@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="/static/css/style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+	{% block head %}{% endblock %}
+	<title>PatternCraft Lab | {% block title %}{% endblock %}</title>
+</head>
+<body class="open-menu">
+	<div class="sidebar">
+		<div class="sidebar-content">
+			<span class="big-text-size"><strong>PatternCraft Lab</strong></span>
+			<br><br>
+			<span class="small-text-size"><strong>Общее</strong></span>
+			<br>
+			<a class="button" href="/theory">
+				<img src="/static/img/theory.png" alt="">
+				<span>Теория</span>
+			</a>
+			<a class="button" href="/problems">
+				<img src="/static/img/problems.png" alt="">
+				<span>Задачи</span>
+			</a>
+			<br><br>
+			<span class="small-text-size"><strong>Системное</strong></span>
+			<br>
+			<a class="button" href="/configuration">
+				<img src="/static/img/configuration.png" alt="">
+				<span>Конфигурация</span>
+			</a>
+		</div>
+		<div class="sidebar-ledge">
+			<span id="sidebar-button">☰</span>
+		</div>
+	</div>
+
+	<div class="content">
+		<div class="wrapper">
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+	{% block script %}{% endblock %}
+	<script>
+		let menuButton = document.querySelector('#sidebar-button');
+		let body = document.querySelector('body');
+
+		menuButton.addEventListener('click', () => {
+			body.classList.toggle('open-menu');
+		})
+	</script>
+</body>
+</html>

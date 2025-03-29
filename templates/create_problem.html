@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Создание задачи
+{% endblock %}
+
+{% block content %}
+<h2>Создание задачи</h2>
+
+<form method="post">
+	<div>
+		<h4>Выберите теги:</h4>
+		<div id="tag-container" class="cards-area gap-10">
+			{% for tag in tags %}
+				<div class="card block-light cursor-pointer tag" data-tag="{{ tag }}">{{ tag }}</div>
+			{% endfor %}
+		</div>
+		<input type="hidden" name="selected_tags" id="selected-tags">
+	</div>
+
+	<br><br>
+	<!-- Остальная форма, например: -->
+	<button class="button block-light cursor-pointer small-text-size" type="submit">Создать задачу</button>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+	const tags = document.querySelectorAll('.tag');
+	const selectedTagsInput = document.getElementById('selected-tags');
+
+	const selected = new Set();
+
+	tags.forEach(tag => {
+		tag.addEventListener('click', () => {
+			const tagName = tag.dataset.tag;
+			if (selected.has(tagName)) {
+				selected.delete(tagName);
+				tag.classList.remove('selected');
+			} else {
+				selected.add(tagName);
+				tag.classList.add('selected');
+			}
+			selectedTagsInput.value = Array.from(selected).join(',');
+		});
+	});
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css" />
+{% endblock %}
+
+{% block title %}
+{{ problem.name }}
+{% endblock %}
+
+{% block content %}
+<h2>Задача</h2>
+<h3>{{ problem.name }}</h3>
+<span class="cards-area gap-10">
+	{% for tag in problem.tags %}
+		<span class="block-light">
+			{{ tag }}
+		</span>
+	{% endfor %}
+</span>
+<p class="formatted-text">{{ problem.task | safe }}</p>
+<br>
+<h3>Ваше решение</h3>
+{% for solution_history_element in problem.solution_history_elements %}
+	{% if solution_history_element.type == 'text' %}
+		<div class="block-light">
+			<p class="formatted-text">{{ solution_history_element.content | safe }}</p>
+		</div>
+	{% elif solution_history_element.type == 'code' %}
+		<div class="code-display">
+			<textarea class="code-snippet">{{ solution_history_element.content }}</textarea>
+		</div>
+	{% endif %}
+	<br>
+{% endfor %}
+
+<form method="post">
+<div class="editor-wrapper">
+	<textarea name="solution" id="editor"></textarea>
+</div>
+<br>
+<button class="button block-light cursor-pointer small-text-size" type="submit">Отправить</button>
+</form>
+{% endblock %}
+
+{% block script %}
+<!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/anyword-hint.min.js"></script>
+
+<script>
+  const editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+    mode: "python",
+    theme: "material-darker",
+    lineNumbers: true,
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    extraKeys: {
+      "Ctrl-Space": "autocomplete"
+    }
+  });
+
+  document.querySelectorAll('.code-snippet').forEach(textarea => {
+    CodeMirror.fromTextArea(textarea, {
+      mode: "python",
+      theme: "material-darker",
+      lineNumbers: true,
+      readOnly: true
+    });
+  });
+</script>
+{% endblock %}
