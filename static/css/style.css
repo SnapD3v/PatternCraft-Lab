@@ -1,0 +1,190 @@
+:root {
+	--dark-color: #000000;
+	--light-color: #151515;
+	--color: #FFFFFF;
+	--active-color: #5B16F0;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: var(--dark-color);
+	color: var(--color);
+	font-family: "Inter", serif;
+}
+
+button, input {
+	font-family: "Inter", serif;
+}
+
+.formatted-text {
+	white-space: pre-wrap;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+	position: fixed;
+	display: flex;
+	background-color: var(--light-color);
+	width: 300px;
+	height: 100%;
+	padding-top: 15px;
+	transition: 0.2s;
+	top: 0;
+	left: -250px; /* скрыто по умолчанию */
+}
+
+.open-menu .sidebar {
+	left: 0; /* при открытом меню */
+}
+
+.sidebar-content {
+	margin-left: 30px;
+	display: flex;
+	flex-direction: column;
+	width: 220px;
+}
+
+.sidebar-content > a {
+	text-decoration: none;
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: var(--dark-color);
+	border-radius: 20px;
+	color: var(--color);
+	font-size: 1em;
+	margin-bottom: 15px;
+}
+
+.sidebar-content > a > img {
+	vertical-align: text-top;
+	height: 1.17em;
+	margin-right: 5px;
+}
+
+.sidebar-ledge {
+	display: inline-flex;
+	width: 50px;
+	justify-content: center;
+}
+
+#sidebar-button:hover {
+	cursor: pointer;
+}
+
+/* --- CONTENT --- */
+.content {
+	transition: 0.2s;
+	margin-left: 50px; /* смещение для скрытого сайдбара */
+}
+
+.open-menu .content {
+	margin-left: 300px; /* смещение при открытом сайдбаре */
+}
+
+.wrapper {
+	margin: 30px;
+}
+
+/* --- TYPOGRAPHY --- */
+.big-text-size {
+	font-size: 1.5em;
+}
+
+.small-text-size {
+	font-size: 0.9em;
+}
+
+/* --- BUTTON & CARDS --- */
+.button {
+	text-decoration: none;
+	box-sizing: border-box;
+	display: inline-block;
+	transition: 0.2s;
+}
+
+.button:hover {
+	background-color: var(--active-color);
+}
+
+.cards-area {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.gap-10 {
+	gap: 10px;
+}
+
+.card > img {
+	max-width: 30%;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.tag.selected {
+	background-color: var(--active-color);
+}
+
+.problem-card img {
+	max-width: 10%;
+}
+
+.block-light {
+	background-color: var(--light-color);
+	color: #FFFFFF;
+	padding: 10px 20px;
+	border-radius: 20px;
+	border: 0;
+}
+
+.block-dark {
+	background-color: var(--dark-color);
+	color: #FFFFFF;
+	padding: 10px 20px;
+	border-radius: 20px;
+	border: 0;
+}
+
+.sequential-card {
+	display: flex !important;
+	align-items: center;
+	gap: 20px;
+}
+
+.cards-area .sequential-card {
+	width: 48%;
+}
+
+/* --- FORMS --- */
+input,
+textarea {
+	box-sizing: border-box;
+}
+
+/* --- IMAGES --- */
+img {
+	border-radius: 20px;
+}
+
+.editor-wrapper {
+	border: 1px solid #444;
+	border-radius: 10px;
+	overflow: hidden;
+	margin-top: 20px;
+}
+.CodeMirror {
+	height: 500px;
+	font-size: 16px;
+	background: #1e1e1e;
+	color: #f8f8f2;
+}
+
+@media (max-width: 768px) {
+	.open-menu .content {
+		margin-left: 50px;
+	}
+}

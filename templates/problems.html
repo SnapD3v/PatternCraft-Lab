@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Main
+{% endblock %}
+
+{% block content %}
+<h2>Задачи</h2>
+<div class="cards-area">
+{% for problem in problems %}
+	<a href="/problem/{{ problem.id }}" class="button block-light card sequential-card">
+		<span>
+			<p><strong>{{problem.name}}</strong></p>
+			<p>
+				<span class="cards-area gap-10">
+				{% for tag in problem.tags %}
+					<span class="block-dark">
+						{{ tag }}
+					</span>
+				{% endfor %}
+				</span>
+			</p>
+		</span>
+	</a>
+{% endfor %}
+	<a href="/create/problem" class="button block-light card sequential-card problem-card">
+		<img src="/static/img/add.png" alt="">
+		<p><strong>Создать задачу</strong></p>
+	</a>
+</div>
+<br>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

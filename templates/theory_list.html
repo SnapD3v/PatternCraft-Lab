@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Main
+{% endblock %}
+
+{% block content %}
+<h2>Теория</h2>
+{% for texts_block in theory %}
+	<h3>{{ texts_block.name }}</h3>
+	<p>{{ texts_block.description }}</p>
+	<a class="button card block-light" href="#">Настройка раздела</a>
+	<br><br>
+	<div class="cards-area">
+	{% for theory_text in texts_block.texts %}
+		<a href="#" class="button block-light card sequential-card">
+			<img src="{{theory_text.image_url}}" alt="">
+			<div class="information">
+				<p><strong>{{theory_text.name}}</strong></p>
+				<p>{{theory_text.description}}</p>
+			</div>
+		</a>
+	{% endfor %}
+		<a href="#" class="button block-light card sequential-card">
+			<img src="/static/img/add.png" alt="">
+			<div class="information">
+				<p><strong>Добавить карточку</strong></p>
+			</div>
+		</a>
+	</div>
+	<br>
+{% endfor %}
+	<br><br>
+	<a class="button card block-light" href="#">Добавить раздел</a>
+	<br><br>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
