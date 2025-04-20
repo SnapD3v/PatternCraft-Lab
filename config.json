@@ -1,0 +1,13 @@
+{
+    "api": {
+        "api_key": null,
+        "model": "deepseek/deepseek-r1:free"
+    },
+    "appearance": {
+        "theme": "dark",
+        "language": "ru"
+    },
+    "education": {
+        "difficulty": "medium"
+    }
+}
