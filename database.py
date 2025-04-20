@@ -3,78 +3,82 @@ from sqlalchemy.orm import relationship, sessionmaker, DeclarativeBase, Session,
 
 
 class Base(DeclarativeBase):
-	pass
+    pass
 
 
 class TextsBlock(Base):
-	__tablename__ = 'texts_blocks'
+    __tablename__ = 'texts_blocks'
 
-	id = Column(Integer, primary_key=True)
-	name = Column(String, nullable=False)
-	description = Column(String, nullable=True)
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    description = Column(String, nullable=True)
 
-	texts = relationship("TheoryText", back_populates="block", cascade="all, delete-orphan")
+    texts = relationship("TheoryText", back_populates="block",
+                         cascade="all, delete-orphan")
 
-	def __repr__(self):
-		return f"<TextsBlock(id={self.id}, name={self.name})>"
+    def __repr__(self):
+        return f"<TextsBlock(id={self.id}, name={self.name})>"
 
 
 class TheoryText(Base):
-	__tablename__ = 'theory_texts'
+    __tablename__ = 'theory_texts'
 
-	id = Column(Integer, primary_key=True)
-	name = Column(String, nullable=False)
-	content = Column(Text, nullable=False)
-	description = Column(String, nullable=False)
-	image_url = Column(String, nullable=False)
-	block_id = Column(Integer, ForeignKey('texts_blocks.id'), nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    content = Column(Text, nullable=False)
+    description = Column(String, nullable=False)
+    image_url = Column(String, nullable=False)
+    block_id = Column(Integer, ForeignKey('texts_blocks.id'), nullable=False)
 
-	block = relationship("TextsBlock", back_populates="texts")
+    block = relationship("TextsBlock", back_populates="texts")
 
-	def __repr__(self):
-		return f"<TheoryText(id={self.id}, block_id={self.block_id})>"
+    def __repr__(self):
+        return f"<TheoryText(id={self.id}, block_id={self.block_id})>"
 
 
 class ProblemsSet(Base):
-	__tablename__ = 'problems_set'
+    __tablename__ = 'problems_set'
 
-	id = Column(Integer, primary_key=True)
-	tags_json = Column(String, nullable=False)
+    id = Column(Integer, primary_key=True)
+    tags_json = Column(String, nullable=False)
 
-	problems = relationship("Problem", back_populates="block", cascade="all, delete-orphan")
+    problems = relationship(
+        "Problem", back_populates="block", cascade="all, delete-orphan")
 
-	def __repr__(self):
-		return f"<ProblemsSet(id={self.id})>"
+    def __repr__(self):
+        return f"<ProblemsSet(id={self.id})>"
 
 
 class Problem(Base):
-	__tablename__ = 'problems'
+    __tablename__ = 'problems'
 
-	id = Column(Integer, primary_key=True)
-	name = Column(String, nullable=False)
-	task = Column(Text, nullable=False)
-	block_id = Column(Integer, ForeignKey('problems_set.id'), nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    task = Column(Text, nullable=False)
+    block_id = Column(Integer, ForeignKey('problems_set.id'), nullable=False)
 
-	block = relationship("ProblemsSet", back_populates="problems")
+    block = relationship("ProblemsSet", back_populates="problems")
 
-	solution_history_elements = relationship("SolutionHistoryElement", back_populates="problem", cascade="all, delete-orphan")
+    solution_history_elements = relationship(
+        "SolutionHistoryElement", back_populates="problem", cascade="all, delete-orphan")
 
-	def __repr__(self):
-		return f"<Problem(id={self.id}, block_id={self.block_id})>"
+    def __repr__(self):
+        return f"<Problem(id={self.id}, block_id={self.block_id})>"
 
 
 class SolutionHistoryElement(Base):
-	__tablename__ = 'solution_history_elements'
+    __tablename__ = 'solution_history_elements'
 
-	id = Column(Integer, primary_key=True)
-	content = Column(Text, nullable=False)
-	type = Column(String, nullable=False)
-	problem_id = Column(Integer, ForeignKey('problems.id'), nullable=False)
+    id = Column(Integer, primary_key=True)
+    content = Column(Text, nullable=False)
+    type = Column(String, nullable=False)
+    problem_id = Column(Integer, ForeignKey('problems.id'), nullable=False)
 
-	problem = relationship("Problem", back_populates="solution_history_elements")
+    problem = relationship(
+        "Problem", back_populates="solution_history_elements")
 
-	def __repr__(self):
-		return f"<SolutionHistoryElement(id={self.id}, problem_id={self.problem_id})>"
+    def __repr__(self):
+        return f"<SolutionHistoryElement(id={self.id}, problem_id={self.problem_id})>"
 
 
 engine = create_engine("sqlite:///app.db", echo=True, future=True)
