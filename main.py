@@ -1,3 +1,9 @@
+"""
+Description: Main entry point of the application. Initializes and configures all
+necessary components including text generation, task writing, reviewing, theory
+and problems management, and web application setup.
+"""
+
 from scripts.config.config import settings
 from scripts.config.services.user_config import user_config_manager
 import scripts.database as db

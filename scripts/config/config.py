@@ -1,3 +1,9 @@
+"""
+Description: Central configuration module that sets and manages application
+settings from various sources including environment variables and configuration
+files. Also loads settings from .env file
+"""
+
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict

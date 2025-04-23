@@ -1,3 +1,8 @@
+"""
+Description: Provides utility functions for working with Markdown content,
+including parsing and formatting operations for text content.
+"""
+
 import re
 
 

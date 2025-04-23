@@ -1,3 +1,8 @@
+"""
+Description: Provides functionality for generating text content using AI models.
+Handles API communication and text generation requests.
+"""
+
 from typing import Dict, Any, Optional, List
 from abc import ABC, abstractmethod
 from openai import OpenAI

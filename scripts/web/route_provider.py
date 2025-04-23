@@ -1,3 +1,7 @@
+"""
+Description: Flask abstract class that registers web routes
+"""
+
 from abc import ABC, abstractmethod
 from flask import Flask
 

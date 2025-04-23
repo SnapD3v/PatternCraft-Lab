@@ -1,3 +1,9 @@
+"""
+Description: Defines data transfer objects for solution history elements,
+providing structured representations for tracking and managing solution
+progress and history.
+"""
+
 import markdown
 import scripts.database as db
 

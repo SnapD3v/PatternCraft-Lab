@@ -1,3 +1,8 @@
+"""
+Description: Implements AI agents for task writing and reviewing. Contains
+specialized agents for generating and evaluating programming tasks and solutions.
+"""
+
 from typing import Dict, Any, List, Tuple
 from abc import ABC, abstractmethod
 from .text_generator import ITextGenerator

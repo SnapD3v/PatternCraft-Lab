@@ -1,3 +1,9 @@
+"""
+Description: Manages the organization and retrieval of theoretical content blocks
+and their associated text content. Handles theory text operations and block
+management.
+"""
+
 from typing import Dict, Any, Optional, Tuple, List
 import json
 import scripts.database as db

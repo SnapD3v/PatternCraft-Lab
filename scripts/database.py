@@ -1,3 +1,9 @@
+"""
+Description: Defines the database schema and models for the application. Contains
+SQLAlchemy models for texts blocks, theory texts, problems sets, problems, and
+solution history elements. Also provides database session creation functionality.
+"""
+
 from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship, sessionmaker, DeclarativeBase, Session, joinedload
 

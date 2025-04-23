@@ -1,3 +1,8 @@
+"""
+Description: Handles the execution and running of the web application with
+configurable settings and parameters.
+"""
+
 from typing import Dict, Any
 from flask import Flask
 

@@ -1,3 +1,8 @@
+"""
+Description: Defines all web routes and their handlers for the application. Includes
+routes for theory content, problems, and solution history management.
+"""
+
 import threading
 from flask import Flask, render_template, request, redirect
 from .route_provider import IRouteProvider

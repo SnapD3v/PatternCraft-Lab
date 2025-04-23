@@ -1,3 +1,7 @@
+"""
+Description: User config that contains personal custom settings.
+"""
+
 from enum import Enum
 from pydantic import BaseModel, SecretStr
 from scripts.config.config import settings

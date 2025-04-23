@@ -1,3 +1,8 @@
+"""
+Description: Factory class for creating and configuring the web application instance
+with all necessary routes and settings.
+"""
+
 from flask import Flask
 from .route_provider import IRouteProvider
 

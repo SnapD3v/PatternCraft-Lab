@@ -1,3 +1,8 @@
+"""
+Description: Defines data transfer objects for problem-related data structures,
+providing structured representations for problem information and operations.
+"""
+
 import json
 import markdown
 import scripts.database as db

@@ -1,3 +1,7 @@
+"""
+Description: User config manager that loads and manages application settings.
+"""
+
 import logging
 from pathlib import Path
 from pydantic import SecretStr, ValidationError
