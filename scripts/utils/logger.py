@@ -1,3 +1,8 @@
+"""
+Description: Provides logging functionality for the application. Configures and
+manages logging settings, formats, and handlers for different log levels.
+"""
+
 import logging
 import sys
 from colorama import init, Fore, Style

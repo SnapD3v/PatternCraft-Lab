@@ -1,12 +1,19 @@
 import logging
 from pathlib import Path
 from pydantic import SecretStr, ValidationError
-from exc import TokenNotProvidedException
-from schemas.user_config import APIConfig, AppearanceConfig, DifficultyLevel, EducationConfig, Theme, UserConfig
+from scripts.utils.exceptions import TokenNotProvidedException
+from ..schemas.user_config import (
+    APIConfig,
+    AppearanceConfig,
+    DifficultyLevel,
+    EducationConfig,
+    Theme,
+    UserConfig,
+)
 import json
-from logger import setup_logger
+from scripts.utils.logger import setup_logger
 
-from config import settings
+from scripts.config.config import settings
 
 logging_level = logging.DEBUG if settings.run.debug else logging.INFO
 logger = setup_logger(name=__name__, log_file=None, level=logging_level)
@@ -56,8 +63,7 @@ class UserConfigManager:
             raw = self.CONFIG_FILE.read_text(encoding="utf-8")
             data = json.loads(raw)
         except json.JSONDecodeError as e:
-            raise ValueError(
-                f"Ошибка при разборе JSON ({self.CONFIG_FILE.name}): {e}")
+            raise ValueError(f"Ошибка при разборе JSON ({self.CONFIG_FILE.name}): {e}")
 
         try:
             return UserConfig.model_validate(data)
@@ -68,8 +74,7 @@ class UserConfigManager:
         return self.config
 
     def update_theme(self, theme: Theme | str):
-        self.config.appearance.theme = Theme(
-            theme) if isinstance(theme, str) else theme
+        self.config.appearance.theme = Theme(theme) if isinstance(theme, str) else theme
         self._save_to_json()
 
     def update_language(self, language: str):
@@ -87,8 +92,10 @@ class UserConfigManager:
         self._save_to_json()
 
     def print_config(self):
-        logger.debug("\n\n\n======== Using User Config ========\n\n%s\n\n===============================\n\n\n",
-                     self.config.model_dump_json(indent=2))
+        logger.debug(
+            "\n\n\n======== Using User Config ========\n\n%s\n\n===============================\n\n\n",
+            self.config.model_dump_json(indent=2),
+        )
 
 
 user_config_manager: UserConfigManager = UserConfigManager()

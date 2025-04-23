@@ -1,0 +1,3 @@
+"""
+PatternCraft-Lab scripts package
+"""

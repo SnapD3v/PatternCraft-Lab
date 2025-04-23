@@ -1,6 +1,6 @@
 from enum import Enum
 from pydantic import BaseModel, SecretStr
-from config import settings
+from scripts.config.config import settings
 
 
 class DifficultyLevel(str, Enum):
