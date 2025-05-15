@@ -40,7 +40,7 @@ if __name__ == "__main__":
     problems_manager = ProblemsManager(db.create_session, task_writer, reviewer)
     assistant_manager = AssistantManager(db.create_session, assistant)
 
-    routes = WebRoutes(theory_manager, problems_manager, assistant_manager, settings.tags.tags_list) 
+    routes = WebRoutes(theory_manager, problems_manager, assistant_manager, settings.tags.tags_list)
     app = WebAppFactory.create_app(routes)
 
     runner = AppRunner(app, settings.run.model_dump())

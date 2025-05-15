@@ -62,20 +62,16 @@ class Reviewer(Agent):
         self._prepare_history(history, tags=kwargs["tags"], solution=kwargs["solution"])
         review = self.text_generator.generate(history)
         return review
-    
+
 
 class Assistant(Agent):
-    def __init__(
-        self, text_generator: ITextGenerator, system_prompt: str
-    ) -> None:
+    def __init__(self, text_generator: ITextGenerator, system_prompt: str) -> None:
         self.text_generator = text_generator
         self.system_prompt = system_prompt
 
     def _prepare_history(self, history: List[Dict[str, str]], user_prompt: str) -> None:
         history.insert(0, {"role": "system", "content": self.system_prompt})
-        history.append(
-            {"role": "user", "content": user_prompt}
-        )
+        history.append({"role": "user", "content": user_prompt})
 
     def generate(self, history: List[Dict[str, str]], user_prompt: str) -> str:
         self._prepare_history(history, user_prompt)

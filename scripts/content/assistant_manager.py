@@ -2,11 +2,12 @@
 Description: Manages the behavior of the AI tutor
 """
 
-from typing import List, Optional 
+from typing import List, Optional
 import scripts.database as db
-from .content_manager import ContentManager 
+from .content_manager import ContentManager
 from ..ai.agents import Agent
 from ..dto.chat_history_dto import ChatHistoryDTO
+
 
 class AssistantManager(ContentManager):
     def __init__(
@@ -20,7 +21,9 @@ class AssistantManager(ContentManager):
     def get_answer(self, user_prompt: str) -> str:
         session = self.session_factory()
         try:
-            db_messages = session.query(db.ChatHistory).order_by(db.ChatHistory.id).all()
+            db_messages = (
+                session.query(db.ChatHistory).order_by(db.ChatHistory.id).all()
+            )
             history = []
             for message in db_messages:
                 history_line = {"role": message.role, "content": message.content}
@@ -29,13 +32,13 @@ class AssistantManager(ContentManager):
             answer = self.assistant.generate(history=history, user_prompt=user_prompt)
 
             user_message_db = db.ChatHistory(
-                role='user',
+                role="user",
                 content=user_prompt,
             )
             session.add(user_message_db)
 
             assistant_message_db = db.ChatHistory(
-                role='assistant',
+                role="assistant",
                 content=answer,
             )
             session.add(assistant_message_db)
@@ -52,7 +55,9 @@ class AssistantManager(ContentManager):
     def get_all_messages(self) -> Optional[List[ChatHistoryDTO]]:
         session = self.session_factory()
         try:
-            messages_db = session.query(db.ChatHistory).order_by(db.ChatHistory.id).all()
+            messages_db = (
+                session.query(db.ChatHistory).order_by(db.ChatHistory.id).all()
+            )
             if messages_db:
                 return [ChatHistoryDTO(msg) for msg in messages_db]
             return None
@@ -62,7 +67,11 @@ class AssistantManager(ContentManager):
     def get_message(self, message_id: int) -> Optional[ChatHistoryDTO]:
         session = self.session_factory()
         try:
-            message_db = session.query(db.ChatHistory).filter(db.ChatHistory.id == message_id).first()
+            message_db = (
+                session.query(db.ChatHistory)
+                .filter(db.ChatHistory.id == message_id)
+                .first()
+            )
             if message_db:
                 return ChatHistoryDTO(message_db)
             return None

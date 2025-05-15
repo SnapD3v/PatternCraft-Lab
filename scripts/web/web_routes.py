@@ -4,19 +4,20 @@ routes for theory content, problems, and solution history management.
 """
 
 import threading
-from flask import Flask, render_template, request, redirect, jsonify 
+from flask import Flask, render_template, request, redirect, jsonify
 from .route_provider import IRouteProvider
 from ..content.theory_manager import TheoryManager
 from ..content.problems_manager import ProblemsManager
-from ..content.assistant_manager import AssistantManager 
+from ..content.assistant_manager import AssistantManager
 import markdown
+
 
 class WebRoutes(IRouteProvider):
     def __init__(
         self,
         theory_manager: TheoryManager,
         problems_manager: ProblemsManager,
-        assistant_manager: AssistantManager, 
+        assistant_manager: AssistantManager,
         tags: list,
     ) -> None:
         self.theory_manager = theory_manager
@@ -37,10 +38,15 @@ class WebRoutes(IRouteProvider):
         )
 
         # Маршруты для Assistant API
-        app.add_url_rule("/assistant/ask", view_func=self.assistant_ask, methods=["POST"])
-        app.add_url_rule("/assistant/history", view_func=self.assistant_history, methods=["GET"])
-        app.add_url_rule("/assistant/clear", view_func=self.assistant_clear_history, methods=["POST"])
-
+        app.add_url_rule(
+            "/assistant/ask", view_func=self.assistant_ask, methods=["POST"]
+        )
+        app.add_url_rule(
+            "/assistant/history", view_func=self.assistant_history, methods=["GET"]
+        )
+        app.add_url_rule(
+            "/assistant/clear", view_func=self.assistant_clear_history, methods=["POST"]
+        )
 
     def index(self) -> str:
         return render_template("index.html")
@@ -86,13 +92,15 @@ class WebRoutes(IRouteProvider):
     # --- Assistant API Handlers ---
     def assistant_ask(self):
         data = request.get_json()
-        user_prompt = data.get('prompt')
+        user_prompt = data.get("prompt")
         if not user_prompt:
             return jsonify({"error": "Prompt is required"}), 400
 
         try:
             raw_answer = self.assistant_manager.get_answer(user_prompt)
-            html_answer = markdown.markdown(raw_answer, extensions=["fenced_code", "nl2br"])
+            html_answer = markdown.markdown(
+                raw_answer, extensions=["fenced_code", "nl2br"]
+            )
             return jsonify({"answer": html_answer})
         except Exception as e:
             return jsonify({"error": str(e)}), 500
@@ -103,11 +111,13 @@ class WebRoutes(IRouteProvider):
             history_data = []
             if messages:
                 for msg_dto in messages:
-                    history_data.append({"role": msg_dto.role, "content": msg_dto.content}) 
+                    history_data.append(
+                        {"role": msg_dto.role, "content": msg_dto.content}
+                    )
             return jsonify({"history": history_data})
         except Exception as e:
             return jsonify({"error": str(e)}), 500
-            
+
     def assistant_clear_history(self):
         try:
             self.assistant_manager.clear_history()
