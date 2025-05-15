@@ -73,6 +73,7 @@
 
 	{% block script %}{% endblock %}
 	<script>
+		// Получаем элементы DOM
 		const body = document.querySelector('body');
 		const menuButton = document.querySelector('#sidebar-button');
 		const assistantButtonElement = document.querySelector('#assistant-button'); 
@@ -87,20 +88,22 @@
 
 		let isAssistantResponding = false; // Флаг для блокировки отправки во время ответа ассистента
 
+		// Обработчик события для кнопки меню
 		menuButton.addEventListener('click', () => {
 			body.classList.toggle('open-menu');
 		});
 
+		// Обработчик события для кнопки ассистента
 		assistantButtonElement.addEventListener('click', () => { 
 			const visible = !assistantPanel.classList.contains('visible');
 			assistantPanel.classList.toggle('visible');
 			if (visible) {
-				loadChatHistory();
-                chatInput.focus();
+				loadChatHistory(); // Загружаем историю чата при открытии панели
+                chatInput.focus(); // Устанавливаем фокус на поле ввода
 			}
 		});
-
 		// Отображение истории
+		// Функция для создания элемента сообщения
 		function createMessageElement(text, role) {
 			const messageElement = document.createElement('div');
 			messageElement.classList.add('message-item'); 
@@ -113,20 +116,23 @@
 			return messageElement;
 		}
 
+		// Функция для прокрутки к нижней части контейнера сообщений
 		function scrollToBottom() {
 			messagesContainer.scrollTop = messagesContainer.scrollHeight;
 		}
 
+        // Функция для отображения сообщения
         function displayMessage(text, role) {
             const messageElement = createMessageElement(text, role);
             messagesDiv.appendChild(messageElement);
-			scrollToBottom();
+			scrollToBottom(); // Прокручиваем вниз после добавления сообщения
         }
 
+        // Асинхронная функция для загрузки истории чата
         async function loadChatHistory() {
-            messagesDiv.innerHTML = '';
+            messagesDiv.innerHTML = ''; // Очищаем текущее содержимое
             try {
-                const response = await fetch('/assistant/history');
+                const response = await fetch('/assistant/history'); // Запрос на сервер для получения истории
                 if (!response.ok) {
                     console.error('Failed to load chat history:', response.statusText);
                     displayMessage(`Ошибка сервера при загрузки истории: ${response.statusText}`, 'system-info');
@@ -135,7 +141,7 @@
                 const data = await response.json();
                 if (data.history && data.history.length > 0) {
                     data.history.forEach(msg => {
-                        displayMessage(msg.content, msg.role);
+                        displayMessage(msg.content, msg.role); // Отображаем каждое сообщение
                     });
                 }
             } catch (error) {
@@ -144,21 +150,20 @@
             }
         }
 
-		// Отправка сообщений
+		// Асинхронная функция для отправки сообщений
 		async function handleSendMessage() {
-			const text = chatInput.value.trim();
+			const text = chatInput.value.trim(); // Получаем текст сообщения
 			if (text === '' || isAssistantResponding) {
-				return;
+				return; // Не отправляем пустые сообщения или если ассистент отвечает
 			}
 
-			isAssistantResponding = true;
+			isAssistantResponding = true; // Устанавливаем флаг, что ассистент отвечает
 			sendButton.classList.add('disabled'); // Визуально блокируем кнопку 
 			clearChatButton.classList.add('disabled');
-			chatInput.disabled = true;
-            if(messageLoadingIndicator) messageLoadingIndicator.style.display = 'block';
+			chatInput.disabled = true; // Блокируем поле ввода
+            if(messageLoadingIndicator) messageLoadingIndicator.style.display = 'block'; // Показываем индикатор загрузки
 
-
-			displayMessage(text, 'user');
+			displayMessage(text, 'user'); // Отображаем сообщение пользователя
 			chatInput.value = ''; // Очищаем поле ввода
 
 			try {
@@ -177,7 +182,7 @@
 				} else {
                     const data = await response.json();
                     if (data.answer) {
-                        displayMessage(data.answer, 'assistant');
+                        displayMessage(data.answer, 'assistant'); // Отображаем ответ ассистента
                     } else if (data.error) {
                          displayMessage(`Ошибка от ассистента: ${data.error}`, 'system-info');
                     }
@@ -186,24 +191,24 @@
 				console.error('Network error sending message:', error);
                 displayMessage('Сетевая ошибка. Не удалось отправить сообщение.', 'system-info');
 			} finally {
-				isAssistantResponding = false;
-				sendButton.classList.remove('disabled');
-				clearChatButton.classList.remove('disabled')
-				chatInput.disabled = false;
-                if(messageLoadingIndicator) messageLoadingIndicator.style.display = 'none';
-                chatInput.focus();
+				isAssistantResponding = false; // Сбрасываем флаг
+				sendButton.classList.remove('disabled'); // Разблокируем кнопку
+				clearChatButton.classList.remove('disabled');
+				chatInput.disabled = false; // Разблокируем поле ввода
+                if(messageLoadingIndicator) messageLoadingIndicator.style.display = 'none'; // Скрываем индикатор загрузки
+                chatInput.focus(); // Устанавливаем фокус на поле ввода
 			}
 		}
 
-		sendButton.addEventListener('click', handleSendMessage);
+		sendButton.addEventListener('click', handleSendMessage); // Обработчик для кнопки отправки
 
 		clearChatButton.addEventListener('click', async () => {
             if (isAssistantResponding) { // Не даем чистить, пока ассистент отвечает
                 return;
             }
 			try {
-                const response = await fetch('/assistant/clear', { method: 'POST'});
-				messagesDiv.innerHTML = ''
+                const response = await fetch('/assistant/clear', { method: 'POST'}); // Запрос на очистку истории
+				messagesDiv.innerHTML = ''; // Очищаем контейнер сообщений
 
             } catch (error) {
                 console.error('Error clearing chat history:', error);
