@@ -25,6 +25,10 @@
 				<img src="/static/img/problems.png" alt="">
 				<span>Задачи</span>
 			</a>
+			<a class="button" id="assistant-button">
+				<img src="/static/img/ai_icon.png" alt="">
+				<span>Ассистент</span>
+			</a>
 			<br><br>
 			<span class="small-text-size"><strong>Системное</strong></span>
 			<br>
@@ -42,15 +46,170 @@
 		<div class="wrapper">
 			{% block content %}{% endblock %}
 		</div>
+
+		<div class="assistant-panel">
+			<div class="chat-content">
+				<div class="messages-container">
+					<div class="messages">
+						</div>
+                    <div class="message-loading-indicator">
+                        Ассистент думает...
+                    </div>
+				</div>
+				<div class="chat-input">
+					<textarea placeholder="Введите сообщение..." rows="3"></textarea>
+				</div>
+				<div class="buttons">
+				<a class="button" id="send-button">
+					<span>Отправить</span>
+				</a>
+				<a class="button" id="clear-button">
+					<span>Очистить чат</span>
+				</a>
+				</div>
+			</div>
+		</div>
 	</div>
+
 	{% block script %}{% endblock %}
 	<script>
-		let menuButton = document.querySelector('#sidebar-button');
-		let body = document.querySelector('body');
+		const body = document.querySelector('body');
+		const menuButton = document.querySelector('#sidebar-button');
+		const assistantButtonElement = document.querySelector('#assistant-button'); 
+		const assistantPanel = document.querySelector('.assistant-panel');
+
+		const messagesContainer = document.querySelector('.messages-container');
+		const messagesDiv = messagesContainer.querySelector('.messages');
+		const chatInput = document.querySelector('.chat-input textarea');
+		const sendButton = document.getElementById('send-button');
+		const clearChatButton = document.getElementById('clear-button'); 
+        const messageLoadingIndicator = messagesContainer.querySelector('.message-loading-indicator');
+
+		let isAssistantResponding = false; // Флаг для блокировки отправки во время ответа ассистента
 
 		menuButton.addEventListener('click', () => {
 			body.classList.toggle('open-menu');
-		})
+		});
+
+		assistantButtonElement.addEventListener('click', () => { 
+			const visible = !assistantPanel.classList.contains('visible');
+			assistantPanel.classList.toggle('visible');
+			if (visible) {
+				loadChatHistory();
+                chatInput.focus();
+			}
+		});
+
+		// Отображение истории
+		function createMessageElement(text, role) {
+			const messageElement = document.createElement('div');
+			messageElement.classList.add('message-item'); 
+			if (role === 'user') {
+				messageElement.classList.add('user-message'); 
+			} else if (role === 'assistant') {
+				messageElement.classList.add('assistant-message'); 
+			}
+			messageElement.innerHTML = text; // Используем innerHTML для отображения HTML
+			return messageElement;
+		}
+
+		function scrollToBottom() {
+			messagesContainer.scrollTop = messagesContainer.scrollHeight;
+		}
+
+        function displayMessage(text, role) {
+            const messageElement = createMessageElement(text, role);
+            messagesDiv.appendChild(messageElement);
+			scrollToBottom();
+        }
+
+        async function loadChatHistory() {
+            messagesDiv.innerHTML = '';
+            try {
+                const response = await fetch('/assistant/history');
+                if (!response.ok) {
+                    console.error('Failed to load chat history:', response.statusText);
+                    displayMessage(`Ошибка сервера при загрузки истории: ${response.statusText}`, 'system-info');
+                    return;
+                }
+                const data = await response.json();
+                if (data.history && data.history.length > 0) {
+                    data.history.forEach(msg => {
+                        displayMessage(msg.content, msg.role);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching chat history:', error);
+                displayMessage(`Ошибка сети при загрузке истории.`, 'system-info');
+            }
+        }
+
+		// Отправка сообщений
+		async function handleSendMessage() {
+			const text = chatInput.value.trim();
+			if (text === '' || isAssistantResponding) {
+				return;
+			}
+
+			isAssistantResponding = true;
+			sendButton.classList.add('disabled'); // Визуально блокируем кнопку 
+			clearChatButton.classList.add('disabled');
+			chatInput.disabled = true;
+            if(messageLoadingIndicator) messageLoadingIndicator.style.display = 'block';
+
+
+			displayMessage(text, 'user');
+			chatInput.value = ''; // Очищаем поле ввода
+
+			try {
+				const response = await fetch('/assistant/ask', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ prompt: text }), // Преобразуем текст в JSON
+				});
+
+				if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({error: "Server error"}));
+					console.error('Server error:', response.statusText, errorData);
+                    displayMessage(`Ошибка на стороне сервера: ${errorData.error || response.statusText}`, 'system-info');
+				} else {
+                    const data = await response.json();
+                    if (data.answer) {
+                        displayMessage(data.answer, 'assistant');
+                    } else if (data.error) {
+                         displayMessage(`Ошибка от ассистента: ${data.error}`, 'system-info');
+                    }
+                }
+			} catch (error) {
+				console.error('Network error sending message:', error);
+                displayMessage('Сетевая ошибка. Не удалось отправить сообщение.', 'system-info');
+			} finally {
+				isAssistantResponding = false;
+				sendButton.classList.remove('disabled');
+				clearChatButton.classList.remove('disabled')
+				chatInput.disabled = false;
+                if(messageLoadingIndicator) messageLoadingIndicator.style.display = 'none';
+                chatInput.focus();
+			}
+		}
+
+		sendButton.addEventListener('click', handleSendMessage);
+
+		clearChatButton.addEventListener('click', async () => {
+            if (isAssistantResponding) { // Не даем чистить, пока ассистент отвечает
+                return;
+            }
+			try {
+                const response = await fetch('/assistant/clear', { method: 'POST'});
+				messagesDiv.innerHTML = ''
+
+            } catch (error) {
+                console.error('Error clearing chat history:', error);
+				displayMessage(`Ошибка сети при очистке истории.`, 'system-info');
+            }
+		});
 	</script>
 </body>
 </html>

@@ -29,7 +29,7 @@ class TextGenerator(ITextGenerator):
         self, history: List[ChatCompletionMessageParam], model: Optional[str] = None
     ) -> str:
         model = model or self.model
-        completion = self.client.chat.completions.create(model=model, messages=history)
-        if completion.choices[0].message.content:
-            return completion.choices[0].message.content
-        raise TypeError
+        while True:
+            completion = self.client.chat.completions.create(model=model, messages=history)
+            if completion.choices[0].message.content:
+                return completion.choices[0].message.content

@@ -85,6 +85,17 @@ class SolutionHistoryElement(Base):
 
     def __repr__(self):
         return f"<SolutionHistoryElement(id={self.id}, problem_id={self.problem_id})>"
+    
+
+class ChatHistory(Base):
+    __tablename__ = 'chat_history'
+
+    id = Column(Integer, primary_key=True)
+    role = Column(Text, nullable=False)
+    content = Column(Text, nullable=False)
+
+    def __repr__(self):
+        return f"<ChatHistory(id={self.id})>"
 
 
 engine = create_engine("sqlite:///app.db", echo=True, future=True)
