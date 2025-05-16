@@ -28,7 +28,7 @@ class AssistantManager(ContentManager):
             for message in db_messages:
                 history_line = {"role": message.role, "content": message.content}
                 history.append(history_line)
-
+            
             answer = self.assistant.generate(history=history, user_prompt=user_prompt)
 
             user_message_db = db.ChatHistory(

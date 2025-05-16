@@ -23,9 +23,8 @@ if __name__ == "__main__":
     user_config_manager.print_config()
 
     text_generator = TextGenerator(
-        settings.defaults.base_url,
-        user_config.api.api_key.get_secret_value(),
-        user_config.api.model,
+        user_config.model.model_name,
+        user_config.model.model_type,
     )
 
     task_writer = TaskWriter(
