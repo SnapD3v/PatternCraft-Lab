@@ -70,9 +70,6 @@ class Assistant(Agent):
         self.system_prompt = system_prompt
 
     def _prepare_history(self, history: List[Dict[str, str]], user_prompt: str) -> None:
-        # Clear existing system prompt if any
-        history = [msg for msg in history if msg["role"] != "system"]
-
         history.insert(0, {"role": "system", "content": self.system_prompt})
         history.append({"role": "user", "content": user_prompt})
 
