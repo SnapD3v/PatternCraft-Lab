@@ -5,9 +5,14 @@ Description: User config manager that loads and manages application settings.
 import logging
 from pathlib import Path
 from pydantic import SecretStr, ValidationError
-from scripts.utils.exceptions import TokenNotProvidedException
+from scripts.utils.exceptions import (
+    TokenNotProvidedException,
+    ModelNotProvidedException,
+)
 from ..schemas.user_config import (
-    APIConfig,
+    ModelConfig,
+    OpenrouterClientConfig,
+    LocalModelConfig,
     AppearanceConfig,
     DifficultyLevel,
     EducationConfig,
@@ -31,13 +36,23 @@ class UserConfigManager:
         self._validate_config()
 
     def _validate_config(self):
-        if not self.config.api.api_key:
+        if (
+            self.config.model.model_type == "online"
+            and not self.config.openrouter.api_key
+        ):
             raise TokenNotProvidedException
+
+        local_models = Path(__file__).parent.parent.parent.parent / "local_models"
+        print(local_models.absolute())
+        if self.config.model.model_type == "local" and not any(
+            local_models.rglob(self.config.model.model_name)
+        ):
+            raise ModelNotProvidedException
 
     def _write_json(self, cfg: UserConfig):
         data = cfg.model_dump()
-        secret = cfg.api.api_key
-        data["api"]["api_key"] = secret.get_secret_value() if secret else None
+        secret = cfg.openrouter.api_key
+        data["openrouter"]["api_key"] = secret.get_secret_value() if secret else None
 
         text = json.dumps(data, indent=4, ensure_ascii=False)
         self.CONFIG_FILE.write_text(text, encoding="utf-8")
@@ -51,7 +66,9 @@ class UserConfigManager:
     def _load_config(self) -> UserConfig:
         if not self.CONFIG_FILE.is_file():
             default_cfg = UserConfig(
-                api=APIConfig(),
+                model=ModelConfig(),
+                local=LocalModelConfig(),
+                openrouter=OpenrouterClientConfig(),
                 appearance=AppearanceConfig(),
                 education=EducationConfig(),
             )
@@ -70,6 +87,7 @@ class UserConfigManager:
             raise ValueError(f"Ошибка при разборе JSON ({self.CONFIG_FILE.name}): {e}")
 
         try:
+
             return UserConfig.model_validate(data)
         except ValidationError as e:
             raise ValueError(f"Неверный формат конфигурации: {e}")
@@ -92,7 +110,7 @@ class UserConfigManager:
         self._save_to_json()
 
     def set_api_key(self, api_key: str):
-        self.config.api.api_key = SecretStr(api_key)
+        self.config.openrouter.api_key = SecretStr(api_key)
         self._save_to_json()
 
     def print_config(self):
