@@ -27,12 +27,14 @@ class WebRoutes(IRouteProvider):
 
     def register(self, app: Flask) -> None:
         app.add_url_rule("/", view_func=self.index, methods=["GET"])
-        app.add_url_rule("/theory", view_func=self.theory_list, methods=["GET"])
+        app.add_url_rule(
+            "/theory", view_func=self.theory_list, methods=["GET"])
         app.add_url_rule("/problems", view_func=self.problems, methods=["GET"])
         app.add_url_rule(
             "/create/problem", view_func=self.create_problem, methods=["GET", "POST"]
         )
-        app.add_url_rule("/theory/<int:id>", view_func=self.theory, methods=["GET"])
+        app.add_url_rule("/theory/<int:id>",
+                         view_func=self.theory, methods=["GET"])
         app.add_url_rule(
             "/problem/<int:id>", view_func=self.problem, methods=["GET", "POST"]
         )
@@ -46,6 +48,9 @@ class WebRoutes(IRouteProvider):
         )
         app.add_url_rule(
             "/assistant/clear", view_func=self.assistant_clear_history, methods=["POST"]
+        )
+        app.add_url_rule(
+            "/assistant/format_promt", view_func=self.server_promt_processing, methods=["POST"]
         )
 
     def index(self) -> str:
@@ -77,7 +82,8 @@ class WebRoutes(IRouteProvider):
 
         tags = request.form["selected_tags"].split(",")
         threading.Thread(
-            target=self.problems_manager.create_problem, args=(tags,), daemon=True
+            target=self.problems_manager.create_problem, args=(
+                tags,), daemon=True
         ).start()
         return redirect("/problems")
 
@@ -90,6 +96,20 @@ class WebRoutes(IRouteProvider):
         return render_template("theory.html", theory=theory)
 
     # --- Assistant API Handlers ---
+    def server_promt_processing(self):
+        data = request.get_json()
+        user_prompt = data.get("prompt")
+        if not user_prompt:
+            return jsonify({"error": "Prompt is required"}), 400
+
+        try:
+            html_promt = markdown.markdown(
+                user_prompt, extensions=["fenced_code", "nl2br"]
+            )
+            return jsonify({"promt": html_promt})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
     def assistant_ask(self):
         data = request.get_json()
         user_prompt = data.get("prompt")
