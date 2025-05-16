@@ -18,6 +18,22 @@ class AssistantManager(ContentManager):
         self.session_factory = session_factory
         self.assistant = assistant
 
+    def get_promt(self, user_prompt: str) -> None:
+        session = self.session_factory()
+        try:
+            user_message_db = db.ChatHistory(
+                role="user",
+                content=user_prompt,
+            )
+            session.add(user_message_db)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
+
     def get_answer(self, user_prompt: str) -> str:
         session = self.session_factory()
         try:
@@ -30,12 +46,6 @@ class AssistantManager(ContentManager):
                 history.append(history_line)
             
             answer = self.assistant.generate(history=history, user_prompt=user_prompt)
-
-            user_message_db = db.ChatHistory(
-                role="user",
-                content=user_prompt,
-            )
-            session.add(user_message_db)
 
             assistant_message_db = db.ChatHistory(
                 role="assistant",
