@@ -103,10 +103,11 @@ class WebRoutes(IRouteProvider):
             return jsonify({"error": "Prompt is required"}), 400
 
         try:
-            html_promt = markdown.markdown(
+            self.assistant_manager.get_promt(user_prompt)
+            html_prompt = markdown.markdown(
                 user_prompt, extensions=["fenced_code", "nl2br"]
             )
-            return jsonify({"promt": html_promt})
+            return jsonify({"promt": html_prompt})
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
