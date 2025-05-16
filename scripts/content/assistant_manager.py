@@ -7,6 +7,7 @@ import scripts.database as db
 from .content_manager import ContentManager
 from ..ai.agents import Agent
 from ..dto.chat_history_dto import ChatHistoryDTO
+from ..utils.markdown_utils import strip_markdown
 
 
 class AssistantManager(ContentManager):
@@ -42,10 +43,10 @@ class AssistantManager(ContentManager):
             )
             history = []
             for message in db_messages:
-                history_line = {"role": message.role, "content": message.content}
+                history_line = {"role": message.role, "content": strip_markdown(message.content)}
                 history.append(history_line)
 
-            answer = self.assistant.generate(history=history, user_prompt=user_prompt)
+            answer = self.assistant.generate(history=history, user_prompt=strip_markdown(user_prompt))
 
             assistant_message_db = db.ChatHistory(
                 role="assistant",
