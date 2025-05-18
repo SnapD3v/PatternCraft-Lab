@@ -66,17 +66,8 @@ class TextGenerator(ITextGenerator):
                 )
                 content = completion.choices[0].message.content
             else:
-                print("-"*100)
-                print(history)
-                print("-"*100)
-                messages = [
-                    {"role": msg["role"], "content": msg["content"]}
-                    for msg in history
-                    if isinstance(msg, dict)
-                ]
-
                 output = self.model.create_chat_completion(
-                    messages=messages,
+                    messages=history,
                     max_tokens=2048,
                     temperature=0.7,
                 )
