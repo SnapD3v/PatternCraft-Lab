@@ -107,3 +107,11 @@ What parameters will define success?
 - *Accuracy:* >90% correct solution validation (evaluated against an expert test set).
 - *Response Time:* <2 seconds for task/feedback generation.
 - *Viral Growth:* 25% of users join through referral links (built-in "invite a friend for collaborative problem-solving" system).
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Third-Party Components
+This project uses the following AI model:
+- **qwen2.5-coder-1.5b-instruct.Q8_0**: Licensed under the Apache License 2.0. Available at https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct.
+- Other models accessed via OpenRouter are subject to their respective licenses or terms, as outlined at https://openrouter.ai/terms.
