@@ -5,7 +5,7 @@ Description: User config manager that loads and manages application settings.
 import logging
 from pathlib import Path
 from pydantic import SecretStr, ValidationError
-from scripts.utils.exceptions import (
+from app.utils.exceptions import (
     TokenNotProvidedException,
     ModelNotProvidedException,
 )
@@ -20,9 +20,9 @@ from ..schemas.user_config import (
     UserConfig,
 )
 import json
-from scripts.utils.logger import setup_logger
+from app.utils.logger import setup_logger
 
-from scripts.config.config import settings
+from app.config.config import settings
 
 logging_level = logging.DEBUG if settings.run.debug else logging.INFO
 logger = setup_logger(name=__name__, log_file=None, level=logging_level)

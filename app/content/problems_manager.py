@@ -6,7 +6,7 @@ operations.
 
 from typing import Dict, Any, List
 import json
-import scripts.database as db
+import app.database as db
 from .content_manager import ContentManager
 from ..ai.agents import Agent
 from ..dto.problem_dto import ProblemDTO

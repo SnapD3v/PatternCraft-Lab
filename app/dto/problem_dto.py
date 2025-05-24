@@ -5,7 +5,7 @@ providing structured representations for problem information and operations.
 
 import json
 import markdown
-import scripts.database as db
+import app.database as db
 from typing import List
 from .solution_history_element_dto import SolutionHistoryElementDTO
 from ..utils.markdown_utils import strip_markdown

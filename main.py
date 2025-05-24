@@ -4,18 +4,18 @@ necessary components including text generation, task writing, reviewing, theory
 and problems management, and web application setup.
 """
 
-from scripts.config.config import settings
-from scripts.config.services.user_config import user_config_manager
-import scripts.database as db
+from app.config.config import settings
+from app.config.services.user_config import user_config_manager
+import app.database as db
 
-from scripts.ai.text_generator import TextGenerator
-from scripts.ai.agents import TaskWriter, Reviewer, Assistant
-from scripts.content.theory_manager import TheoryManager
-from scripts.content.problems_manager import ProblemsManager
-from scripts.content.assistant_manager import AssistantManager
-from scripts.web.web_routes import WebRoutes
-from scripts.web.web_app_factory import WebAppFactory
-from scripts.web.app_runner import AppRunner
+from app.ai.text_generator import TextGenerator
+from app.ai.agents import TaskWriter, Reviewer, Assistant
+from app.content.theory_manager import TheoryManager
+from app.content.problems_manager import ProblemsManager
+from app.content.assistant_manager import AssistantManager
+from app.views.web_routes import WebRoutes
+from app.utils.web_app_factory import WebAppFactory
+from app.utils.app_runner import AppRunner
 
 
 if __name__ == "__main__":

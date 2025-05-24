@@ -3,7 +3,7 @@ Description: Defines data transfer objects for messages from assistant chat
 """
 
 import markdown
-import scripts.database as db
+import app.database as db
 
 
 class ChatHistoryDTO:

@@ -3,7 +3,7 @@ Description: Manages the behavior of the AI tutor
 """
 
 from typing import List, Optional
-import scripts.database as db
+import app.database as db
 from .content_manager import ContentManager
 from ..ai.agents import Agent
 from ..dto.chat_history_dto import ChatHistoryDTO

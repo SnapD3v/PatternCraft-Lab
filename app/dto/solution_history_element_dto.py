@@ -5,7 +5,7 @@ progress and history.
 """
 
 import markdown
-import scripts.database as db
+import app.database as db
 
 
 class SolutionHistoryElementDTO:

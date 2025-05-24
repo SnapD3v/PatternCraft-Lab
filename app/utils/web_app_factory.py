@@ -4,7 +4,7 @@ with all necessary routes and settings.
 """
 
 from flask import Flask
-from .route_provider import IRouteProvider
+from ..views.route_provider import IRouteProvider
 
 
 class WebAppFactory:

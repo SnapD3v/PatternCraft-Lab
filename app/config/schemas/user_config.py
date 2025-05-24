@@ -4,7 +4,7 @@ Description: User config that contains personal custom settings.
 
 from enum import Enum
 from pydantic import BaseModel, SecretStr
-from scripts.config.config import settings
+from app.config.config import settings
 
 
 class DifficultyLevel(str, Enum):
@@ -21,6 +21,7 @@ class Theme(str, Enum):
 class AppearanceConfig(BaseModel):
     theme: Theme = Theme.DARK
     language: str = settings.defaults.language
+    babel_translations_directory: str = 
 
 
 class EducationConfig(BaseModel):

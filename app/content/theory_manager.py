@@ -6,7 +6,7 @@ management.
 
 from typing import Dict, Any, Optional, Tuple, List
 import json
-import scripts.database as db
+import app.database as db
 from .content_manager import ContentManager
 
 
