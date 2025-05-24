@@ -39,7 +39,7 @@ class TextGenerator(ITextGenerator):
                 api_key=user_config.openrouter.api_key.get_secret_value(),
             )
         else:
-            model_dir = Path(__file__).parent.parent.parent / "local_models"
+            model_dir = Path(__file__).parent.parent / "local_models"
             model_path = next(model_dir.rglob(self.model_name))
 
             self.model = Llama(

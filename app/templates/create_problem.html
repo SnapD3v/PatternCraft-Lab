@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Создание задачи
+{{ _('create_problem.title') }} <!-- Создание задачи -->
 {% endblock %}
 
 {% block content %}
-<h2>Создание задачи</h2>
+<h2>{{ _('create_problem.heading') }}</h2> <!-- Создание задачи -->
 
 <form method="post">
 	<div>
-		<h4>Выберите теги:</h4>
+		<h4>{{ _('create_problem.select_tags') }}</h4> <!-- Выберите теги: -->
 		<div id="tag-container" class="cards-area gap-10">
 			{% for tag in tags %}
 				<div class="card block-light cursor-pointer tag" data-tag="{{ tag }}">{{ tag }}</div>
@@ -20,7 +20,7 @@
 
 	<br><br>
 	<!-- Остальная форма, например: -->
-	<button class="button block-light cursor-pointer small-text-size" type="submit">Создать задачу</button>
+	<button class="button block-light cursor-pointer small-text-size" type="submit">{{ _('create_problem.submit') }}</button> <!-- Создать задачу -->
 </form>
 {% endblock %}
 

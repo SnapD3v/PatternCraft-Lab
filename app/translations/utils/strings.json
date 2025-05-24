@@ -1,0 +1,134 @@
+{
+  "common.section": {
+    "ru": "Общее",
+    "en": "Common"
+  },
+  "common.theory": {
+    "ru": "Теория",
+    "en": "Theory"
+  },
+  "common.problems": {
+    "ru": "Задачи",
+    "en": "Problems"
+  },
+  "common.assistant": {
+    "ru": "Ассистент",
+    "en": "Assistant"
+  },
+  "common.system": {
+    "ru": "Системное",
+    "en": "System"
+  },
+  "common.configuration": {
+    "ru": "Конфигурация",
+    "en": "Configuration"
+  },
+  "assistant.thinking": {
+    "ru": "Ассистент думает...",
+    "en": "Assistant is thinking..."
+  },
+  "assistant.message_placeholder": {
+    "ru": "Введите сообщение...",
+    "en": "Enter a message..."
+  },
+  "assistant.send": {
+    "ru": "Отправить",
+    "en": "Send"
+  },
+  "assistant.clear": {
+    "ru": "Очистить чат",
+    "en": "Clear chat"
+  },
+  "errors.server_history": {
+    "ru": "Ошибка сервера при загрузки истории",
+    "en": "Server error while loading history"
+  },
+  "errors.network_history": {
+    "ru": "Ошибка сети при загрузке истории",
+    "en": "Network error while loading history"
+  },
+  "errors.server": {
+    "ru": "Ошибка на стороне сервера",
+    "en": "Server-side error"
+  },
+  "errors.assistant": {
+    "ru": "Ошибка от ассистента",
+    "en": "Assistant error"
+  },
+  "errors.network_message": {
+    "ru": "Сетевая ошибка. Не удалось отправить сообщение",
+    "en": "Network error. Failed to send message"
+  },
+  "create_problem.title": {
+    "ru": "Создание задачи",
+    "en": "Create Problem"
+  },
+  "create_problem.heading": {
+    "ru": "Создание задачи",
+    "en": "Create Problem"
+  },
+  "create_problem.select_tags": {
+    "ru": "Выберите теги:",
+    "en": "Select tags:"
+  },
+  "create_problem.submit": {
+    "ru": "Создать задачу",
+    "en": "Create Problem"
+  },
+  "main.title": {
+    "ru": "Main",
+    "en": "Main"
+  },
+  "main.heading": {
+    "ru": "Главная",
+    "en": "Main"
+  },
+  "main.lorem_ipsum": {
+    "ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  },
+  "problem.heading": {
+    "ru": "Задача",
+    "en": "Problem"
+  },
+  "problem.your_solution": {
+    "ru": "Ваше решение",
+    "en": "Your Solution"
+  },
+  "problem.submit": {
+    "ru": "Отправить",
+    "en": "Submit"
+  },
+  "problems.title": {
+    "ru": "Main",
+    "en": "Main"
+  },
+  "problems.heading": {
+    "ru": "Задачи",
+    "en": "Problems"
+  },
+  "problems.create": {
+    "ru": "Создать задачу",
+    "en": "Create Problem"
+  },
+  "theory.title": {
+    "ru": "Main",
+    "en": "Main"
+  },
+  "theory.heading": {
+    "ru": "Теория",
+    "en": "Theory"
+  },
+  "theory.section_settings": {
+    "ru": "Настройка раздела",
+    "en": "Section Settings"
+  },
+  "theory.add_card": {
+    "ru": "Добавить карточку",
+    "en": "Add Card"
+  },
+  "theory.add_section": {
+    "ru": "Добавить раздел",
+    "en": "Add Section"
+  }
+}

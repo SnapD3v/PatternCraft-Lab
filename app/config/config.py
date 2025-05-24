@@ -8,10 +8,6 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
-
-
-
 load_dotenv()
 
 

@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-<h2>Задача</h2>
+<h2>{{ _('problem.heading') }}</h2> <!-- Задача -->
 <h3>{{ problem.name }}</h3>
 <span class="cards-area gap-10">
 	{% for tag in problem.tags %}
@@ -22,7 +22,7 @@
 </span>
 <p class="formatted-text">{{ problem.task | safe }}</p>
 <br>
-<h3>Ваше решение</h3>
+<h3>{{ _('problem.your_solution') }}</h3> <!-- Ваше решение -->
 {% for solution_history_element in problem.solution_history_elements %}
 	{% if solution_history_element.type == 'text' %}
 		<div class="block-light">
@@ -41,7 +41,7 @@
 	<textarea name="solution" id="editor"></textarea>
 </div>
 <br>
-<button class="button block-light cursor-pointer small-text-size" type="submit">Отправить</button>
+<button class="button block-light cursor-pointer small-text-size" type="submit">{{ _('problem.submit') }}</button> <!-- Отправить -->
 </form>
 {% endblock %}
 

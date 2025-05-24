@@ -42,7 +42,7 @@ class UserConfigManager:
         ):
             raise TokenNotProvidedException
 
-        local_models = Path(__file__).parent.parent.parent.parent / "local_models"
+        local_models = Path(__file__).parent.parent.parent / "local_models"
         print(local_models.absolute())
         if self.config.model.model_type == "local" and not any(
             local_models.rglob(self.config.model.model_name)

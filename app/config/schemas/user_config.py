@@ -21,7 +21,6 @@ class Theme(str, Enum):
 class AppearanceConfig(BaseModel):
     theme: Theme = Theme.DARK
     language: str = settings.defaults.language
-    babel_translations_directory: str = 
 
 
 class EducationConfig(BaseModel):

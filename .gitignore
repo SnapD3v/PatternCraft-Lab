@@ -52,7 +52,8 @@ coverage.xml
 cover/
 
 # Translations
-*.mo
+# *.mo
+*.po
 *.pot
 
 # Django stuff:
@@ -174,5 +175,5 @@ cython_debug/
 config.json
 
 # Local models
-local_models/*
-!local_models/.gitkeep
+app/local_models/*
+!app/local_models/.gitkeep

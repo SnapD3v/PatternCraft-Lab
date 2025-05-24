@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Main
+{{ _('problems.title') }} <!-- Main -->
 {% endblock %}
 
 {% block content %}
-<h2>Задачи</h2>
+<h2>{{ _('problems.heading') }}</h2> <!-- Задачи -->
 <div class="cards-area">
 {% for problem in problems %}
 	<a href="/problem/{{ problem.id }}" class="button block-light card sequential-card">
@@ -25,7 +25,7 @@ Main
 {% endfor %}
 	<a href="/create/problem" class="button block-light card sequential-card problem-card">
 		<img src="/static/img/add.png" alt="">
-		<p><strong>Создать задачу</strong></p>
+		<p><strong>{{ _('problems.create') }}</strong></p> <!-- Создать задачу -->
 	</a>
 </div>
 <br>

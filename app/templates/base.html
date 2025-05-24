@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={{ g.get('lang_code', 'ru') }}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,26 +18,26 @@
       <div class="sidebar-content">
         <span class="big-text-size"><strong>PatternCraft Lab</strong></span>
         <br /><br />
-        <span class="small-text-size"><strong>Общее</strong></span>
+        <span class="small-text-size"><strong>{{ _('common.section') }}</strong></span>
         <br />
         <a class="button" href="/theory">
           <img src="/static/img/theory.png" alt="" />
-          <span>Теория</span>
+          <span>{{ _('common.theory') }}</span>
         </a>
         <a class="button" href="/problems">
           <img src="/static/img/problems.png" alt="" />
-          <span>Задачи</span>
+          <span>{{ _('common.problems') }}</span>
         </a>
         <a class="button" id="assistant-button">
           <img src="/static/img/ai_icon.png" alt="" />
-          <span>Ассистент</span>
+          <span>{{ _('common.assistant') }}</span>
         </a>
         <br /><br />
-        <span class="small-text-size"><strong>Системное</strong></span>
+        <span class="small-text-size"><strong>{{ _('common.system') }}</strong></span>
         <br />
         <a class="button" href="/configuration">
           <img src="/static/img/configuration.png" alt="" />
-          <span>Конфигурация</span>
+          <span>{{ _('common.configuration') }}</span>
         </a>
       </div>
       <div class="sidebar-ledge">
@@ -52,17 +52,17 @@
         <div class="chat-content">
           <div class="messages-container">
             <div class="messages"></div>
-            <div class="message-loading-indicator">Ассистент думает...</div>
+            <div class="message-loading-indicator">{{ _('assistant.thinking') }}</div>
           </div>
           <div class="chat-input">
-            <textarea placeholder="Введите сообщение..." rows="3"></textarea>
+            <textarea placeholder="{{ _('assistant.message_placeholder') }}" rows="3"></textarea>
           </div>
           <div class="buttons">
             <a class="button" id="send-button">
-              <span>Отправить</span>
+              <span>{{ _('assistant.send') }}</span>
             </a>
             <a class="button" id="clear-button">
-              <span>Очистить чат</span>
+              <span>{{ _('assistant.clear') }}</span>
             </a>
           </div>
         </div>
@@ -137,7 +137,7 @@
           if (!response.ok) {
             console.error("Failed to load chat history:", response.statusText);
             displayMessage(
-              `Ошибка сервера при загрузки истории: ${response.statusText}`,
+              `{{ _('errors.server_history') }}: ${response.statusText}`,
               "system-info"
             );
             return;
@@ -150,7 +150,7 @@
           }
         } catch (error) {
           console.error("Error fetching chat history:", error);
-          displayMessage(`Ошибка сети при загрузке истории.`, "system-info");
+          displayMessage(`{{ _('errors.network_history') }}`, "system-info");
         }
       }
 
@@ -183,9 +183,7 @@
               .catch(() => ({ error: "Server error" }));
             console.error("Server error:", response.statusText, errorData);
             displayMessage(
-              `Ошибка на стороне сервера: ${
-                errorData.error || response.statusText
-              }`,
+              `{{ _('errors.server') }}: ${errorData.error || response.statusText}`,
               "system-info"
             );
           } else {
@@ -208,9 +206,7 @@
                   .catch(() => ({ error: "Server error" }));
                 console.error("Server error:", response.statusText, errorData);
                 displayMessage(
-                  `Ошибка на стороне сервера: ${
-                    errorData.error || response.statusText
-                  }`,
+                  `{{ _('errors.assistant') }}: ${data.error}`,
                   "system-info"
                 );
               } else {
@@ -219,7 +215,7 @@
                   displayMessage(data.answer, "assistant"); // Отображаем ответ ассистента
                 } else if (data.error) {
                   displayMessage(
-                    `Ошибка от ассистента: ${data.error}`,
+                    `{{ _('errors.assistant') }}: ${data.error}`,
                     "system-info"
                   );
                 }
@@ -227,7 +223,7 @@
             } catch (error) {
               console.error("Network error sending message:", error);
               displayMessage(
-                "Сетевая ошибка. Не удалось отправить сообщение.",
+                "{{ _('errors.network_message') }}",
                 "system-info"
               );
             } finally {
@@ -243,7 +239,7 @@
         } catch (error) {
           console.error("Network error sending message:", error);
           displayMessage(
-            "Сетевая ошибка. Не удалось отправить сообщение.",
+            "{{ _('errors.network_message') }}",
             "system-info"
           );
         }
