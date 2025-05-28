@@ -41,16 +41,33 @@ class WebRoutes(IRouteProvider):
 
         # Маршруты для Assistant API
         app.add_url_rule(
-            "/assistant/ask", view_func=self.assistant_ask, methods=["POST"]
+            "/assistant/ask/<int:chat_id>", view_func=self.assistant_ask, methods=["POST"]
         )
         app.add_url_rule(
-            "/assistant/history", view_func=self.assistant_history, methods=["GET"]
+            "/assistant/history/<int:chat_id>", view_func=self.assistant_history, methods=["GET"]
         )
         app.add_url_rule(
-            "/assistant/clear", view_func=self.assistant_clear_history, methods=["POST"]
+            "/assistant/clear/<int:chat_id>", view_func=self.assistant_clear_history, methods=["POST"]
         )
         app.add_url_rule(
-            "/assistant/format_promt", view_func=self.server_promt_processing, methods=["POST"]
+            "/assistant/format_promt/<int:chat_id>", view_func=self.server_promt_processing, methods=["POST"]
+        )
+        app.add_url_rule(
+            "/assistant/save_message/<int:chat_id>", view_func=self.save_user_message, methods=["POST"]
+        )
+
+        # Маршруты для управления чатами
+        app.add_url_rule(
+            "/assistant/chats", view_func=self.get_chats, methods=["GET"]
+        )
+        app.add_url_rule(
+            "/assistant/chats/create", view_func=self.create_chat, methods=["POST"]
+        )
+        app.add_url_rule(
+            "/assistant/chats/<int:chat_id>", view_func=self.delete_chat, methods=["DELETE"]
+        )
+        app.add_url_rule(
+            "/assistant/chats/<int:chat_id>/rename", view_func=self.rename_chat, methods=["POST"]
         )
 
     def index(self) -> str:
@@ -96,14 +113,14 @@ class WebRoutes(IRouteProvider):
         return render_template("theory.html", theory=theory)
 
     # --- Assistant API Handlers ---
-    def server_promt_processing(self):
+    def server_promt_processing(self, chat_id):
         data = request.get_json()
         user_prompt = data.get("prompt")
         if not user_prompt:
             return jsonify({"error": "Prompt is required"}), 400
 
         try:
-            self.assistant_manager.get_promt(user_prompt)
+            self.assistant_manager.get_promt(chat_id, user_prompt)
             html_prompt = markdown.markdown(
                 user_prompt, extensions=["fenced_code", "nl2br"]
             )
@@ -111,14 +128,14 @@ class WebRoutes(IRouteProvider):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
-    def assistant_ask(self):
+    def assistant_ask(self, chat_id):
         data = request.get_json()
         user_prompt = data.get("prompt")
         if not user_prompt:
             return jsonify({"error": "Prompt is required"}), 400
 
         try:
-            raw_answer = self.assistant_manager.get_answer(user_prompt)
+            raw_answer = self.assistant_manager.get_answer(chat_id, user_prompt)
             html_answer = markdown.markdown(
                 raw_answer, extensions=["fenced_code", "nl2br"]
             )
@@ -126,9 +143,9 @@ class WebRoutes(IRouteProvider):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
-    def assistant_history(self):
+    def assistant_history(self, chat_id):
         try:
-            messages = self.assistant_manager.get_all_messages()
+            messages = self.assistant_manager.get_all_messages(chat_id)
             history_data = []
             if messages:
                 for msg_dto in messages:
@@ -139,9 +156,56 @@ class WebRoutes(IRouteProvider):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
-    def assistant_clear_history(self):
+    def assistant_clear_history(self, chat_id):
         try:
-            self.assistant_manager.clear_history()
+            self.assistant_manager.clear_history(chat_id)
             return jsonify({"status": "success", "message": "Chat history cleared."})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    def save_user_message(self, chat_id):
+        data = request.get_json()
+        content = data.get("content")
+        if not content:
+            return jsonify({"error": "Content is required"}), 400
+        try:
+            self.assistant_manager.save_user_message(chat_id, content)
+            return jsonify({"status": "success"})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    # --- Chat Management Handlers ---
+    def get_chats(self):
+        try:
+            chats = self.assistant_manager.get_chats()
+            return jsonify({"chats": chats})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    def create_chat(self):
+        data = request.get_json()
+        name = data.get("name", "New Chat")
+        try:
+            chat_id = self.assistant_manager.create_chat(name)
+            return jsonify({"id": chat_id, "name": name})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    def rename_chat(self, chat_id):
+        data = request.get_json()
+        new_name = data.get("name")
+        if not new_name:
+            return jsonify({"error": "Name is required"}), 400
+
+        try:
+            self.assistant_manager.rename_chat(chat_id, new_name)
+            return jsonify({"status": "success", "message": "Chat renamed."})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    def delete_chat(self, chat_id):
+        try:
+            self.assistant_manager.delete_chat(chat_id)
+            return jsonify({"status": "success", "message": "Chat deleted."})
         except Exception as e:
             return jsonify({"error": str(e)}), 500

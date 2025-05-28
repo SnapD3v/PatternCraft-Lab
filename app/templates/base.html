@@ -6,10 +6,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/chat.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     {% block head %}{% endblock %}
     <title>PatternCraft Lab | {% block title %}{% endblock %}</title>
   </head>
@@ -49,21 +51,36 @@
       <div class="wrapper">{% block content %}{% endblock %}</div>
 
       <div class="assistant-panel">
+        <div class="chat-container">
+          <button class="close-button">×</button>
+          <!-- Chat List Sidebar -->
+          <div class="chat-list-sidebar">
+            <div class="chat-list-header">
+              <h3>AI-Ассистент</h3>
+              <button id="new-chat-button" class="new-chat-btn">
+                <span>Новый чат</span>
+              </button>
+            </div>
+            <div class="chat-list">
+              <!-- Чаты будут добавляться здесь динамически -->
+            </div>
+          </div>
+
+          <!-- Chat Content -->
         <div class="chat-content">
+            <div class="chat-title">
+              <h3 id="current-chat-title">Выберите чат</h3>
+            </div>
           <div class="messages-container">
             <div class="messages"></div>
             <div class="message-loading-indicator">{{ _('assistant.thinking') }}</div>
           </div>
-          <div class="chat-input">
+          <div class="chat-input unified-input">
             <textarea placeholder="{{ _('assistant.message_placeholder') }}" rows="3"></textarea>
+            <button class="send-icon-button" id="send-button" type="button" title="{{ _('assistant.send') }}">
+              <i class="fas fa-arrow-up"></i>
+            </button>
           </div>
-          <div class="buttons">
-            <a class="button" id="send-button">
-              <span>{{ _('assistant.send') }}</span>
-            </a>
-            <a class="button" id="clear-button">
-              <span>{{ _('assistant.clear') }}</span>
-            </a>
           </div>
         </div>
       </div>
@@ -74,78 +91,403 @@
       // Получаем элементы DOM
       const body = document.querySelector("body");
       const menuButton = document.querySelector("#sidebar-button");
-      const assistantButtonElement =
-        document.querySelector("#assistant-button");
+      const assistantButtonElement = document.querySelector("#assistant-button");
       const assistantPanel = document.querySelector(".assistant-panel");
+      const newChatButton = document.getElementById("new-chat-button");
+      const chatList = document.querySelector(".chat-list");
 
       const messagesContainer = document.querySelector(".messages-container");
       const messagesDiv = messagesContainer.querySelector(".messages");
       const chatInput = document.querySelector(".chat-input textarea");
       const sendButton = document.getElementById("send-button");
-      const clearChatButton = document.getElementById("clear-button");
-      const messageLoadingIndicator = messagesContainer.querySelector(
-        ".message-loading-indicator"
-      );
+      const messageLoadingIndicator = messagesContainer.querySelector(".message-loading-indicator");
 
-      let isAssistantResponding = false; // Флаг для блокировки отправки во время ответа ассистента
+      let currentChatId = null;
+      let isAssistantResponding = false;
+      let activeThinkingChatId = null;
 
-      // Обработчик события для кнопки меню
+      // Глобальный список чатов
+      let chatsCache = [];
+
+      // Кастомный tooltip для названия чата
+      let chatTooltip = null;
+      function showChatTooltip(target, text) {
+        if (!chatTooltip) {
+          chatTooltip = document.createElement('div');
+          chatTooltip.className = 'custom-tooltip';
+          chatTooltip.appendChild(document.createTextNode(''));
+          const arrow = document.createElement('div');
+          arrow.className = 'custom-tooltip-arrow';
+          chatTooltip.appendChild(arrow);
+          document.body.appendChild(chatTooltip);
+        }
+        chatTooltip.childNodes[0].nodeValue = text;
+        chatTooltip.classList.add('visible');
+        // Позиционируем tooltip по центру и выше над элементом
+        const rect = target.getBoundingClientRect();
+        chatTooltip.style.left = (rect.left + rect.width / 2 + window.scrollX) + 'px';
+        chatTooltip.style.top = (rect.top + window.scrollY - 32) + 'px';
+      }
+      function hideChatTooltip() {
+        if (chatTooltip) {
+          chatTooltip.classList.remove('visible');
+        }
+      }
+      document.addEventListener('mouseover', function(e) {
+        if (e.target.classList.contains('chat-item-title')) {
+          showChatTooltip(e.target, e.target.textContent);
+        }
+      });
+      document.addEventListener('mouseout', function(e) {
+        if (e.target.classList.contains('chat-item-title')) {
+          hideChatTooltip();
+        }
+      });
+
+      // Функция отображения сообщения
+      function displayMessage(content, role) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${role}`;
+        
+        const roleLabel = document.createElement("div");
+        roleLabel.className = "message-role";
+        roleLabel.textContent = role === "user" ? "Вы" : "Ассистент";
+        
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "message-content";
+        contentDiv.innerHTML = content;
+        
+        messageDiv.appendChild(roleLabel);
+        messageDiv.appendChild(contentDiv);
+        messagesDiv.appendChild(messageDiv);
+        
+        // Прокрутка к последнему сообщению
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Загрузка списка чатов
+      async function loadChats() {
+        try {
+          const response = await fetch('/assistant/chats');
+          const data = await response.json();
+          chatsCache = data.chats;
+          chatList.innerHTML = '';
+          data.chats.forEach(chat => {
+            chatList.appendChild(createChatElement(chat));
+          });
+        } catch (error) {
+          console.error('Error loading chats:', error);
+        }
+      }
+
+      // Обновление заголовка чата из локального списка
+      function updateChatTitleFromCache(chatId) {
+        const chat = chatsCache.find(c => c.id === chatId);
+        document.getElementById('current-chat-title').textContent = chat ? chat.name : 'Новый чат';
+      }
+
+      // Модальное окно для переименования чата
+      function showRenameChatModal(event, chatId, oldName) {
+        event.stopPropagation();
+        const modal = document.createElement("div");
+        modal.className = "delete-confirmation-modal";
+        modal.innerHTML = `
+          <div class="delete-confirmation-content">
+            <h3>Rename chat</h3>
+            <input type="text" class="rename-chat-input" value="${oldName}" maxlength="50" style="width:100%;margin-bottom:16px;padding:8px;border-radius:6px;border:1px solid #444;background:#222;color:#fff;" />
+            <div class="delete-confirmation-buttons">
+              <button class="cancel-button">Cancel</button>
+              <button class="delete-button">Save</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        const input = modal.querySelector('.rename-chat-input');
+        input.focus();
+        input.select();
+        modal.querySelector('.cancel-button').onclick = () => modal.remove();
+        modal.querySelector('.delete-button').onclick = async () => {
+          const newName = input.value.trim();
+          if (newName && newName !== oldName) {
+            await renameChat(null, chatId, newName);
+          }
+          modal.remove();
+        };
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') {
+            modal.querySelector('.delete-button').click();
+          }
+          if (e.key === 'Escape') {
+            modal.remove();
+          }
+        });
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+      }
+
+      // Функции для показа/скрытия индикатора загрузки
+      function showLoadingIndicator() {
+        messageLoadingIndicator.style.display = "block";
+      }
+      function hideLoadingIndicator() {
+        messageLoadingIndicator.style.display = "none";
+      }
+
+      // Исправленная функция отправки сообщения
+      async function handleSendMessage() {
+        const text = chatInput.value.trim();
+        if (text === "" || isAssistantResponding) return;
+
+        if (!currentChatId) {
+          try {
+            const response = await fetch('/assistant/chats/create', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: text.substring(0, 30) + '...' })
+            });
+            const data = await response.json();
+            currentChatId = data.id;
+            await loadChats();
+            updateChatTitleFromCache(currentChatId);
+          } catch (error) {
+            console.error('Error creating chat:', error);
+            return;
+          }
+        }
+
+        isAssistantResponding = true;
+        sendButton.classList.add("disabled");
+        chatInput.disabled = true;
+        activeThinkingChatId = currentChatId;
+        showLoadingIndicator();
+
+        chatInput.value = "";
+
+        try {
+          // Сохраняем сообщение пользователя в базе
+          await fetch(`/assistant/save_message/${currentChatId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: text }),
+          });
+
+          // После сохранения — сразу перезагружаем историю (покажет и новое сообщение)
+          await loadChatHistory(currentChatId);
+
+          // Получение ответа от ассистента
+          const response = await fetch(`/assistant/ask/${currentChatId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: text }),
+          });
+
+          // После ответа ассистента — снова перезагружаем историю (покажет и ответ)
+          await loadChatHistory(currentChatId);
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            displayMessage(`{{ _('errors.assistant') }}: ${errorData.error}`, "system-info");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          displayMessage("{{ _('errors.network_message') }}", "system-info");
+        } finally {
+          isAssistantResponding = false;
+          if (currentChatId === activeThinkingChatId) {
+            hideLoadingIndicator();
+          }
+          activeThinkingChatId = null;
+          sendButton.classList.remove("disabled");
+          chatInput.disabled = false;
+          chatInput.focus();
+        }
+      }
+
+      // При переключении чата показываем индикатор только если ассистент думает в этом чате
+      async function selectChat(chatId) {
+        currentChatId = chatId;
+        if (activeThinkingChatId === chatId) {
+          showLoadingIndicator();
+        } else {
+          hideLoadingIndicator();
+        }
+        await loadChats();
+        await loadChatHistory(chatId);
+        updateChatTitleFromCache(chatId);
+      }
+
+      // Функция для создания элемента чата
+      function createChatElement(chat) {
+        const chatElement = document.createElement("div");
+        chatElement.className = `chat-item ${currentChatId === chat.id ? 'active' : ''}`;
+        chatElement.setAttribute('data-chat-id', chat.id);
+        
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "chat-item-title";
+        titleSpan.textContent = chat.name;
+        titleSpan.title = chat.name;
+        
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "chat-item-actions";
+        actionsDiv.innerHTML = `
+          <button class="chat-item-action" onclick="showRenameChatModal(event, ${chat.id}, '${chat.name.replace(/'/g, "&#39;")}')" title="Переименовать чат">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="chat-item-action" onclick="showDeleteConfirmation(event, ${chat.id})" title="Удалить чат">
+            <i class="fas fa-trash"></i>
+          </button>
+        `;
+
+        chatElement.appendChild(titleSpan);
+        chatElement.appendChild(actionsDiv);
+        chatElement.onclick = (e) => {
+          if (e.target === chatElement || e.target === titleSpan) {
+            selectChat(chat.id);
+          }
+        };
+        
+        return chatElement;
+      }
+
+      // Обработчики событий
       menuButton.addEventListener("click", () => {
         body.classList.toggle("open-menu");
       });
 
-      // Обработчик события для кнопки ассистента
-      assistantButtonElement.addEventListener("click", () => {
-        const visible = !assistantPanel.classList.contains("visible");
-        assistantPanel.classList.toggle("visible");
-        if (visible) {
-          loadChatHistory(); // Загружаем историю чата при открытии панели
-          chatInput.focus(); // Устанавливаем фокус на поле ввода
+      // Обработчик для открытия панели ассистента
+      assistantButtonElement.addEventListener("click", async () => {
+        assistantPanel.classList.add("visible");
+        await loadChats();
+        if (currentChatId) {
+          await updateChatTitleFromCache(currentChatId);
+        } else {
+          document.getElementById('current-chat-title').textContent = 'Новый чат';
+        }
+        chatInput.focus();
+      });
+
+      // Обработчик для закрытия панели ассистента
+      document.querySelector('.close-button').addEventListener('click', () => {
+        assistantPanel.classList.remove('visible');
+      });
+
+      // Закрытие по клику вне окна
+      assistantPanel.addEventListener("click", (e) => {
+        if (e.target === assistantPanel) {
+          assistantPanel.classList.remove("visible");
         }
       });
-      // Отображение истории
-      // Функция для создания элемента сообщения
-      function createMessageElement(text, role) {
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message-item");
-        if (role === "user") {
-          messageElement.classList.add("user-message");
-        } else if (role === "assistant") {
-          messageElement.classList.add("assistant-message");
+
+      // Обработчик для кнопки нового чата
+      newChatButton.onclick = async () => {
+        currentChatId = null;
+        document.getElementById('current-chat-title').textContent = 'Новый чат';
+        messagesDiv.innerHTML = '';
+        await loadChats();
+        chatInput.focus();
+      };
+
+      // Обработчики для отправки сообщений
+      sendButton.addEventListener("click", handleSendMessage);
+      chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          handleSendMessage();
         }
-        messageElement.innerHTML = text; // Используем innerHTML для отображения HTML
-        return messageElement;
+      });
+
+      // Функция показа диалога подтверждения удаления
+      function showDeleteConfirmation(event, chatId) {
+        event.stopPropagation();
+        
+        // Создаем модальное окно
+        const modal = document.createElement("div");
+        modal.className = "delete-confirmation-modal";
+        modal.innerHTML = `
+          <div class="delete-confirmation-content">
+            <h3>Delete chat?</h3>
+            <p>Are you sure you want to delete this chat?</p>
+            <div class="delete-confirmation-buttons">
+              <button class="cancel-button">Cancel</button>
+              <button class="delete-button">Delete</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Обработчики кнопок
+        const cancelButton = modal.querySelector(".cancel-button");
+        const deleteButton = modal.querySelector(".delete-button");
+        
+        cancelButton.onclick = () => {
+          modal.remove();
+        };
+        
+        deleteButton.onclick = async () => {
+          await deleteChat(event, chatId);
+          modal.remove();
+        };
+        
+        // Закрытие по клику вне окна
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            modal.remove();
+          }
+        };
       }
 
-      // Функция для прокрутки к нижней части контейнера сообщений
-      function scrollToBottom() {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      }
-
-      // Функция для отображения сообщения
-      function displayMessage(text, role) {
-        const messageElement = createMessageElement(text, role);
-        messagesDiv.appendChild(messageElement);
-        scrollToBottom(); // Прокручиваем вниз после добавления сообщения
-      }
-
-      // Асинхронная функция для загрузки истории чата
-      async function loadChatHistory() {
-        messagesDiv.innerHTML = ""; // Очищаем текущее содержимое
+      // Функция удаления чата
+      async function deleteChat(event, chatId) {
+        event.stopPropagation();
         try {
-          const response = await fetch("/assistant/history"); // Запрос на сервер для получения истории
+          await fetch(`/assistant/chats/${chatId}`, { method: 'DELETE' });
+          if (currentChatId === chatId) {
+            currentChatId = null;
+            messagesDiv.innerHTML = '';
+            document.getElementById('current-chat-title').textContent = 'Новый чат';
+          }
+          await loadChats();
+        } catch (error) {
+          console.error('Error deleting chat:', error);
+        }
+      }
+
+      // После переименования чата
+      async function renameChat(event, chatId, newName) {
+        if (event) event.stopPropagation();
+        try {
+          const response = await fetch(`/assistant/chats/${chatId}/rename`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: newName })
+          });
+          await loadChats();
+          updateChatTitleFromCache(chatId);
+        } catch (error) {
+          console.error('Error renaming chat:', error);
+        }
+      }
+
+      // Модифицированная функция загрузки истории чата
+      async function loadChatHistory(chatId = currentChatId) {
+        if (!chatId) {
+          messagesDiv.innerHTML = '';
+          document.getElementById('current-chat-title').textContent = 'Новый чат';
+          return;
+        }
+        
+        messagesDiv.innerHTML = '';
+        try {
+          const response = await fetch(`/assistant/history/${chatId}`);
           if (!response.ok) {
             console.error("Failed to load chat history:", response.statusText);
-            displayMessage(
-              `{{ _('errors.server_history') }}: ${response.statusText}`,
-              "system-info"
-            );
+            displayMessage(`{{ _('errors.server_history') }}: ${response.statusText}`, "system-info");
             return;
           }
           const data = await response.json();
           if (data.history && data.history.length > 0) {
             data.history.forEach((msg) => {
-              displayMessage(msg.content, msg.role); // Отображаем каждое сообщение
+              displayMessage(msg.content, (msg.role === 'user' || msg.role === 'human') ? 'user' : msg.role);
             });
           }
         } catch (error) {
@@ -153,113 +495,6 @@
           displayMessage(`{{ _('errors.network_history') }}`, "system-info");
         }
       }
-
-      // Асинхронная функция для отправки сообщений
-      async function handleSendMessage() {
-        const text = chatInput.value.trim(); // Получаем текст сообщения
-        if (text === "" || isAssistantResponding) {
-          return; // Не отправляем пустые сообщения или если ассистент отвечает
-        }
-
-        isAssistantResponding = true; // Устанавливаем флаг, что ассистент отвечает
-        sendButton.classList.add("disabled"); // Визуально блокируем кнопку
-        clearChatButton.classList.add("disabled");
-        chatInput.disabled = true; // Блокируем поле ввода
-        if (messageLoadingIndicator)
-          messageLoadingIndicator.style.display = "block"; // Показываем индикатор загрузки
-
-        try {
-          const response = await fetch("/assistant/format_promt", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ prompt: text }), // Преобразуем текст в JSON
-          });
-
-          if (!response.ok) {
-            const errorData = await response
-              .json()
-              .catch(() => ({ error: "Server error" }));
-            console.error("Server error:", response.statusText, errorData);
-            displayMessage(
-              `{{ _('errors.server') }}: ${errorData.error || response.statusText}`,
-              "system-info"
-            );
-          } else {
-            const data = await response.json();
-
-            displayMessage(data.promt, "user");
-            chatInput.value = ""; // Очищаем поле ввода
-            try {
-              const response = await fetch("/assistant/ask", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ prompt: text }), // Преобразуем текст в JSON
-              });
-
-              if (!response.ok) {
-                const errorData = await response
-                  .json()
-                  .catch(() => ({ error: "Server error" }));
-                console.error("Server error:", response.statusText, errorData);
-                displayMessage(
-                  `{{ _('errors.assistant') }}: ${data.error}`,
-                  "system-info"
-                );
-              } else {
-                const data = await response.json();
-                if (data.answer) {
-                  displayMessage(data.answer, "assistant"); // Отображаем ответ ассистента
-                } else if (data.error) {
-                  displayMessage(
-                    `{{ _('errors.assistant') }}: ${data.error}`,
-                    "system-info"
-                  );
-                }
-              }
-            } catch (error) {
-              console.error("Network error sending message:", error);
-              displayMessage(
-                "{{ _('errors.network_message') }}",
-                "system-info"
-              );
-            } finally {
-              isAssistantResponding = false; // Сбрасываем флаг
-              sendButton.classList.remove("disabled"); // Разблокируем кнопку
-              clearChatButton.classList.remove("disabled");
-              chatInput.disabled = false; // Разблокируем поле ввода
-              if (messageLoadingIndicator)
-                messageLoadingIndicator.style.display = "none"; // Скрываем индикатор загрузки
-                chatInput.focus(); // Устанавливаем фокус на поле ввода
-            }
-          }
-        } catch (error) {
-          console.error("Network error sending message:", error);
-          displayMessage(
-            "{{ _('errors.network_message') }}",
-            "system-info"
-          );
-        }
-      }
-
-      sendButton.addEventListener("click", handleSendMessage); // Обработчик для кнопки отправки
-
-      clearChatButton.addEventListener("click", async () => {
-        if (isAssistantResponding) {
-          // Не даем чистить, пока ассистент отвечает
-          return;
-        }
-        try {
-          const response = await fetch("/assistant/clear", { method: "POST" }); // Запрос на очистку истории
-          messagesDiv.innerHTML = ""; // Очищаем контейнер сообщений
-        } catch (error) {
-          console.error("Error clearing chat history:", error);
-          displayMessage(`Ошибка сети при очистке истории.`, "system-info");
-        }
-      });
     </script>
   </body>
 </html>

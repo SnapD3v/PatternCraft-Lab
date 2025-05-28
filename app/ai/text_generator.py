@@ -13,7 +13,6 @@ from pathlib import Path
 
 user_config = user_config_manager.get_config()
 
-
 class ITextGenerator(ABC):
     @abstractmethod
     def generate(
