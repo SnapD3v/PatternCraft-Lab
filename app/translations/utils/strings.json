@@ -16,7 +16,7 @@
     "en": "Assistant"
   },
   "common.system": {
-    "ru": "Системное",
+    "ru": "Система",
     "en": "System"
   },
   "common.configuration": {
@@ -35,29 +35,29 @@
     "ru": "Отправить",
     "en": "Send"
   },
-  "assistant.clear": {
-    "ru": "Очистить чат",
-    "en": "Clear chat"
+  "errors.assistant": {
+    "ru": "Ошибка ассистента",
+    "en": "Assistant error"
+  },
+  "errors.network_message": {
+    "ru": "Ошибка сети. Не удалось отправить сообщение",
+    "en": "Network error. Failed to send message"
   },
   "errors.server_history": {
-    "ru": "Ошибка сервера при загрузки истории",
+    "ru": "Ошибка сервера при загрузке истории",
     "en": "Server error while loading history"
   },
   "errors.network_history": {
     "ru": "Ошибка сети при загрузке истории",
     "en": "Network error while loading history"
   },
-  "errors.server": {
-    "ru": "Ошибка на стороне сервера",
-    "en": "Server-side error"
+  "problems.generating": {
+    "ru": "Генерация задачи...",
+    "en": "Generating..."
   },
-  "errors.assistant": {
-    "ru": "Ошибка от ассистента",
-    "en": "Assistant error"
-  },
-  "errors.network_message": {
-    "ru": "Сетевая ошибка. Не удалось отправить сообщение",
-    "en": "Network error. Failed to send message"
+  "problems.generated": {
+    "ru": "Задача успешно сгенерирована!",
+    "en": "Problem generated successfully!"
   },
   "create_problem.title": {
     "ru": "Создание задачи",
@@ -76,7 +76,7 @@
     "en": "Create Problem"
   },
   "main.title": {
-    "ru": "Main",
+    "ru": "Главная",
     "en": "Main"
   },
   "main.heading": {
@@ -99,20 +99,56 @@
     "ru": "Отправить",
     "en": "Submit"
   },
+  "problem.answer_received": {
+    "ru": "Получен ответ от ИИ",
+    "en": "Answer received from AI"
+  },
   "problems.title": {
-    "ru": "Main",
-    "en": "Main"
+    "ru": "Задачи",
+    "en": "Problems"
   },
   "problems.heading": {
     "ru": "Задачи",
     "en": "Problems"
   },
+  "problems.delete": {
+    "ru": "Удалить задачу",
+    "en": "Delete Problem"
+  },
   "problems.create": {
     "ru": "Создать задачу",
     "en": "Create Problem"
   },
+  "problems.delete_confirmation.title": {
+    "ru": "Удалить задачу?",
+    "en": "Delete problem?"
+  },
+  "problems.delete_confirmation.message": {
+    "ru": "Вы уверены, что хотите удалить эту задачу?",
+    "en": "Are you sure you want to delete this problem?"
+  },
+  "problems.delete_confirmation.cancel": {
+    "ru": "Отменить",
+    "en": "Cancel"
+  },
+  "problems.delete_confirmation.delete": {
+    "ru": "Удалить",
+    "en": "Delete"
+  },
+  "problems.delete_success": {
+    "ru": "Задача удалена успешно!",
+    "en": "Problem deleted successfully!"
+  },
+  "problems.delete_error": {
+    "ru": "Ошибка при удалении задачи",
+    "en": "Error deleting problem."
+  },
+  "problems.generation_timeout": {
+    "ru": "Время генерации задачи истекло",
+    "en": "Generating..."
+  },
   "theory.title": {
-    "ru": "Main",
+    "ru": "Теория",
     "en": "Main"
   },
   "theory.heading": {
@@ -120,7 +156,7 @@
     "en": "Theory"
   },
   "theory.section_settings": {
-    "ru": "Настройка раздела",
+    "ru": "Настройки раздела",
     "en": "Section Settings"
   },
   "theory.add_card": {
@@ -130,5 +166,41 @@
   "theory.add_section": {
     "ru": "Добавить раздел",
     "en": "Add Section"
+  },
+  "chats.delete_confirmation.title": {
+    "ru": "Удалить чат?",
+    "en": "Delete chat?"
+  },
+  "chats.delete_confirmation.message": {
+    "ru": "Вы уверены, что хотите удалить этот чат?",
+    "en": "Are you sure you want to delete this chat?"
+  },
+  "chats.delete_confirmation.cancel": {
+    "ru": "Отменить",
+    "en": "Cancel"
+  },
+  "chats.delete_confirmation.delete": {
+    "ru": "Удалить",
+    "en": "Delete"
+  },
+  "chats.delete_success": {
+    "ru": "Чат удален успешно!",
+    "en": "Chat deleted successfully!"
+  },
+  "chats.delete_error": {
+    "ru": "Ошибка при удалении чата",
+    "en": "Error deleting chat."
+  },
+  "chats.rename.title": {
+    "ru": "Переименовать чат",
+    "en": "Rename chat"
+  },
+  "chats.rename.save": {
+    "ru": "Сохранить",
+    "en": "Save"
+  },
+  "chats.rename.cancel": {
+    "ru": "Отменить",
+    "en": "Cancel"
   }
 }

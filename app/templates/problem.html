@@ -72,5 +72,46 @@
       readOnly: true
     });
   });
+
+  // Обработка отправки решения
+  const form = document.querySelector('form');
+  const submitButton = form.querySelector('button[type="submit"]');
+  
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Блокируем кнопку отправки
+    submitButton.disabled = true;
+    submitButton.style.opacity = '0.5';
+    submitButton.style.cursor = 'not-allowed';
+    
+    try {
+      const solution = editor.getValue();
+      const formData = new FormData(form);
+      formData.set('solution', solution);
+
+      showNotification('Отправка решения...', 'info');
+      
+      const response = await fetch(window.location.pathname, {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.ok) {
+        showNotification('Решение успешно отправлено!', 'success');
+        editor.setValue('');
+      } else {
+        const data = await response.json();
+        showNotification(data.error || 'Произошла ошибка при отправке решения', 'error');
+      }
+    } catch (error) {
+      showNotification('Произошла ошибка при отправке решения', 'error');
+    } finally {
+      // Разблокируем кнопку отправки
+      submitButton.disabled = false;
+      submitButton.style.opacity = '1';
+      submitButton.style.cursor = 'pointer';
+    }
+  });
 </script>
 {% endblock %}

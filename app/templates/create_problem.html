@@ -28,6 +28,7 @@
 <script>
 	const tags = document.querySelectorAll('.tag');
 	const selectedTagsInput = document.getElementById('selected-tags');
+	const form = document.querySelector('form');
 
 	const selected = new Set();
 
@@ -43,6 +44,44 @@
 			}
 			selectedTagsInput.value = Array.from(selected).join(',');
 		});
+	});
+
+	form.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		try {
+			const formData = new FormData(form);
+			const response = await fetch('/create/problem', {
+				method: 'POST',
+				body: formData
+			});
+			if (response.ok) {
+				localStorage.setItem('show_problem_generating', '1');
+				localStorage.setItem('awaiting_problem_generation', '1');
+				form.reset();
+				selected.clear();
+				tags.forEach(tag => tag.classList.remove('selected'));
+				selectedTagsInput.value = '';
+				setTimeout(() => {
+					window.location.href = '/problems';
+				}, 100);
+			} else {
+				const data = await response.json();
+				showNotification(data.error || 'Произошла ошибка при создании задачи', 'error');
+			}
+		} catch (error) {
+			console.error('Error creating problem:', error);
+			showNotification('Произошла ошибка при создании задачи', 'error');
+		}
+	});
+
+	document.addEventListener('DOMContentLoaded', function() {
+		if (localStorage.getItem('awaiting_problem_generation') === '1') {
+			const form = document.querySelector('form');
+			if (form) {
+				Array.from(form.elements).forEach(el => el.disabled = true);
+				form.insertAdjacentHTML('beforeend', '<div class="info-block" style="color:#a00;margin-top:1em;">Дождитесь завершения генерации предыдущей задачи</div>');
+			}
+		}
 	});
 </script>
 {% endblock %}

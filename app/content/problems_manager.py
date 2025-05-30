@@ -118,3 +118,11 @@ class ProblemsManager(ContentManager):
         )
         session.close()
         return ProblemDTO(problem)
+
+    def delete_problem(self, id: int):
+        session = self.session_factory()
+        problem = session.query(db.Problem).filter(db.Problem.id == id).first()
+        if problem:
+            session.delete(problem)
+            session.commit()
+        session.close()

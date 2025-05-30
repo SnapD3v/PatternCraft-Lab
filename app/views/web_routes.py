@@ -38,6 +38,9 @@ class WebRoutes(IRouteProvider):
         app.add_url_rule(
             "/problem/<int:id>", view_func=self.problem, methods=["GET", "POST"]
         )
+        app.add_url_rule(
+            "/problem/<int:id>", view_func=self.delete_problem, methods=["DELETE"]
+        )
 
         # Маршруты для Assistant API
         app.add_url_rule(
@@ -75,6 +78,9 @@ class WebRoutes(IRouteProvider):
 
     def problems(self) -> str:
         problems = self.problems_manager.get_problems()
+        if request.args.get("as") == "json":
+            # Возвращаем только id и name для минимального трафика
+            return jsonify({"problems": [{"id": p.id, "name": p.name} for p in problems]})
         return render_template("problems.html", problems=problems)
 
     def problem(self, id: int) -> str:
@@ -207,5 +213,12 @@ class WebRoutes(IRouteProvider):
         try:
             self.assistant_manager.delete_chat(chat_id)
             return jsonify({"status": "success", "message": "Chat deleted."})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    def delete_problem(self, id: int):
+        try:
+            self.problems_manager.delete_problem(id)
+            return jsonify({"status": "success"})
         except Exception as e:
             return jsonify({"error": str(e)}), 500
