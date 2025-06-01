@@ -69,10 +69,10 @@ class ProblemsManager(ContentManager):
     def review_solution(self, problem_id: int, solution: str) -> str:
         session = self.session_factory()
         problem = session.query(db.Problem).filter(db.Problem.id == problem_id).first()
-        history: List[Dict[str, str]] = [{"role": "assistant", "content": problem.task}]
+        history: List[Dict[str, str]] = [{"role": "assistant", "content": strip_markdown(problem.task)}]
         for solution_history_element in problem.solution_history_elements:
             role = "assitant" if solution_history_element.id % 2 == 0 else "user"
-            history_line = {"role": role, "content": solution_history_element.content}
+            history_line = {"role": role, "content": strip_markdown(solution_history_element.content)}
             history.append(history_line)
 
         tags = json.loads(problem.block.tags_json)
