@@ -10,6 +10,7 @@ import app.database as db
 from .content_manager import ContentManager
 from ..ai.agents import Agent
 from ..dto.problem_dto import ProblemDTO
+from ..utils.markdown_utils import strip_markdown
 
 
 class ProblemsManager(ContentManager):
@@ -53,7 +54,7 @@ class ProblemsManager(ContentManager):
         existing_problems = problems_set.problems
         history: List[Dict[str, str]] = []
         for problem in existing_problems:
-            history_line = {"role": "user", "content": problem.task}
+            history_line = {"role": "user", "content": strip_markdown(problem.task)}
             history.append(history_line)
         name, task = self.task_writer.generate(history, tags=tags)
         problem = db.Problem(name=name, task=task)

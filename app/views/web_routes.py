@@ -109,6 +109,13 @@ class WebRoutes(IRouteProvider):
                 tags,), daemon=True
         ).start()
         return redirect("/problems")
+    
+    def delete_problem(self, id: int):
+        try:
+            self.problems_manager.delete_problem(id)
+            return jsonify({"status": "success"})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
     def theory_list(self) -> str:
         theory_list = self.theory_manager.get_texts_blocks()
@@ -216,9 +223,3 @@ class WebRoutes(IRouteProvider):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
-    def delete_problem(self, id: int):
-        try:
-            self.problems_manager.delete_problem(id)
-            return jsonify({"status": "success"})
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500

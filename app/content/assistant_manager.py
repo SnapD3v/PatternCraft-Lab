@@ -107,7 +107,7 @@ class AssistantManager(ContentManager):
                 history_line = {"role": message.role, "content": strip_markdown(message.content)}
                 history.append(history_line)
 
-            answer = self.assistant.generate(history=history, user_prompt=strip_markdown(user_prompt))
+            answer = self.assistant.generate(history=history, user_prompt=user_prompt)
 
             assistant_message_db = db.ChatHistory(
                 role="assistant",
