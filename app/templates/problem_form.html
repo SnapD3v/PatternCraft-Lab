@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Создание задачи
+{% endblock %}
+
+{% block content %}
+<h2>Создание задачи</h2>
+
+<form id="create-problem-form" onsubmit="return false;">
+    <div>
+        <h4>Выберите темы:</h4>
+        <div id="tag-container">
+            {% for section in sections %}
+                <h3>{{ section.name }}</h3>
+                <div class="cards-area gap-10">
+                    {% for theory_text in section.texts %}
+                        <div class="card block-light cursor-pointer tag" data-tag="{{ theory_text.name }}">{{ theory_text.name }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <div>
+        <h4>Сложность:</h4>
+        <div id="difficulty-container" class="cards-area gap-10">
+            <div class="card block-light cursor-pointer difficulty difficulty-easy" data-difficulty="easy">Легкая</div>
+            <div class="card block-light cursor-pointer difficulty difficulty-medium" data-difficulty="medium">Средняя</div>
+            <div class="card block-light cursor-pointer difficulty difficulty-hard" data-difficulty="hard">Тяжелая</div>
+        </div>
+    </div>
+    <br>
+    <h4>Дополнительные инструкции</h4>
+    <textarea class="block-light full-width" name="additional_instructions" id="additional-instructions"></textarea>
+
+    <br><br>
+    
+   {% if task_generating %}
+        <input
+            class="button block-light cursor-pointer small-text-size"
+            type="submit"
+            value="Создать задачу"
+            disabled
+        >
+        <p style="color: #c44; margin-top:10px;">Задача генерируется, дождитесь окончания.</p>
+    {% else %}
+        <input
+            class="button block-light cursor-pointer small-text-size"
+            type="submit"
+            value="Создать задачу"
+        >
+    {% endif %}
+
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+    // Выбор тегов
+    const tags = document.querySelectorAll('.tag');
+    const selectedTags = new Set();
+
+    tags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            const tagName = tag.dataset.tag;
+            if (selectedTags.has(tagName)) {
+                selectedTags.delete(tagName);
+                tag.classList.remove('selected');
+            } else {
+                selectedTags.add(tagName);
+                tag.classList.add('selected');
+            }
+        });
+    });
+
+    // Взаимоисключающий выбор сложности
+    let selectedDifficulty = null;
+    const difficultyCards = document.querySelectorAll('.difficulty');
+
+    difficultyCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Убрать выделение со всех
+            difficultyCards.forEach(c => c.classList.remove('selected'));
+            // Выделить выбранный
+            card.classList.add('selected');
+            selectedDifficulty = card.dataset.difficulty;
+        });
+    });
+
+    document.getElementById('create-problem-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Собираем данные для запроса
+        const data = {
+            selected_tags: Array.from(selectedTags),
+            additional_instructions: document.getElementById('additional-instructions').value,
+            difficulty: selectedDifficulty
+        };
+
+        // Отправляем POST-запрос через fetch
+        fetch('/create_problem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        // Задержка 2 секунды
+        setTimeout(() => {
+            window.location.href = '/problems';
+        }, 500);
+    });
+</script>
+{% endblock %}

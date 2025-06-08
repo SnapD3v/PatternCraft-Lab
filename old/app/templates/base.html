@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang={{ g.get('lang_code', 'ru') }}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.rel='stylesheet'">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    {% block head %}{% endblock %}
+    <title>PatternCraft Lab | {% block title %}{% endblock %}</title>
+  </head>
+  <body class="open-menu">
+    <div id="notifications-container"></div>
+    <div class="sidebar">
+      <div class="sidebar-content">
+        <span class="big-text-size"><strong>PatternCraft Lab</strong></span>
+        <br /><br />
+        <span class="small-text-size"><strong>{{ _('common.section') }}</strong></span>
+        <br />
+        <a class="button" href="/theory">
+          <img src="/static/img/theory.png" alt="" />
+          <span>{{ _('common.theory') }}</span>
+        </a>
+        <a class="button" href="/problems">
+          <img src="/static/img/problems.png" alt="" />
+          <span>{{ _('common.problems') }}</span>
+        </a>
+        <a class="button" id="assistant-button">
+          <img src="/static/img/ai_icon.png" alt="" />
+          <span>{{ _('common.assistant') }}</span>
+        </a>
+        <br /><br />
+        <span class="small-text-size"><strong>{{ _('common.system') }}</strong></span>
+        <br />
+        <a class="button" href="/configuration">
+          <img src="/static/img/configuration.png" alt="" />
+          <span>{{ _('common.configuration') }}</span>
+        </a>
+      </div>
+      <div class="sidebar-ledge">
+        <span id="sidebar-button">☰</span>
+      </div>
+      <!-- Notification Bell and Dropdown -->
+      <div class="sidebar-notifications">
+        <button id="notification-bell" class="notification-bell">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge" style="display:none"></span>
+        </button>
+        <div id="notification-dropdown" class="notification-dropdown">
+          <div class="notification-dropdown-header">
+            <span>Уведомления</span>
+            <button id="clear-notifications" title="Очистить все"><i class="fas fa-trash"></i></button>
+          </div>
+          <div class="notification-dropdown-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="wrapper">{% block content %}{% endblock %}</div>
+
+      <div class="assistant-panel">
+        <div class="chat-container">
+          <button class="close-button">×</button>
+          <!-- Chat List Sidebar -->
+          <div class="chat-list-sidebar">
+            <div class="chat-list-header">
+              <h3>AI-Ассистент</h3>
+              <button id="new-chat-button" class="new-chat-btn">
+                <span>Новый чат</span>
+              </button>
+            </div>
+            <div class="chat-list">
+              <!-- Чаты будут добавляться здесь динамически -->
+            </div>
+          </div>
+
+          <!-- Chat Content -->
+        <div class="chat-content">
+            <div class="chat-title">
+              <h3 id="current-chat-title">Выберите чат</h3>
+            </div>
+          <div class="messages-container">
+            <div class="messages"></div>
+            <div class="message-loading-indicator">{{ _('assistant.thinking') }}</div>
+          </div>
+          <div class="chat-input unified-input">
+            <textarea placeholder="{{ _('assistant.message_placeholder') }}" rows="3"></textarea>
+            <button class="send-icon-button" id="send-button" type="button" title="{{ _('assistant.send') }}">
+              <i class="fas fa-arrow-up"></i>
+            </button>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification template -->
+    <template id="notification-template">
+        <div class="notification">
+            <div class="notification-icon">
+                <i class="fas"></i>
+            </div>
+            <div class="notification-content">
+                <div class="notification-message"></div>
+                <div class="notification-progress"></div>
+            </div>
+            <button class="notification-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </template>
+
+    <script>
+      // Получаем элементы DOM
+      const body = document.querySelector("body");
+      const menuButton = document.querySelector("#sidebar-button");
+      const assistantButtonElement = document.querySelector("#assistant-button");
+      const assistantPanel = document.querySelector(".assistant-panel");
+      const newChatButton = document.getElementById("new-chat-button");
+      const chatList = document.querySelector(".chat-list");
+
+      const messagesContainer = document.querySelector(".messages-container");
+      const messagesDiv = messagesContainer.querySelector(".messages");
+      const chatInput = document.querySelector(".chat-input textarea");
+      const sendButton = document.getElementById("send-button");
+      const messageLoadingIndicator = messagesContainer.querySelector(".message-loading-indicator");
+
+      let currentChatId = null;
+      let isAssistantResponding = false;
+      let activeThinkingChatId = null;
+
+      // Глобальный список чатов
+      let chatsCache = [];
+
+      // Кастомный tooltip для названия чата
+      let chatTooltip = null;
+      function showChatTooltip(target, text) {
+        if (!chatTooltip) {
+          chatTooltip = document.createElement('div');
+          chatTooltip.className = 'custom-tooltip';
+          chatTooltip.appendChild(document.createTextNode(''));
+          const arrow = document.createElement('div');
+          arrow.className = 'custom-tooltip-arrow';
+          chatTooltip.appendChild(arrow);
+          document.body.appendChild(chatTooltip);
+        }
+        chatTooltip.childNodes[0].nodeValue = text;
+        chatTooltip.classList.add('visible');
+        // Позиционируем tooltip по центру и выше над элементом
+        const rect = target.getBoundingClientRect();
+        chatTooltip.style.left = (rect.left + rect.width / 2 + window.scrollX) + 'px';
+        chatTooltip.style.top = (rect.top + window.scrollY - 32) + 'px';
+      }
+      function hideChatTooltip() {
+        if (chatTooltip) {
+          chatTooltip.classList.remove('visible');
+        }
+      }
+      document.addEventListener('mouseover', function(e) {
+        if (e.target.classList.contains('chat-item-title')) {
+          showChatTooltip(e.target, e.target.textContent);
+        }
+      });
+      document.addEventListener('mouseout', function(e) {
+        if (e.target.classList.contains('chat-item-title')) {
+          hideChatTooltip();
+        }
+      });
+
+      // Функция отображения сообщения
+      function displayMessage(content, role) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${role}`;
+        
+        const roleLabel = document.createElement("div");
+        roleLabel.className = "message-role";
+        roleLabel.textContent = role === "user" ? "Вы" : "Ассистент";
+        
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "message-content";
+        contentDiv.innerHTML = content;
+        
+        messageDiv.appendChild(roleLabel);
+        messageDiv.appendChild(contentDiv);
+        messagesDiv.appendChild(messageDiv);
+        
+        // Прокрутка к последнему сообщению
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Загрузка списка чатов
+      async function loadChats() {
+        try {
+          const response = await fetch('/assistant/chats');
+          const data = await response.json();
+          chatsCache = data.chats;
+          chatList.innerHTML = '';
+          data.chats.forEach(chat => {
+            chatList.appendChild(createChatElement(chat));
+          });
+        } catch (error) {
+          console.error('Error loading chats:', error);
+        }
+      }
+
+      // Обновление заголовка чата из локального списка
+      function updateChatTitleFromCache(chatId) {
+        const chat = chatsCache.find(c => c.id === chatId);
+        document.getElementById('current-chat-title').textContent = chat ? chat.name : 'Новый чат';
+      }
+
+      // Модальное окно для переименования чата
+      function showRenameChatModal(event, chatId, oldName) {
+        event.stopPropagation();
+        const modal = document.createElement("div");
+        modal.className = "delete-confirmation-modal";
+        modal.innerHTML = `
+          <div class="delete-confirmation-content">
+            <h3>{{ _('chats.rename.title') }}</h3>
+            <input type="text" class="rename-chat-input" value="${oldName}" maxlength="50" style="width:100%;margin-bottom:16px;padding:8px;border-radius:6px;border:1px solid #444;background:#222;color:#fff;" />
+            <div class="delete-confirmation-buttons">
+              <button class="cancel-button">{{ _('chats.rename.cancel') }}</button>
+              <button class="delete-button">{{ _('chats.rename.save') }}</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        const input = modal.querySelector('.rename-chat-input');
+        input.focus();
+        input.select();
+        modal.querySelector('.cancel-button').onclick = () => modal.remove();
+        modal.querySelector('.delete-button').onclick = async () => {
+          const newName = input.value.trim();
+          if (newName && newName !== oldName) {
+            await renameChat(null, chatId, newName);
+          }
+          modal.remove();
+        };
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') {
+            modal.querySelector('.delete-button').click();
+          }
+          if (e.key === 'Escape') {
+            modal.remove();
+          }
+        });
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+      }
+
+      // Функции для показа/скрытия индикатора загрузки
+      function showLoadingIndicator() {
+        messageLoadingIndicator.style.display = "block";
+      }
+      function hideLoadingIndicator() {
+        messageLoadingIndicator.style.display = "none";
+      }
+
+      async function handleSendMessage() {
+        const text = chatInput.value.trim();
+        if (text === "" || isAssistantResponding) return;
+
+        if (!currentChatId) {
+          try {
+            const response = await fetch('/assistant/chats/create', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: text.substring(0, 30) + '...' })
+            });
+            const data = await response.json();
+            currentChatId = data.id;
+            await loadChats();
+            updateChatTitleFromCache(currentChatId);
+          } catch (error) {
+            console.error('Error creating chat:', error);
+            return;
+          }
+        }
+
+        isAssistantResponding = true;
+        sendButton.classList.add("disabled");
+        chatInput.disabled = true;
+        activeThinkingChatId = currentChatId;
+        showLoadingIndicator();
+
+        chatInput.value = "";
+
+        try {
+          // Сохраняем сообщение пользователя в базе
+          await fetch(`/assistant/save_message/${currentChatId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: text }),
+          });
+
+          // После сохранения — сразу перезагружаем историю (покажет и новое сообщение)
+          await loadChatHistory(currentChatId);
+
+          // Получение ответа от ассистента
+          const response = await fetch(`/assistant/ask/${currentChatId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: text }),
+          });
+
+          // После ответа ассистента — снова перезагружаем историю (покажет и ответ)
+          await loadChatHistory(currentChatId);
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            displayMessage(`{{ _('errors.assistant') }}: ${errorData.error}`, "system-info");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          displayMessage("{{ _('errors.network_message') }}", "system-info");
+        } finally {
+          isAssistantResponding = false;
+          if (currentChatId === activeThinkingChatId) {
+            hideLoadingIndicator();
+          }
+          activeThinkingChatId = null;
+          sendButton.classList.remove("disabled");
+          chatInput.disabled = false;
+          chatInput.focus();
+        }
+      }
+
+      // При переключении чата показываем индикатор только если ассистент думает в этом чате
+      async function selectChat(chatId) {
+        currentChatId = chatId;
+        if (activeThinkingChatId === chatId) {
+          showLoadingIndicator();
+        } else {
+          hideLoadingIndicator();
+        }
+        await loadChats();
+        await loadChatHistory(chatId);
+        updateChatTitleFromCache(chatId);
+      }
+
+      // Функция для создания элемента чата
+      function createChatElement(chat) {
+        const chatElement = document.createElement("div");
+        chatElement.className = `chat-item ${currentChatId === chat.id ? 'active' : ''}`;
+        chatElement.setAttribute('data-chat-id', chat.id);
+        
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "chat-item-title";
+        titleSpan.textContent = chat.name;
+        titleSpan.title = chat.name;
+        
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "chat-item-actions";
+        actionsDiv.innerHTML = `
+          <button class="chat-item-action" onclick="showRenameChatModal(event, ${chat.id}, '${chat.name.replace(/'/g, "&#39;")}')" title="Переименовать чат">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="chat-item-action" onclick="showDeleteConfirmation(event, ${chat.id})" title="Удалить чат">
+            <i class="fas fa-trash"></i>
+          </button>
+        `;
+
+        chatElement.appendChild(titleSpan);
+        chatElement.appendChild(actionsDiv);
+        chatElement.onclick = (e) => {
+          if (e.target === chatElement || e.target === titleSpan) {
+            selectChat(chat.id);
+          }
+        };
+        
+        return chatElement;
+      }
+
+      // Обработчики событий
+      menuButton.addEventListener("click", () => {
+        body.classList.toggle("open-menu");
+      });
+
+      // Обработчик для открытия панели ассистента
+      assistantButtonElement.addEventListener("click", async () => {
+        assistantPanel.classList.add("visible");
+        await loadChats();
+        if (currentChatId) {
+          await updateChatTitleFromCache(currentChatId);
+        } else {
+          document.getElementById('current-chat-title').textContent = 'Новый чат';
+        }
+        chatInput.focus();
+      });
+
+      // Обработчик для закрытия панели ассистента
+      document.querySelector('.close-button').addEventListener('click', () => {
+        assistantPanel.classList.remove('visible');
+      });
+
+      // Закрытие по клику вне окна
+      assistantPanel.addEventListener("click", (e) => {
+        if (e.target === assistantPanel) {
+          assistantPanel.classList.remove("visible");
+        }
+      });
+
+      // Обработчик для кнопки нового чата
+      newChatButton.onclick = async () => {
+        currentChatId = null;
+        document.getElementById('current-chat-title').textContent = 'Новый чат';
+        messagesDiv.innerHTML = '';
+        await loadChats();
+        chatInput.focus();
+      };
+
+      // Обработчики для отправки сообщений
+      sendButton.addEventListener("click", handleSendMessage);
+      chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          handleSendMessage();
+        }
+      });
+
+      // Функция показа диалога подтверждения удаления
+      function showDeleteConfirmation(event, chatId) {
+        event.stopPropagation();
+        
+        // Модальное окно удаления чата
+        const modal = document.createElement("div");
+        modal.className = "delete-confirmation-modal";
+        modal.innerHTML = `
+          <div class="delete-confirmation-content">
+            <h3>{{ _('chats.delete_confirmation.title') }}</h3>
+            <p>{{ _('chats.delete_confirmation.message') }}</p>
+            <div class="delete-confirmation-buttons">
+              <button class="cancel-button">{{ _('chats.delete_confirmation.cancel') }}</button>
+              <button class="delete-button">{{ _('chats.delete_confirmation.delete') }}</button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Обработчики кнопок
+        const cancelButton = modal.querySelector(".cancel-button");
+        const deleteButton = modal.querySelector(".delete-button");
+        
+        cancelButton.onclick = () => {
+          modal.remove();
+        };
+        
+        deleteButton.onclick = async () => {
+          await deleteChat(event, chatId);
+          modal.remove();
+        };
+        
+        // Закрытие по клику вне окна
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            modal.remove();
+          }
+        };
+      }
+
+      // Функция удаления чата
+      async function deleteChat(event, chatId) {
+        event.stopPropagation();
+        try {
+          await fetch(`/assistant/chats/${chatId}`, { method: 'DELETE' });
+          if (currentChatId === chatId) {
+            currentChatId = null;
+            messagesDiv.innerHTML = '';
+            document.getElementById('current-chat-title').textContent = 'Новый чат';
+          }
+          await loadChats();
+        } catch (error) {
+          console.error('Error deleting chat:', error);
+        }
+      }
+
+      // После переименования чата
+      async function renameChat(event, chatId, newName) {
+        if (event) event.stopPropagation();
+        try {
+          const response = await fetch(`/assistant/chats/${chatId}/rename`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: newName })
+          });
+          await loadChats();
+          updateChatTitleFromCache(chatId);
+        } catch (error) {
+          console.error('Error renaming chat:', error);
+        }
+      }
+
+      // Модифицированная функция загрузки истории чата
+      async function loadChatHistory(chatId = currentChatId) {
+        if (!chatId) {
+          messagesDiv.innerHTML = '';
+          document.getElementById('current-chat-title').textContent = 'Новый чат';
+          return;
+        }
+        
+        messagesDiv.innerHTML = '';
+        try {
+          const response = await fetch(`/assistant/history/${chatId}`);
+          if (!response.ok) {
+            console.error("Failed to load chat history:", response.statusText);
+            displayMessage(`{{ _('errors.server_history') }}: ${response.statusText}`, "system-info");
+            return;
+          }
+          const data = await response.json();
+          if (data.history && data.history.length > 0) {
+            data.history.forEach((msg) => {
+              displayMessage(msg.content, (msg.role === 'user' || msg.role === 'human') ? 'user' : msg.role);
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching chat history:", error);
+          displayMessage(`{{ _('errors.network_history') }}`, "system-info");
+        }
+      }
+
+      // --- Notification Dropdown Logic ---
+      const notificationBell = document.getElementById('notification-bell');
+      const notificationDropdown = document.getElementById('notification-dropdown');
+      const notificationList = document.querySelector('.notification-dropdown-list');
+      const notificationBadge = document.querySelector('.notification-badge');
+      const clearNotificationsBtn = document.getElementById('clear-notifications');
+      
+      // Типы и иконки
+      const notificationIcons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        info: 'fa-info-circle',
+        warning: 'fa-exclamation-triangle'
+      };
+
+      // Получить уведомления из localStorage
+      function getStoredNotifications() {
+        try {
+          return JSON.parse(localStorage.getItem('dropdown_notifications') || '[]');
+        } catch { return []; }
+      }
+      // Сохранить уведомления
+      function setStoredNotifications(arr) {
+        localStorage.setItem('dropdown_notifications', JSON.stringify(arr));
+      }
+      // Добавить уведомление
+      function addNotification(message, type = 'info', url = null) {
+        const now = new Date();
+        const notif = {
+          message,
+          type,
+          time: now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+          read: false,
+          url: url || null
+        };
+        const arr = getStoredNotifications();
+        arr.unshift(notif);
+        if (arr.length > 20) arr.length = 20;
+        setStoredNotifications(arr);
+        renderDropdownNotifications();
+      }
+      // Количество непрочитанных
+      function getUnreadCount() {
+        return getStoredNotifications().filter(n => !n.read).length;
+      }
+      // Рендер уведомлений в меню
+      function renderDropdownNotifications() {
+        const arr = getStoredNotifications();
+        notificationList.innerHTML = '';
+        if (!arr.length) {
+          notificationList.innerHTML = '<div class="notification-dropdown-empty">Нет уведомлений</div>';
+          notificationBadge.style.display = 'none';
+          return;
+        }
+        arr.forEach((n, idx) => {
+          const item = document.createElement('div');
+          item.className = `notification-dropdown-item ${n.type}${n.read ? '' : ' unread'}`;
+          item.innerHTML = `${!n.read ? '' : ''}<span class='dropdown-icon'><i class='fas ${notificationIcons[n.type] || 'fa-info-circle'}'></i></span><span>${n.message}</span><span class='dropdown-time'>${n.time}</span>`;
+          // Снять непрочитанность при наведении с анимацией
+          if (!n.read) {
+            item.addEventListener('mouseenter', function() {
+              item.classList.add('just-read');
+              setTimeout(function() {
+                markNotificationRead(idx);
+                item.classList.remove('unread');
+                item.classList.remove('just-read');
+              }, 300);
+            });
+          }
+          // Кликабельное уведомление
+          if (n.url) {
+            item.classList.add('clickable');
+            item.addEventListener('click', function(e) {
+              window.location.href = n.url;
+            });
+          }
+          notificationList.appendChild(item);
+        });
+        const unread = getUnreadCount();
+        if (unread > 0) {
+          notificationBadge.textContent = unread;
+          notificationBadge.style.display = '';
+        } else {
+          notificationBadge.style.display = 'none';
+        }
+      }
+      // Пометить уведомление как прочитанное
+      function markNotificationRead(idx) {
+        const arr = getStoredNotifications();
+        if (arr[idx] && !arr[idx].read) {
+          arr[idx].read = true;
+          setStoredNotifications(arr);
+          renderDropdownNotifications();
+        }
+      }
+      // Очистить все уведомления
+      clearNotificationsBtn.onclick = function() {
+        setStoredNotifications([]);
+        renderDropdownNotifications();
+      };
+      // Открытие/закрытие меню
+      notificationBell.onclick = function() {
+        notificationDropdown.classList.toggle('open');
+        if (notificationDropdown.classList.contains('open')) {
+          notificationBadge.style.display = 'none';
+        } else {
+          renderDropdownNotifications();
+        }
+      };
+      // Клик вне меню — закрыть
+      document.addEventListener('click', function(e) {
+        if (!notificationDropdown.contains(e.target) && !notificationBell.contains(e.target)) {
+          notificationDropdown.classList.remove('open');
+        }
+      });
+      // Инициализация
+      renderDropdownNotifications();
+
+      // --- Универсальная функция уведомлений ---
+      function showNotification(message, type = 'info', duration = 5000, url = null) {
+        if (type === 'error') {
+          // Всплывающее уведомление для ошибок
+          const container = document.getElementById('notifications-container');
+          const template = document.getElementById('notification-template');
+          const notification = template.content.cloneNode(true).querySelector('.notification');
+          notification.classList.add(type);
+          const icon = notification.querySelector('.notification-icon i');
+          icon.className = `fas ${notificationIcons[type]}`;
+          notification.querySelector('.notification-message').textContent = message;
+          const progressBar = document.createElement('div');
+          progressBar.className = 'notification-progress-bar';
+          notification.querySelector('.notification-progress').appendChild(progressBar);
+          container.appendChild(notification);
+          setTimeout(() => { progressBar.style.width = '0%'; }, 100);
+          notification.querySelector('.notification-close').addEventListener('click', () => { removeNotification(notification); });
+          setTimeout(() => { removeNotification(notification); }, duration);
+        } else {
+          addNotification(message, type, url);
+        }
+      }
+      function removeNotification(notification) {
+        notification.classList.add('hiding');
+        notification.addEventListener('animationend', () => { notification.remove(); });
+      }
+
+      // Функция для проверки наличия нового ответа от ИИ
+      let lastSolutionCount = 0;
+      let isReloading = false;
+      document.addEventListener('DOMContentLoaded', () => {
+        lastSolutionCount = document.querySelectorAll('.block-light, .code-display').length;
+      });
+
+      async function checkForAIResponse() {
+        try {
+          // Получаем текущий URL задачи, если мы на странице задачи
+          const problemUrl = window.location.pathname.match(/\/problem\/\d+/);
+          if (!problemUrl) return; // Если мы не на странице задачи, выходим
+          
+          const response = await fetch(problemUrl[0]);
+          const html = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          
+          // Проверяем наличие сообщения от ИИ в истории решений
+          const newSolutions = doc.querySelectorAll('.block-light, .code-display');
+          
+          if (newSolutions.length > lastSolutionCount && !isReloading) {
+            lastSolutionCount = newSolutions.length;
+            isReloading = true;
+            
+            showNotification("{{ _('problem.answer_received') }}", 'info', 5000);
+            
+            // Если мы не на странице задачи, предлагаем перейти к ней
+            if (!window.location.pathname.includes('/problem/')) {
+              setTimeout(() => {
+                if (confirm('Получен новый ответ от ИИ. Хотите перейти к задаче?')) {
+                  window.location.href = problemUrl[0];
+                }
+                isReloading = false;
+              }, 1000);
+            } else {
+              // Если мы на странице задачи, перезагружаем через 5 секунд
+              setTimeout(() => {
+                window.location.reload();
+              }, 5000);
+            }
+          }
+        } catch (error) {
+          console.error('Error checking for AI response:', error);
+          isReloading = false;
+        }
+      }
+
+      // Проверяем наличие ответа каждые 3 секунды
+      setInterval(checkForAIResponse, 3000);
+
+      // Показываем уведомление о начале генерации задачи (один раз)
+      if (localStorage.getItem('show_problem_generating') === '1') {
+        showNotification("{{ _('problems.generating') }}", 'info', 5000, '/problems');
+        localStorage.removeItem('show_problem_generating');
+        // Сохраняем текущее количество задач и id
+        fetch('/problems?as=json')
+          .then(res => res.json())
+          .then(data => {
+            localStorage.setItem('last_problems_count', data.problems.length);
+            localStorage.setItem('last_problems_ids', JSON.stringify(data.problems.map(p => p.id)));
+          });
+      }
+
+      // Polling для успешной генерации задачи
+      setInterval(function() {
+        if (localStorage.getItem('awaiting_problem_generation') === '1') {
+          fetch('/problems?as=json')
+            .then(res => res.json())
+            .then(data => {
+              const lastCount = Number(localStorage.getItem('last_problems_count') || 0);
+              const lastIds = JSON.parse(localStorage.getItem('last_problems_ids') || '[]');
+              const currentIds = data.problems.map(p => p.id);
+              if (data.problems.length > lastCount) {
+                // Найти id новой задачи
+                const newIds = currentIds.filter(id => !lastIds.includes(id));
+                const newId = newIds.length > 0 ? newIds[0] : currentIds[currentIds.length - 1];
+                showNotification("{{ _('problems.generated') }}", 'success', 5000, `/problem/${newId}`);
+                localStorage.removeItem('awaiting_problem_generation');
+                localStorage.setItem('last_problems_count', data.problems.length);
+                localStorage.setItem('last_problems_ids', JSON.stringify(currentIds));
+              }
+            });
+        }
+      }, 3000);
+    </script>
+    {% block script %}{% endblock %}
+  </body>
+</html>

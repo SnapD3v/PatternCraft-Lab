@@ -1,98 +1,119 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ _('problems.title') }} <!-- Main -->
+Main
 {% endblock %}
 
 {% block content %}
-<h2>{{ _('problems.heading') }}</h2> <!-- Задачи -->
+<h2>Задачи</h2>
 <div class="cards-area">
-	{% for problem in problems %}
-	<a href="/problem/{{ problem.id }}" class="button block-light card sequential-card">
-		<span>
-			<p><strong>{{problem.name}}</strong></p>
-			<p>
-				<span class="cards-area gap-10">
-					{% for tag in problem.tags %}
-					<span class="block-dark">
-						{{ tag }}
-					</span>
-					{% endfor %}
-				</span>
-			</p>
-		</span>
-		<button class="delete-problem" data-problem-id="{{ problem.id }}" title="{{ _('problems.delete') }}">
-			<i class="fas fa-trash"></i>
-		</button>
-	</a>
-	{% endfor %}
-	<a href="/create/problem" class="button block-light card sequential-card problem-card">
-		<img src="/static/img/add.png" alt="">
-		<p><strong>{{ _('problems.create') }}</strong></p> <!-- Создать задачу -->
-	</a>
+{% for problem in problems %}
+    <div class="button block-light card sequential-card problem-card one-line" style="justify-content: space-between; position: relative;">
+        <a href="/problem/{{ problem.id }}" style="flex: 1 1 auto; color: inherit; text-decoration: none;">
+            <p>
+                {% if problem.is_solved %}
+                    ✅
+                {% endif %}
+                <strong>{{problem.name}}</strong>
+            </p>
+            <p>
+                <span class="cards-area gap-10">
+                <span class="block-dark difficulty-{{problem.difficulty}} selected">
+                    {{ problem.difficulty | capitalize }}
+                </span>
+                {% for tag in problem.tags %}
+                    <span class="block-dark">
+                        {{ tag }}
+                    </span>
+                {% endfor %}
+                </span>
+            </p>
+        </a>
+        <button class="delete-btn" data-problem-id="{{ problem.id }}" title="Удалить задачу">&times;</button>
+    </div>
+{% endfor %}
+    {% if not task_generating %}
+        <a href="/problem/create" class="button block-light card sequential-card problem-card">
+            <img src="/static/img/add.png" alt="">
+            <p><strong>Создать задачу</strong></p>
+        </a>
+    {% else %}
+        <a class="button block-light card sequential-card problem-card">
+            <img class="rotating" src="/static/img/load.png" alt="">
+            <p><strong>Задача создается</strong></p>
+        </a>
+    {% endif %}
 </div>
 <br>
+<!-- Модальное окно подтверждения -->
+<div id="confirm-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <p>Вы уверены, что хотите удалить задачу?</p>
+        <div style="display:flex; gap:20px; justify-content: flex-end;">
+            <button id="cancel-delete" class="block-dark">Отмена</button>
+            <button id="confirm-delete" class="block-light" style="background-color: #aa2222;">Удалить</button>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
 <script>
-  // Показываем уведомление об успешной генерации задачи после редиректа
-  if (localStorage.getItem('show_problem_generated') === '1') {
-    showNotification("{{ _('problems.generated') }}", 'success');
-    localStorage.removeItem('show_problem_generated');
-  }
-  // Функция показа диалога подтверждения удаления
-  function showDeleteConfirmationProblem(event, problemId) {
-    event.preventDefault();
-    event.stopPropagation();
-    const modal = document.createElement("div");
-    modal.className = "delete-confirmation-modal";
-    modal.innerHTML = `
-      <div class="delete-confirmation-content">
-        <h3>{{ _('problems.delete_confirmation.title') }}</h3>
-        <p>{{ _('problems.delete_confirmation.message') }}</p>
-        <div class="delete-confirmation-buttons">
-          <button class="cancel-button">{{ _('problems.delete_confirmation.cancel') }}</button>
-          <button class="delete-button">{{ _('problems.delete_confirmation.delete') }}</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    const cancelButton = modal.querySelector(".cancel-button");
-    const deleteButton = modal.querySelector(".delete-button");
-    cancelButton.onclick = function() { 
-      modal.classList.add('closing');
-      setTimeout(() => modal.remove(), 250);
-    };
-    deleteButton.onclick = async function() {
-      try {
-        const response = await fetch(`/problem/${problemId}`, { method: 'DELETE' });
-        if (response.ok) {
-          showNotification("{{ _('problems.delete_success') }}", 'success');
-          const problemCard = document.querySelector(`[data-problem-id="${problemId}"]`).closest('.card');
-          if (problemCard) problemCard.remove();
-        } else {
-          const data = await response.json();
-          showNotification(data.error || "{{ _('problems.delete_error') }}", 'error');
-        }
-      } catch (error) {
-        showNotification("{{ _('problems.delete_error') }}", 'error');
-      }
-      modal.classList.add('closing');
-      setTimeout(() => modal.remove(), 250);
-    };
-    modal.onclick = function(e) { 
-      if (e.target === modal) { 
-        modal.classList.add('closing');
-        setTimeout(() => modal.remove(), 250);
-      } 
-    };
-  }
-  document.querySelectorAll('.delete-problem').forEach(function(button) {
-    button.addEventListener('click', function(e) {
-      var problemId = button.dataset.problemId;
-      showDeleteConfirmationProblem(e, problemId);
+document.addEventListener('DOMContentLoaded', function() {
+    let modal = document.getElementById('confirm-modal');
+    let confirmBtn = document.getElementById('confirm-delete');
+    let cancelBtn = document.getElementById('cancel-delete');
+    let problemIdToDelete = null;
+
+    // Клик по "крестику"
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            problemIdToDelete = this.getAttribute('data-problem-id');
+            modal.style.display = 'flex';
+        });
     });
-  });
+
+    // Отмена удаления
+    cancelBtn.onclick = function() {
+        modal.style.display = 'none';
+        problemIdToDelete = null;
+    };
+
+    // Подтвердить удаление
+    confirmBtn.onclick = function() {
+        if (!problemIdToDelete) return;
+        fetch('/delete_problem', {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({problem_id: problemIdToDelete})
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            if (data.message) {
+                // Удалить карточку без перезагрузки
+                let btn = document.querySelector('.delete-btn[data-problem-id="'+problemIdToDelete+'"]');
+                if (btn) btn.closest('.problem-card').remove();
+            } else {
+                alert(data.error || 'Ошибка удаления');
+            }
+            modal.style.display = 'none';
+            problemIdToDelete = null;
+        })
+        .catch(() => {
+            alert('Ошибка сети');
+            modal.style.display = 'none';
+            problemIdToDelete = null;
+        });
+    };
+
+    // Клик вне модального окна — закрыть
+    modal.addEventListener('mousedown', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            problemIdToDelete = null;
+        }
+    });
+});
 </script>
 {% endblock %}

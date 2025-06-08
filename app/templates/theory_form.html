@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/quill.css">
+{% endblock %}
+
+{% block title %}
+Редактирование {{ theory.name }}
+{% endblock %}
+
+{% block content %}
+<form id="theory-edit-form" method="post" enctype="multipart/form-data">
+
+	<h3>{% if theory %}Редактирование{% else %}Создание{% endif %} теории</h3>
+
+	<p>Название</p>
+	<input name="name" class="block-light full-width" type="text" value="{{ theory.name }}">
+	<br>
+
+	<p>Описание</p>
+	<textarea name="description" class="block-light full-width">{{ theory.description }}</textarea>
+	<br>
+
+	<p>Изображение</p>
+	<div class="sequential-card">
+		{% if theory %}
+		<div>
+			<p>Текущее:</p>
+			<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/{{ theory.id }}.png {% endif %}" alt="{{ theory.name }}">
+		</div>
+		{% endif %}
+		<div>
+			{% if theory %}
+			<p>Новое:</p>
+			{% endif %}
+			<input class="block-light full-width" name="image_url" type="text" placeholder="Ссылка на Изображение" value="{{ theory.image_url }}">
+			<p>или</p>
+			<input class="block-light full-width" name="image" type="file">
+		</div>
+	</div>
+
+	<br>
+
+	<div class="block-light" id="editor"></div>
+
+	<input type="hidden" name="content" id="content-input">
+
+	<br>
+
+	<input class="button card block-light" type="submit" value="Сохранить">
+
+</form>
+
+<br><br>
+{% endblock %}
+
+{% block script %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+	var quill = new Quill('#editor', {
+		theme: 'snow',
+		modules: {
+			// включаем подсветку синтаксиса
+			syntax: true,
+			// настраиваем тулбар — добавляем кнопку code-block
+			toolbar: [
+				[{ header: [1, 2, false] }],
+				['bold', 'italic', 'underline', 'strike'],
+				['link', 'image'],
+				['code-block'],          // ← эта кнопка
+				[{ list: 'ordered' }, { list: 'bullet' }]
+			]
+		}
+	});
+
+	// Попробуем прочитать из контекста сервера строку с контентом
+	// Если theory.content отсутствует, default('') даст пустую строку.
+	var raw   = {{ theory.content | default('') | tojson }};
+	var delta;
+
+	try {
+		// первый JSON.parse превращает JS-литерал в строку или объект
+		var parsed = JSON.parse(raw);
+		// если parsed — строка, значит нужно ещё раз парсить
+		delta = (typeof parsed === 'string')
+			? JSON.parse(parsed)
+			: parsed;
+	} catch (e) {
+		// на пустой или некорректный контент — пустой delta
+		delta = { ops: [] };
+	}
+
+	quill.setContents(delta);
+
+	// Перед отправкой формы копируем контент в скрытое поле
+	document.getElementById('theory-edit-form')
+		.addEventListener('submit', function(e) {
+			var contentInput = document.getElementById('content-input');
+			contentInput.value = JSON.stringify(quill.getContents());
+		});
+</script>
+{% endblock %}

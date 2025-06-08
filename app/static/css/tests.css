@@ -1,0 +1,108 @@
+:root {
+    --success: #4caf50;
+    --danger: #f44336;
+    --warning: #ff9800;
+    --muted: #9e9e9e;
+    --border: #bdbdbd;
+    --test-bg: #222;
+    --test-code-bg: #232323;
+    --test-code-fg: #ffecb3;
+}
+
+.status {
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #fff;
+    display: inline-block;
+    margin-bottom: 6px;
+    background: var(--border);
+}
+.status-large {
+    font-size: 1.08em;
+    margin-bottom: 12px;
+}
+.status-success { background: var(--success); }
+.status-danger  { background: var(--danger); }
+.status-warning { background: var(--warning); }
+.status-muted   { background: var(--muted); }
+
+.cards-area.gap-10 { gap: 10px; }
+
+.card {
+    text-decoration: none;;
+}
+
+.test-results-list {
+    list-style: none;
+    padding-left: 0;
+}
+.test-result-item {
+    margin-bottom: 8px;
+    border-radius: 6px;
+    background: var(--test-bg);
+    padding: 8px 12px;
+}
+.test-result-icon {
+    font-size: 18px;
+    margin-right: 8px;
+}
+.test-status-passed   { color: var(--success); }
+.test-status-failed   { color: var(--danger); }
+.test-status-error    { color: var(--warning); }
+.test-status-skipped  { color: var(--muted); }
+.test-status-unknown  { color: var(--border); }
+
+.test-result-name {
+    font-family: monospace;
+    color: #fff;
+    margin-left: 8px;
+}
+.test-result-status {
+    font-weight: bold;
+    margin-left: 10px;
+}
+.test-result-message {
+    color: var(--test-code-fg);
+    background: var(--test-code-bg);
+    border-radius: 4px;
+    padding: 2px 6px;
+    white-space: pre;
+    display: inline-block;
+    margin-top: 4px;
+}
+.traceback {
+    white-space: pre;
+    background: var(--test-code-bg);
+    color: var(--test-code-fg);
+    border-radius: 4px;
+    padding: 2px 6px;
+    display: block;
+    margin-top: 4px;
+}
+
+.editor-wrapper {
+    margin-bottom: 1em;
+}
+
+.code-display {
+    margin-bottom: 1em;
+}
+
+textarea.code-snippet {
+    width: 100%;
+    min-height: 80px;
+    font-family: monospace;
+    font-size: 14px;
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 6px;
+    border: 1px solid #333;
+    padding: 8px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.formatted-text {
+    white-space: pre-line;
+}

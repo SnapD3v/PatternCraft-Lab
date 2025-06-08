@@ -1,56 +1,58 @@
-"""
-PatternCraft-Lab app package
-"""
+from flask import Flask
 
-from pathlib import Path
-from app.config.config import settings
-from app.config.services.user_config import user_config_manager
-import app.database as db
-
-from app.ai.text_generator import TextGenerator
-from app.ai.agents import TaskWriter, Reviewer, Assistant
-from app.content.theory_manager import TheoryManager
-from app.content.problems_manager import ProblemsManager
-from app.content.assistant_manager import AssistantManager
-from app.views.web_routes import WebRoutes
-from app.utils.web_app_factory import WebAppFactory
-from app.utils.localization import get_locale, get_timezone, babel
-
-BASE_DIR = Path(__file__).resolve()
+from .config import AppConfig
+from .services import ProblemService
+from app import constants
+from app.text_generator import APITextGenerator
+from app.ai import TaskWriter, TestWriter, Reviewer, Adjudicator
+from app.services import ProblemCreator, SolutionChecker, ProblemService
+from app.test_runner import TestRunner
+from . import constants
 
 
-def create_app():
-    user_config = user_config_manager.get_config()
-    user_config_manager.print_config()
-
-    text_generator = TextGenerator(
-        user_config.model.model_name,
-        user_config.model.model_type,
+def configure_app(
+    app: Flask,
+    config: AppConfig
+) -> Flask:
+    text_generator = APITextGenerator(
+        str(config.api.base_url),
+        config.api.key,
+        config.api.model
     )
-
     task_writer = TaskWriter(
         text_generator,
-        settings.prompt.writer_system_prompt,
-        settings.prompt.writer_user_prompt,
+        constants.TASK_WRITER_SYSTEM_PROMPT,
+        constants.TASK_WRITER_USER_PROMPT
     )
-    reviewer = Reviewer(text_generator, settings.prompt.reviewer_prompt)
-    assistant = Assistant(text_generator, settings.prompt.assistant_prompt)
+    test_writer = TestWriter(text_generator, constants.TEST_WRITER_SYSTEM_PROMPT)
+    problem_creator = ProblemCreator(task_writer, test_writer)
+    test_runner = TestRunner()
+    reviewer = Reviewer(text_generator, constants.REVIEWER_PROMPT)
+    adjudicator = Adjudicator(text_generator, constants.ADJUDICATOR_SYSTEM_PROMPT)
+    solution_checker = SolutionChecker(test_runner, reviewer, adjudicator)
+    problem_service = ProblemService(problem_creator, solution_checker)
 
-    theory_manager = TheoryManager(db.create_session)
-    problems_manager = ProblemsManager(db.create_session, task_writer, reviewer)
-    assistant_manager = AssistantManager(db.create_session, assistant)
+    app.dependencies = {
+        'app_config': config,
+        'problem_service': problem_service,
+        'text_generator': text_generator,
+    }
 
-    routes = WebRoutes(
-        theory_manager, problems_manager, assistant_manager, settings.tags.tags_list
-    )
-    app = WebAppFactory.create_app(routes)
+    return app
 
-    babel.init_app(
-        app,
-        locale_selector=get_locale,
-        timezone_selector=get_timezone,
-        default_domain="messages",
-        default_translation_directories=str(BASE_DIR.parent / "translations"),
-    )
 
-    return app, settings
+def register_blueprints(app: Flask) -> Flask:
+    # Импортируй блюпринты тут (чтобы не было циклических импортов)
+    from app.blueprints.problems import problems_bp
+    from app.blueprints.theory import theory_bp
+    from app.blueprints.config import config_bp
+    from app.blueprints.assistant import assistant_bp
+    from app.blueprints.other import other_bp
+
+    # Зарегистрируй блюпринты
+    app.register_blueprint(problems_bp)
+    app.register_blueprint(theory_bp)
+    app.register_blueprint(config_bp)
+    app.register_blueprint(assistant_bp)
+    app.register_blueprint(other_bp)
+    return app

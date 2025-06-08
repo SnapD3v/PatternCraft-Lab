@@ -1,24 +1,16 @@
 {
-    "model": {
-        "model_name": "qwen2.5-coder-1.5b-instruct.Q8_0.gguf",
-        "model_type": "local"
-    },
-    "openrouter": {
-        "api_key": null,
-        "base_url": "https://openrouter.ai/api/v1"
-    },
-    "local": {
-        "n_gpu_layers": -1,
-        "use_mlock": true,
-        "flash_attn": true,
-        "n_ctx": 32768,
-        "chat_format": "chatml"
+    "api": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "key": "dummy",
+        "model": "deepseek/deepseek-chat-v3-0324:free"
     },
     "appearance": {
         "theme": "dark",
         "language": "ru"
     },
-    "education": {
-        "difficulty": "medium"
+    "server": {
+        "host": "127.0.0.1",
+        "port": 8000,
+        "debug": true
     }
 }

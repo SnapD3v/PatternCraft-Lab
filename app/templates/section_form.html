@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Создание раздела
+{% endblock %}
+
+{% block content %}
+<h2>Создание раздела</h2>
+<br>
+
+<form method="post">
+	<p>Название</p>
+	<input name="name" class="block-light full-width" type="text" value="{{ section.name }}">
+	<br>
+	<p>Описание</p>
+	<input name="description" class="block-light full-width" type="text" value="{{ section.description }}">
+	<br><br>
+
+	<input type="submit" class="button card block-light" href="#" value="Создать">
+
+</form>
+
+<br><br>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

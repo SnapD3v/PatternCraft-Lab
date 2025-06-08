@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css" />
+<link rel="stylesheet" href="/static/css/tests.css">
 {% endblock %}
 
 {% block title %}
@@ -11,38 +12,82 @@
 {% endblock %}
 
 {% block content %}
-<h2>{{ _('problem.heading') }}</h2> <!-- Задача -->
-<h3>{{ problem.name }}</h3>
+<h2>Задача</h2>
+<h3>
+    {% if problem.is_solved %}
+        ✅
+    {% endif %}
+    {{ problem.name }}
+</h3>
 <span class="cards-area gap-10">
-	{% for tag in problem.tags %}
-		<span class="block-light">
-			{{ tag }}
-		</span>
-	{% endfor %}
+    <span class="block-light difficulty-{{problem.difficulty}} selected">
+        {{ problem.difficulty | capitalize }}
+    </span>
+    {% for tag in problem.tags %}
+        <span class="block-light">
+            {{ tag }}
+        </span>
+    {% endfor %}
 </span>
 <p class="formatted-text">{{ problem.task | safe }}</p>
-<br>
-<h3>{{ _('problem.your_solution') }}</h3> <!-- Ваше решение -->
-{% for solution_history_element in problem.solution_history_elements %}
-	{% if solution_history_element.type == 'text' %}
-		<div class="block-light">
-			<p class="formatted-text">{{ solution_history_element.content | safe }}</p>
-		</div>
-	{% elif solution_history_element.type == 'code' %}
-		<div class="code-display">
-			<textarea class="code-snippet">{{ solution_history_element.content }}</textarea>
-		</div>
-	{% endif %}
-	<br>
-{% endfor %}
 
-<form method="post">
-<div class="editor-wrapper">
-	<textarea name="solution" id="editor"></textarea>
+<h3>Тесты</h3>
+<form id="change-tests-form">
+    <div class="editor-wrapper">
+        <textarea class="code-editor" name="tests_code">{{ problem.tests_code }}</textarea>
+    </div>
+    <br>
+    <button class="button block-light cursor-pointer small-text-size" type="submit">Изменить</button>
+</form>
+<br>
+<div id="change-tests-status"></div>
+<br>
+<h3>Ваши решения</h3>
+
+<div class="cards-area gap-10">
+    {% for i in range(1, solutions_count + 1) %}
+        <a href="/problem/{{ problem.id }}/{{ i }}" class="card block-light cursor-pointer tag {% if i == solution_number %}selected{% endif %}">
+            {{ i }}
+        </a>
+    {% endfor %}
+</div>
+
+<br>
+
+{% if solution %}
+<div class="code-display">
+    <textarea class="code-snippet">{{ solution.content }}</textarea>
 </div>
 <br>
-<button class="button block-light cursor-pointer small-text-size" type="submit">{{ _('problem.submit') }}</button> <!-- Отправить -->
+
+<div class="block-light">
+    <p class="formatted-text">{{ solution.review.content | safe }}</p>
+</div>
+
+<br>
+<!-- Новый блок для результатов тестов текущего решения -->
+<div id="current-solution-summary"></div>
+<div id="current-solution-result"></div>
+
+<script>
+    const CURRENT_TESTS_RESULTS = {{ solution.review.tests_results | tojson }};
+</script>
+{% endif %}
+
+<form id="solution-form" method="post">
+    <div class="editor-wrapper">
+        <textarea class="code-editor" name="solution_code"></textarea>
+    </div>
+    <br>
+    <button class="button block-light cursor-pointer small-text-size" type="submit">Отправить</button>
+    <button id="test-solution-btn" class="button block-light cursor-pointer small-text-size" type="button">Протестировать решение</button>
 </form>
+<br>
+<div id="send-solution-summary"></div>
+<div id="send-solution-result"></div>
+<br>
+<div id="test-solution-summary"></div>
+<div id="test-solution-result"></div>
 {% endblock %}
 
 {% block script %}
@@ -53,65 +98,187 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/anyword-hint.min.js"></script>
 
 <script>
-  const editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
-    mode: "python",
-    theme: "material-darker",
-    lineNumbers: true,
-    autoCloseBrackets: true,
-    matchBrackets: true,
-    extraKeys: {
-      "Ctrl-Space": "autocomplete"
-    }
-  });
-
-  document.querySelectorAll('.code-snippet').forEach(textarea => {
-    CodeMirror.fromTextArea(textarea, {
-      mode: "python",
-      theme: "material-darker",
-      lineNumbers: true,
-      readOnly: true
+// --- CodeMirror инициализация ---
+const editors = document.querySelectorAll('.code-editor');
+let solutionEditor = null;
+editors.forEach((element, idx) => {
+    const cm = CodeMirror.fromTextArea(element, {
+        mode: "python",
+        theme: "material-darker",
+        lineNumbers: true,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        extraKeys: {
+            "Ctrl-Space": "autocomplete"
+        }
     });
-  });
+    if (idx === editors.length - 1) solutionEditor = cm;
+});
 
-  // Обработка отправки решения
-  const form = document.querySelector('form');
-  const submitButton = form.querySelector('button[type="submit"]');
-  
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Блокируем кнопку отправки
-    submitButton.disabled = true;
-    submitButton.style.opacity = '0.5';
-    submitButton.style.cursor = 'not-allowed';
-    
-    try {
-      const solution = editor.getValue();
-      const formData = new FormData(form);
-      formData.set('solution', solution);
+document.querySelectorAll('.code-snippet').forEach(textarea => {
+    CodeMirror.fromTextArea(textarea, {
+        mode: "python",
+        theme: "material-darker",
+        lineNumbers: true,
+        readOnly: true
+    });
+});
 
-      showNotification('Отправка решения...', 'info');
-      
-      const response = await fetch(window.location.pathname, {
-        method: 'POST',
-        body: formData
-      });
-      
-      if (response.ok) {
-        showNotification('Решение успешно отправлено!', 'success');
-        editor.setValue('');
-      } else {
-        const data = await response.json();
-        showNotification(data.error || 'Произошла ошибка при отправке решения', 'error');
-      }
-    } catch (error) {
-      showNotification('Произошла ошибка при отправке решения', 'error');
-    } finally {
-      // Разблокируем кнопку отправки
-      submitButton.disabled = false;
-      submitButton.style.opacity = '1';
-      submitButton.style.cursor = 'pointer';
+function getStatusIcon(status) {
+    switch (status) {
+        case 'passed': return '✅';
+        case 'failed': return '❌';
+        case 'error':  return '⚠️';
+        case 'skipped': return '⏭️';
+        default: return '❓';
     }
-  });
+}
+function getStatusColor(status) {
+    switch (status) {
+        case 'passed': return 'var(--success)';
+        case 'failed': return 'var(--danger)';
+        case 'error':  return 'var(--warning)';
+        case 'skipped': return 'var(--muted)';
+        default: return 'var(--border)';
+    }
+}
+function getSummary(tests_results) {
+    let total = 0, passed = 0, failed = 0, error = 0, skipped = 0, timeout = false, worker_error = false;
+    for (const [test_id, res] of Object.entries(tests_results)) {
+        if (test_id === '__timeout__') { timeout = true; continue; }
+        if (test_id === '__worker_error__' || test_id === '__error__') { worker_error = true; continue; }
+        total++;
+        switch (res.status) {
+            case 'passed': passed++; break;
+            case 'failed': failed++; break;
+            case 'error': error++; break;
+            case 'skipped': skipped++; break;
+        }
+    }
+    return { total, passed, failed, error, skipped, timeout, worker_error };
+}
+
+function renderTestsResults(results, summaryElemId, detailsElemId, reviewHtml) {
+    let summary = '', html = '';
+    if (results.__timeout__ === 'timeout') {
+        summary = `<span class="status status-warning status-large">⏱ Таймаут — решение слишком долго выполнялось</span>`;
+        html = '';
+    } else if (results.__worker_error__) {
+        summary = `<span class="status status-danger status-large">❗ Ошибка при запуске: ${results.__worker_error__}<br><code class="traceback">${results.__traceback__ || ''}</code></span>`;
+        html = '';
+    } else if (results.__error__) {
+        summary = `<span class="status status-danger status-large">❗ ${results.__error__}</span>`;
+        html = '';
+    } else {
+        const stat = getSummary(results);
+        let colorClass = stat.failed || stat.error ? 'status-danger' : (stat.passed === stat.total ? 'status-success' : 'status-muted');
+        let icon = stat.failed || stat.error ? '❌' : (stat.passed === stat.total ? '✅' : '➖');
+        let text = stat.passed === stat.total
+            ? `Все ${stat.total} тестов успешно пройдены`
+            : `Пройдено: ${stat.passed}/${stat.total} &nbsp; | &nbsp; Ошибки: ${stat.failed} &nbsp; | &nbsp; Исключения: ${stat.error} &nbsp; | &nbsp; Пропущено: ${stat.skipped}`;
+
+        summary = `<span class="status ${colorClass} status-large">${icon} ${text}</span>`;
+        html += '<ul class="test-results-list">';
+        for (const [test_id, result] of Object.entries(results)) {
+            if (test_id.startsWith('__')) continue;
+            const status = result.status;
+            const icon = getStatusIcon(status);
+            const colorClass = `test-status-${status}`;
+
+            html += `<li class="test-result-item">
+                <span class="test-result-icon ${colorClass}">${icon}</span>
+                <span class="test-result-name">${test_id.replace(/^.*\./, '')}</span>
+                <span class="test-result-status ${colorClass}">${status.toUpperCase()}</span>
+                ${result.message ? `<br><code class="test-result-message">${result.message}</code>` : ''}
+            </li>`;
+        }
+        html += '</ul>';
+    }
+    document.getElementById(summaryElemId).innerHTML = summary;
+    document.getElementById(detailsElemId).innerHTML = html;
+}
+
+document.getElementById('change-tests-form').onsubmit = async function(e) {
+    e.preventDefault();
+    const statusDiv = document.getElementById('change-tests-status');
+    statusDiv.innerHTML = '<span class="status status-muted">⏳ Сохраняем...</span>';
+    const editor = document.querySelectorAll('.code-editor')[0];
+    let cmTestEditor = editor.nextSibling && editor.nextSibling.CodeMirror;
+    if (!cmTestEditor) {
+        cmTestEditor = document.querySelectorAll('.CodeMirror')[0]?.CodeMirror;
+    }
+    const tests_code = cmTestEditor ? cmTestEditor.getValue() : editor.value;
+    const problem_id = {{ problem.id }};
+    try {
+        const response = await fetch('/change_tests', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ problem_id, tests_code })
+        });
+        const data = await response.json();
+        if (data.message) {
+            statusDiv.innerHTML = `<span class="status status-success">✅ ${data.message}</span>`;
+        } else if (data.error) {
+            statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
+        }
+    } catch (err) {
+        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+    }
+};
+
+document.getElementById('test-solution-btn').onclick = async function () {
+    const solution_code = solutionEditor.getValue();
+    const problem_id = {{ problem.id }};
+    document.getElementById('test-solution-result').innerHTML = '';
+    document.getElementById('test-solution-summary').innerHTML = '<span class="status status-muted">⏳ Проверка...</span>';
+
+    try {
+        const response = await fetch('/test_solution', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ problem_id, solution_code })
+        });
+        const data = await response.json();
+        renderTestsResults(data.tests_results, "test-solution-summary", "test-solution-result");
+    } catch (err) {
+        document.getElementById('test-solution-summary').innerHTML =
+            '<span class="status status-danger">Ошибка соединения или сервера</span>';
+        document.getElementById('test-solution-result').innerHTML = '';
+    }
+};
+
+document.getElementById('solution-form').onsubmit = async function(e) {
+    e.preventDefault();
+    document.getElementById('send-solution-summary').innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
+    document.getElementById('send-solution-result').innerHTML = '';
+
+    const solution_code = solutionEditor.getValue();
+    const problem_id = {{ problem.id }};
+
+    try {
+        const response = await fetch('/check_solution', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ problem_id, solution_code })
+        });
+        window.location.href = '/problem/{{ problem.id }}';
+    } catch (err) {
+        document.getElementById('send-solution-summary').innerHTML =
+            '<span class="status status-danger">Ошибка соединения или сервера</span>';
+        document.getElementById('send-solution-result').innerHTML = '';
+    }
+};
+
+{% if solution %}
+document.addEventListener("DOMContentLoaded", function() {
+    renderTestsResults(
+        {{ solution.review.tests_results | tojson }},
+        "current-solution-summary",
+        "current-solution-result",
+        {{ solution.review.content | tojson | safe }}
+    );
+});
+{% endif %}
+
 </script>
 {% endblock %}

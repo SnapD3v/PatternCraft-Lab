@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/quill.css">
+{% endblock %}
+
+{% block title %}
+{{ theory.name }}
+{% endblock %}
+
+{% block content %}
+<h2>{{ theory.name }}</h2>
+<br>
+
+<div class="sequential-card">
+	<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/{{ theory.id }}.png {% endif %}" alt="{{ theory.name }}">
+	<div class="information">
+		{{ theory.description }}
+	</div>
+</div>
+
+<br>
+
+<div class="block-light" id="editor"></div>
+
+<br>
+
+<a class="button card block-light" href="/theory/edit/{{ theory.id }}">Редактировать</a>
+
+<br><br>
+{% endblock %}
+
+{% block script %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+	var quill = new Quill('#editor', { 
+		readOnly: true,
+		modules: { syntax: true }
+	});
+
+	var delta = JSON.parse({{ theory.content | tojson }});
+	quill.setContents(delta);
+
+	// После установки контента вызываем подсветку
+	setTimeout(function() {
+		hljs.highlightAll();
+	}, 100);
+</script>
+{% endblock %}

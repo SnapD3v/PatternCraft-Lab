@@ -1,0 +1,15 @@
+.ql-toolbar {
+    border: 0 !important;
+}
+
+.ql-container {
+    border: 0 !important;
+}
+
+pre.ql-syntax {
+    border-radius: 3px;
+    background-color: #1e1e1e !important;
+    padding: 5px 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
