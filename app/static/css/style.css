@@ -31,7 +31,6 @@ select.block-light {
 	background-size: 12px;
 }
 
-
 .full-width {
 	width: 100%;
 }
@@ -75,7 +74,8 @@ select.block-light {
 	margin-bottom: 15px;
 }
 
-.sidebar-content > a > img {
+.sidebar-content > a > img,
+.sidebar-content > a > i {
 	vertical-align: text-top;
 	height: 1.17em;
 	margin-right: 5px;
