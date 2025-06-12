@@ -5,7 +5,8 @@ from .utils import markdown_process, strip_markdown
 from .database import (
     Problem,
     Solution,
-    Review
+    Review,
+    Course
 )
 
 
@@ -38,3 +39,14 @@ class ProblemDTO:
 
     def _parse_tags(self, tags: str) -> List[str]:
         return tags.split(', ')
+
+
+class CourseDTO:
+    def __init__(self, course: Course) -> None:
+        self.id = course.id
+        self.name = course.name
+        self.description = course.description
+        self.image_url = course.image_url
+        self.is_hidden = course.is_hidden
+        self.theories = course.theories
+        self.problems = [ProblemDTO(problem) for problem in course.problems]

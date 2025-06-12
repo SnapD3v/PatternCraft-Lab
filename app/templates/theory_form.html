@@ -28,7 +28,7 @@
 		{% if theory %}
 		<div>
 			<p>Текущее:</p>
-			<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/{{ theory.id }}.png {% endif %}" alt="{{ theory.name }}">
+			<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/theory/{{ theory.id }}.png {% endif %}" alt="{{ theory.name }}">
 		</div>
 		{% endif %}
 		<div>
@@ -48,6 +48,25 @@
 	<input type="hidden" name="content" id="content-input">
 
 	<br>
+
+	<div class="one-line">
+        <label class="switch">
+            <input 
+                type="checkbox"
+                id="theme-switcher"
+                name="in_practice"
+                value="on"
+                {% if theory %}
+					{% if theory.in_practice %}checked{% endif %}
+				{% else %}	
+				    {% if section_in_practice %}checked{% endif %}
+				{% endif %}
+			>
+            <span class="slider"></span>
+        </label>
+        <span>Добавить в практику</span>
+    </div>
+    <br><br>
 
 	<input class="button card block-light" type="submit" value="Сохранить">
 

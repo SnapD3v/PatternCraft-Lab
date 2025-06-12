@@ -9,12 +9,12 @@
 {% for texts_block in theory %}
 	<h3>{{ texts_block.name }}</h3>
 	<p>{{ texts_block.description }}</p>
-	<a class="button card block-light" href="#">Настройка раздела</a>
+	<a class="button card block-light" href="/section/edit/{{texts_block.id}}">Настройка раздела</a>
 	<br><br>
 	<div class="cards-area">
 	{% for theory in texts_block.texts %}
 		<a href="/theory/{{ theory.id }}" class="button block-light card sequential-card">
-			<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/{{ theory.id }}.png {% endif %}" alt="">
+			<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/theory/{{ theory.id }}.png {% endif %}" alt="">
 			<div class="information">
 				<p><strong>{{ theory.name }}</strong></p>
 				<p>{{ theory.description }}</p>

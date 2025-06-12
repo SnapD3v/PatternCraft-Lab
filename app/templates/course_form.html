@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание курса{% endblock %}
+
+{% block content %}
+<h3>
+    {% if course %}
+    Редактирование курса
+    {% else %}
+    Создание курса
+    {% endif %}
+</h3>
+
+<form id="create-course-form" method="post" enctype="multipart/form-data">
+    <div>
+        <p>Название</p>
+        <input class="block-light full-width" type="text" name="name" id="name" value="{{ course.name if course else '' }}" required>
+    </div>
+
+    <div>
+        <p>Описание курса</p>
+        <textarea class="block-light full-width" name="description" id="description">{{ course.description if course else '' }}</textarea>
+    </div>
+
+    <p>Изображение</p>
+	<div class="sequential-card">
+		{% if course %}
+		<div>
+			<p>Текущее:</p>
+			<img src="{% if course.image_url %} {{ course.image_url }} {% else %} /static/img/courses/{{ course.id }}.png {% endif %}" alt="{{ course.name }}">
+		</div>
+		{% endif %}
+		<div>
+			{% if course %}
+			<p>Новое:</p>
+			{% endif %}
+			<input class="block-light full-width" name="image_url" type="text" placeholder="Ссылка на Изображение" value="{{ course.image_url }}">
+			<p>или</p>
+			<input class="block-light full-width" name="image" type="file">
+		</div>
+	</div>
+    
+    <br><br>
+
+    <h3>Выберите теорию:</h3>
+    <div id="theory-container">
+        {% for block in sections %}
+            {% if block.texts %}
+                <h4>{{ block.name }}</h4>
+                <div class="cards-area gap-10">
+                    {% for theory in block.texts %}
+                        <div class="card block-light cursor-pointer theory tag"
+                             data-theory-id="{{ theory.id }}">
+                            {{ theory.name }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <input type="hidden" name="theory_texts" id="theory-texts">
+
+    <br><br>
+
+    <h3>Выберите задачи:</h3>
+    <div id="problems-container">
+        <div class="cards-area gap-10">
+            {% for problem in problems %}
+                <div class="card block-light cursor-pointer problem tag"
+                     data-problem-id="{{ problem.id }}">
+                    {{ problem.name }}
+                    <span class="text-{{ problem.difficulty.value }}">({{ problem.difficulty.value }})</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <input type="hidden" name="problems" id="problems">
+
+    <br><br>
+
+    <div class="one-line">
+        <label class="switch">
+            <input type="checkbox" name="is_hidden" id="is_hidden" {% if course and course.is_hidden %}checked{% endif %}>
+            <span class="slider"></span>
+        </label>
+        <span>Скрыть курс</span>
+    </div>
+
+    <br><br><br>
+    <input
+        class="button block-light cursor-pointer small-text-size"
+        type="submit"
+        value="Сохранить курс">
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+    // Из шаблона: выбранные ID
+    const selectedTheoryIds = {{ selected_theory_ids|tojson|safe }};
+    const selectedProblemIds = {{ selected_problem_ids|tojson|safe }};
+
+    // ================= ТЕОРИЯ =================
+    const theoryCards = document.querySelectorAll('.theory');
+    const selectedTheory = new Set(selectedTheoryIds);  // <--- сразу из шаблона
+    theoryCards.forEach(card => {
+        const id = card.dataset.theoryId;
+        if (selectedTheory.has(id)) {
+            card.classList.add('selected');
+        }
+        card.addEventListener('click', () => {
+            if (selectedTheory.has(id)) {
+                selectedTheory.delete(id);
+                card.classList.remove('selected');
+            } else {
+                selectedTheory.add(id);
+                card.classList.add('selected');
+            }
+            document.getElementById('theory-texts').value = Array.from(selectedTheory).join(',');
+        });
+    });
+    document.getElementById('theory-texts').value = Array.from(selectedTheory).join(',');
+
+    // ================= ЗАДАЧИ =================
+    const problemCards = document.querySelectorAll('.problem');
+    const selectedProblems = new Set(selectedProblemIds);
+    problemCards.forEach(card => {
+        const id = card.dataset.problemId;
+        if (selectedProblems.has(id)) {
+            card.classList.add('selected');
+        }
+        card.addEventListener('click', () => {
+            if (selectedProblems.has(id)) {
+                selectedProblems.delete(id);
+                card.classList.remove('selected');
+            } else {
+                selectedProblems.add(id);
+                card.classList.add('selected');
+            }
+            document.getElementById('problems').value = Array.from(selectedProblems).join(',');
+        });
+    });
+    document.getElementById('problems').value = Array.from(selectedProblems).join(',');
+
+    // ============= Классический submit ============
+    document.getElementById('create-course-form').addEventListener('submit', function (e) {
+        // Формируем поля для множественного выбора (через input[type=hidden])
+        document.getElementById('theory-texts').value = Array.from(selectedTheory).join(',');
+        document.getElementById('problems').value = Array.from(selectedProblems).join(',');
+        // Ничего не меняем — форма отправится классическим POST
+    });
+</script>
+
+{% endblock %}

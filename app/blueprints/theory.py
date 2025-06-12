@@ -16,22 +16,30 @@ def theory_list():
 
 @theory_bp.route("/theory/create/<int:section_id>", methods=["GET", "POST"])
 def create_theory(section_id: int):
+    section = TextsBlock.query.get(section_id)
     if request.method == 'GET':
-        return make_response(render_template('theory_form.html', theory=None))
+        return make_response(
+            render_template(
+                'theory_form.html',
+                theory=None,
+                section_in_practice=section.in_practice
+            )
+        )
     theory_text = TheoryText(
         name=request.form['name'],
         content=request.form['content'],
         description=request.form['description'],
         image_url=request.form.get('image_url', ''),
+        in_practice=request.form.get('in_practice') == 'on',
         block_id=section_id
     )
     db.session.add(theory_text)
     db.session.commit()
     if 'image' in request.files and request.files['image']:
-        filename = f'app/static/img/{theory_text.id}.png'
+        filename = f'app/static/img/theory/{theory_text.id}.png'
         image = request.files['image']
         image.save(filename)
-        theory_text.image_url = None
+        theory_text.image_url = ''
     db.session.add(theory_text)
     db.session.commit()
     id = theory_text.id
@@ -44,8 +52,26 @@ def create_section():
         return make_response(render_template('section_form.html', section=None))
     name = request.form['name']
     description = request.form['description']
-    texts_block = TextsBlock(name=name, description=description)
+    in_practice = request.form.get('in_practice') == 'on'
+    texts_block = TextsBlock(name=name, description=description, in_practice=in_practice)
     db.session.add(texts_block)
+    db.session.commit()
+    return make_response(redirect('/theory'))
+
+
+@theory_bp.route("/section/edit/<int:id>", methods=["GET", "POST"])
+def edit_section(id: int):
+    section = TextsBlock.query.get(id)
+    print(section)
+    if request.method == 'GET':
+        return make_response(render_template('section_form.html', section=section))
+    name = request.form['name']
+    description = request.form['description']
+    print(request.form)
+    in_practice = request.form.get('in_practice') == 'on'
+    section.name = name
+    section.description = description
+    section.in_practice = in_practice
     db.session.commit()
     return make_response(redirect('/theory'))
 
@@ -60,15 +86,22 @@ def theory(id: int):
 def edit_theory(id: int):
     theory_text = TheoryText.query.get(id)
     if request.method == 'GET':
-        return make_response(render_template('theory_form.html', theory=theory_text))
-    for key in request.form:
-        value = request.form[key]
-        if hasattr(theory_text, key):
-            setattr(theory_text, key, value)
+        return make_response(
+            render_template(
+                'theory_form.html',
+                theory=theory_text,
+                section_in_practice=theory_text.block.in_practice
+            )
+        )
+    theory_text.name = request.form['name']
+    theory_text.description = request.form['description']
+    theory_text.content = request.form['content']
+    theory_text.in_practice = request.form.get('in_practice') == 'on'
+    theory_text.image_url = request.form.get('image_url', '')
     if 'image' in request.files and request.files['image']:
-        filename = f'app/static/img/{id}.png'
+        filename = f'app/static/img/theory/{id}.png'
         image = request.files['image']
         image.save(filename)
-        theory_text.image_url = None
+        theory_text.image_url = ''
     db.session.commit()
     return make_response(redirect(f'/theory/{id}'))

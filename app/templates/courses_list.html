@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Курсы	
+{% endblock %}
+
+{% block content %}
+<h2>Курсы</h2>
+<div class="cards-area">
+	{% for course in courses %}
+		<a href="/course/{{ course.id }}" class="button block-light card sequential-card">
+			<img src="{% if course.image_url %} {{ course.image_url }} {% else %} /static/img/courses/{{ course.id }}.png {% endif %}" alt="">
+			<div class="information">
+				<p><strong>{{ course.name }}</strong></p>
+				<p>{{ course.description }}</p>
+			</div>
+		</a>
+	{% endfor %}
+	<a href="/course/create" class="button block-light card sequential-card">
+		<img src="/static/img/add.png" alt="">
+		<div class="information">
+			<p><strong>Создать курс</strong></p>
+		</div>
+	</a>
+</div>
+<br><br>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

@@ -12,12 +12,15 @@
         <h4>Выберите темы:</h4>
         <div id="tag-container">
             {% for section in sections %}
-                <h3>{{ section.name }}</h3>
-                <div class="cards-area gap-10">
-                    {% for theory_text in section.texts %}
-                        <div class="card block-light cursor-pointer tag" data-tag="{{ theory_text.name }}">{{ theory_text.name }}</div>
-                    {% endfor %}
-                </div>
+                {% set practice_texts = section.texts | selectattr('in_practice') | list %}
+                {% if practice_texts %}
+                    <h3>{{ section.name }}</h3>
+                    <div class="cards-area gap-10">
+                        {% for theory_text in practice_texts %}
+                            <div class="card block-light cursor-pointer tag" data-tag="{{ theory_text.name }}">{{ theory_text.name }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

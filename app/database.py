@@ -11,7 +11,9 @@ from sqlalchemy import (
     ForeignKey,
     DateTime,
     Boolean,
-    Enum
+    Enum,
+    Table,
+    Column
 )
 
 from .constants import Difficulty
@@ -26,6 +28,12 @@ class TextsBlock(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    in_practice: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        server_default='1',
+        nullable=False
+    )
     texts: Mapped[List[TheoryText]] = relationship(
         "TheoryText", back_populates="block",
         cascade="all, delete-orphan")
@@ -39,6 +47,12 @@ class TheoryText(db.Model):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
     image_url: Mapped[str] = mapped_column(String, nullable=True)
+    in_practice: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        server_default='1',
+        nullable=False
+    )
     block_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey('texts_blocks.id'),
@@ -175,3 +189,61 @@ class Message(db.Model):
     )
 
     chat: Mapped[Chat] = relationship("Chat", back_populates="messages")
+
+
+course_problems = Table(
+    'course_problems',
+    db.Model.metadata,
+    Column('course_id', Integer, ForeignKey('courses.id'), primary_key=True),
+    Column('problem_id', Integer, ForeignKey('problems.id'), primary_key=True)
+)
+
+course_theories = Table(
+    'course_theories',
+    db.Model.metadata,
+    Column('course_id', Integer, ForeignKey('courses.id'), primary_key=True),
+    Column(
+        'theory_id',
+        Integer,
+        ForeignKey('theory_texts.id'),
+        primary_key=True
+    )
+)
+
+
+class Course(db.Model):
+    __tablename__ = 'courses'
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    image_url: Mapped[Optional[str]] = mapped_column(
+        String, nullable=True
+    )
+    server_course_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        nullable=True
+    )
+    creator_id: Mapped[int] = mapped_column(Integer, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.now,
+        nullable=False
+    )
+    is_hidden: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        server_default='0',
+        nullable=False
+    )
+
+    problems: Mapped[List["Problem"]] = relationship(
+        "Problem",
+        secondary=course_problems,
+        backref="courses"
+    )
+    theories: Mapped[List["TheoryText"]] = relationship(
+        "TheoryText",
+        secondary=course_theories,
+        backref="courses"
+    )

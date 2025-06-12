@@ -48,6 +48,7 @@ def register_blueprints(app: Flask) -> Flask:
     from app.blueprints.config import config_bp
     from app.blueprints.assistant import assistant_bp
     from app.blueprints.other import other_bp
+    from app.blueprints.courses import courses_bp
 
     # Зарегистрируй блюпринты
     app.register_blueprint(problems_bp)
@@ -55,4 +56,5 @@ def register_blueprints(app: Flask) -> Flask:
     app.register_blueprint(config_bp)
     app.register_blueprint(assistant_bp)
     app.register_blueprint(other_bp)
+    app.register_blueprint(courses_bp)
     return app

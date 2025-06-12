@@ -15,7 +15,7 @@
 <br>
 
 <div class="sequential-card">
-	<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/{{ theory.id }}.png {% endif %}" alt="{{ theory.name }}">
+	<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/theory/{{ theory.id }}.png {% endif %}" alt="{{ theory.name }}">
 	<div class="information">
 		{{ theory.description }}
 	</div>
@@ -25,7 +25,11 @@
 
 <div class="block-light" id="editor"></div>
 
-<br>
+<p>
+	{% if not theory.in_practice %}❌ Не участвует
+	{% else %}✅ Участвует
+	{% endif %}
+	в списке при генерации задач</p>
 
 <a class="button card block-light" href="/theory/edit/{{ theory.id }}">Редактировать</a>
 

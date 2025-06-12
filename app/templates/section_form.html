@@ -1,22 +1,50 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Создание раздела
+{% if section %}Редактирование раздела
+{% else %}Создание раздела
+{% endif %}
 {% endblock %}
 
 {% block content %}
-<h2>Создание раздела</h2>
+<h2>
+    {% if section %}
+        Редактирование раздела
+    {% else %}
+        Создание раздела
+    {% endif %}
+</h2>
 <br>
 
 <form method="post">
-	<p>Название</p>
-	<input name="name" class="block-light full-width" type="text" value="{{ section.name }}">
-	<br>
-	<p>Описание</p>
-	<input name="description" class="block-light full-width" type="text" value="{{ section.description }}">
-	<br><br>
+    <p>Название</p>
+    <input name="name" class="block-light full-width" type="text" value="{{ section.name }}">
+    <br>
+    <p>Описание</p>
+    <input name="description" class="block-light full-width" type="text" value="{{ section.description }}">
+    <br><br>
 
-	<input type="submit" class="button card block-light" href="#" value="Создать">
+    <div class="one-line">
+        <label class="switch">
+            <input 
+                type="checkbox"
+                id="theme-switcher"
+                name="in_practice"
+                value="on"
+                {% if not section or section.in_practice %}checked{% endif %}
+            >
+            <span class="slider"></span>
+        </label>
+        <span>Добавить в практику</span>
+    </div>
+    <br><br>
+
+    <input
+        type="submit"
+        class="button card block-light"
+        href="#" 
+        value="{% if section %}Редактировать{% else %}Создать{% endif %}"
+    >
 
 </form>
 

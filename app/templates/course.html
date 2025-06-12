@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Курс «{{ course.name }}»{% endblock %}
+
+{% block content %}
+<h2>Курс «{{ course.name }}»</h2>
+
+<div class="sequential-card">
+	<img src="{% if course.image_url %} {{ course.image_url }} {% else %} /static/img/courses/{{ course.id }}.png {% endif %}" alt="{{ course.name }}">
+	<div class="information">
+		{{ course.description }}
+	</div>
+</div>
+
+<h3>Теория:</h3>
+<div class="cards-area">
+    {% for theory in course.theories %}
+        <a href="/theory/{{ theory.id }}" class="button block-light card sequential-card">
+			<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/theory/{{ theory.id }}.png {% endif %}" alt="">
+			<div class="information">
+				<p><strong>{{ theory.name }}</strong></p>
+				<p>{{ theory.description }}</p>
+			</div>
+		</a>
+	{% endfor %}
+</div>
+
+<h3>Задачи:</h3>
+<div class="cards-area">
+{% for problem in course.problems %}
+    <div class="button block-light card sequential-card problem-card one-line" style="justify-content: space-between; position: relative;">
+        <a href="/problem/{{ problem.id }}" style="flex: 1 1 auto; color: inherit; text-decoration: none;">
+            <p>
+                {% if problem.is_solved %}
+                    ✅
+                {% endif %}
+                <strong>{{problem.name}}</strong>
+            </p>
+            <p>
+                <span class="cards-area gap-10">
+                <span class="block-dark difficulty-{{problem.difficulty}} selected">
+                    {{ problem.difficulty | capitalize }}
+                </span>
+                {% for tag in problem.tags %}
+                    <span class="block-dark">
+                        {{ tag }}
+                    </span>
+                {% endfor %}
+                </span>
+            </p>
+        </a>
+    </div>
+{% endfor %}
+</div>
+
+<br><br>
+<div class="one-line" style="justify-content: space-between; align-items: center;">
+    <a href="/course/edit/{{ course.id }}" class="button block-light">Редактировать курс</a>
+    <a class="button block-light" id="delete-btn">Удалить курс<a>
+</div>
+
+<!-- Модальное окно подтверждения -->
+<div id="confirm-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <p>Вы уверены, что хотите удалить курс?</p>
+        <div style="display:flex; gap:20px; justify-content: flex-end;">
+            <button id="cancel-delete" class="block-dark">Отмена</button>
+            <button id="confirm-delete" class="block-light" style="background-color: #aa2222;">Удалить</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    let modal = document.getElementById('confirm-modal');
+    let confirmBtn = document.getElementById('confirm-delete');
+    let cancelBtn = document.getElementById('cancel-delete');
+    let deleteBtn = document.getElementById('delete-btn');
+    let courseIdToDelete = parseInt({{ course.id }});
+
+    deleteBtn.onclick = function() {
+        modal.style.display = 'flex';
+    };
+
+    // Отмена удаления
+    cancelBtn.onclick = function() {
+        modal.style.display = 'none';
+    };
+
+    // Подтвердить удаление
+    confirmBtn.onclick = function() {
+        fetch('/delete_course', {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({course_id: courseIdToDelete})
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            window.location.href = '/courses';
+        })
+        .catch(() => {
+            alert('Ошибка сети');
+            modal.style.display = 'none';
+            courseIdToDelete = null;
+        });
+    };
+
+    // Клик вне модального окна — закрыть
+    modal.addEventListener('mousedown', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            problemIdToDelete = null;
+        }
+    });
+});
+</script>
+{% endblock %}
