@@ -34,19 +34,31 @@
         <br><br>
 
         <h3>Внешний вид</h3>
+
         <p>Тема</p>
-        <select name="theme" class="block-light" name="theme">
+        <select name="appearance.theme" class="block-light">
             <option value="light" {% if config.appearance.theme == 'light' %}selected{% endif %}>Светлая</option>
             <option value="dark" {% if config.appearance.theme == 'dark' %}selected{% endif %}>Тёмная</option>
         </select>
         <br>
 
         <p>Язык</p>
-        <select name="language" class="block-light" name="language">
+        <select name="appearance.language" class="block-light">
             <option value="ru" {% if config.appearance.language == 'ru' %}selected{% endif %}>Русский</option>
             <option value="en" {% if config.appearance.language == 'en' %}selected{% endif %}>English</option>
         </select>
-        <br><br>
+        <br>
+
+        <p>Размер шрифта (px)</p>
+        <input
+                type="number"
+                name="appearance.font_size"
+                class="block-light full-width"
+                min="10"
+                max="32"
+                value="{{ config.appearance.font_size }}"
+        >
+        <br>
 
         <br>
 

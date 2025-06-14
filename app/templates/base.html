@@ -1,107 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="stylesheet" href="/static/css/style.css">
-	<link rel="stylesheet" href="/static/css/chat.css">
-	<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.rel='stylesheet'">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-	{% block head %}{% endblock %}
-	<title>PatternCraft Lab | {% block title %}{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/chat.css">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style"
+          onload="this.rel='stylesheet'">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+          rel="stylesheet">
+    {% block head %}{% endblock %}
+    <title>PatternCraft Lab | {% block title %}{% endblock %}</title>
 </head>
 <body class="open-menu">
-	<div class="sidebar">
-		<div class="sidebar-content">
-			<span class="big-text-size"><strong>PatternCraft Lab</strong></span>
-			<br><br>
-			<span class="small-text-size"><strong>Общее</strong></span>
-			<br>
-			<a class="button" href="/theory">
-				<img src="/static/img/theory.png" alt="">
-				<span>Теория</span>
-			</a>
-			<a class="button" href="/problems">
-				<img src="/static/img/problems.png" alt="">
-				<span>Задачи</span>
-			</a>
-			<a class="button" href="/courses">
-				<img src="/static/img/courses.png" alt="">
-				<span>Курсы</span>
-			</a>
-			<a class="button" id="assistant-button">
-				<img src="/static/img/ai_icon.png" alt="">
-				<span>AI-ассистент</span>
-			</a>	
-			<a class="button" href="/profile">
-				<img src="/static/img/profile.png" alt="">
-				<span>Профиль</span>
-			</a>
-			<br><br>
-			<span class="small-text-size"><strong>Системное</strong></span>
-			<br>
-			<a class="button" href="/config">
-				<img src="/static/img/configuration.png" alt="">
-				<span>Конфигурация</span>
-			</a>
-		</div>
-		<div class="sidebar-ledge">
-			<span id="sidebar-button">☰</span>
-		</div>
-	</div>
+<div class="sidebar">
+    <div class="sidebar-content">
+        <div style="display: flex; align-items: center;">
+            {% if is_authenticated %}
+                <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:green; margin-right:8px; margin-left:8px;"></span>
+            {% else %}
+                <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:red; margin-right:8px; margin-left:8px;"></span>
+            {% endif %}
+            <span class="big-text-size"><strong>PatternCraft Lab</strong></span>
+        </div>
 
-	<div class="content">
-		<div class="wrapper">
-			{% block content %}{% endblock %}
-		</div>
-		<div class="assistant-panel">
-			<div class="chat-container">
-			<button class="close-button">×</button>
-			<!-- Chat List Sidebar -->
-			<div class="chat-list-sidebar">
-				<div class="chat-list-header">
-				<h3>AI-Ассистент</h3>
-				<button id="new-chat-button" class="new-chat-btn">
-					<span>Новый чат</span>
-				</button>
-				</div>
-				<div class="chat-list">
-				<!-- Чаты будут добавляться здесь динамически -->
-				</div>
-			</div>
+        <br><br>
+        <span class="small-text-size"><strong>Общее</strong></span>
+        <br>
+        <a class="button" href="/theory">
+            <img src="/static/img/theory.png" alt="">
+            <span>Теория</span>
+        </a>
+        <a class="button" href="/problems">
+            <img src="/static/img/problems.png" alt="">
+            <span>Задачи</span>
+        </a>
+        <a class="button" href="/courses">
+            <img src="/static/img/courses.png" alt="">
+            <span>Курсы</span>
+        </a>
+        <a class="button" id="assistant-button">
+            <img src="/static/img/ai_icon.png" alt="">
+            <span>AI-ассистент</span>
+        </a>
+        <a class="button" href="/profile">
 
-			<!-- Chat Content -->
-			<div class="chat-content">
-				<div class="chat-title">
-				<h3 id="current-chat-title">Выберите чат</h3>
-				</div>
-			<div class="messages-container">
-				<div class="messages"></div>
-				<div class="message-loading-indicator">Ассистент думает</div>
-			</div>
-			<div class="chat-input unified-input">
-				<textarea placeholder="Введите запрос" rows="3"></textarea>
-				<button class="send-icon-button" id="send-button" type="button" title="Отправить">
-				<i class="fas fa-arrow-up"></i>
-				</button>
-			</div>
-			</div>
-			</div>
-		</div>
-	</div>
-	{% block script %}{% endblock %}
-	<script>
-		let menuButton = document.querySelector('#sidebar-button');
-		let body = document.querySelector('body');
+            <img src="/static/img/profile.png" alt="">
+            <span>Профиль</span>
 
-		menuButton.addEventListener('click', () => {
-			body.classList.toggle('open-menu');
-		})
-	</script>
+        </a>
 
-	<script src="/static/js/assistant.js"></script>
+        <br><br>
+        <span class="small-text-size"><strong>Системное</strong></span>
+        <br>
+        <a class="button" href="/config">
+            <img src="/static/img/configuration.png" alt="">
+            <span>Конфигурация</span>
+        </a>
+    </div>
+    <div class="sidebar-ledge">
+        <span id="sidebar-button">☰</span>
+    </div>
+</div>
+
+<div class="content">
+    <div class="wrapper">
+        {% block content %}{% endblock %}
+    </div>
+    <div class="assistant-panel">
+        <div class="chat-container">
+            <button class="close-button">×</button>
+            <!-- Chat List Sidebar -->
+            <div class="chat-list-sidebar">
+                <div class="chat-list-header">
+                    <h3>AI-Ассистент</h3>
+                    <button id="new-chat-button" class="new-chat-btn">
+                        <span>Новый чат</span>
+                    </button>
+                </div>
+                <div class="chat-list">
+                    <!-- Чаты будут добавляться здесь динамически -->
+                </div>
+            </div>
+
+            <!-- Chat Content -->
+            <div class="chat-content">
+                <div class="chat-title">
+                    <h3 id="current-chat-title">Выберите чат</h3>
+                </div>
+                <div class="messages-container">
+                    <div class="messages"></div>
+                    <div class="message-loading-indicator">Ассистент думает</div>
+                </div>
+                <div class="chat-input unified-input">
+                    <textarea placeholder="Введите запрос" rows="3"></textarea>
+                    <button class="send-icon-button" id="send-button" type="button" title="Отправить">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block script %}{% endblock %}
+<script>
+    let menuButton = document.querySelector('#sidebar-button');
+    let body = document.querySelector('body');
+
+    menuButton.addEventListener('click', () => {
+        body.classList.toggle('open-menu');
+    })
+</script>
+
+<script src="/static/js/assistant.js"></script>
 </body>
 </html>

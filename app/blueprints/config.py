@@ -30,6 +30,7 @@ def configuration():
     configure_app(current_app, app_config)
     update_auth_client(current_app, app_config)
 
+
     json_config = app_config.model_dump_json(indent=4, exclude_none=True)
     with open("config.json", "w") as f:
         f.write(json_config)

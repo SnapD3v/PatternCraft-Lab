@@ -16,6 +16,7 @@ class APIConfig(BaseModel):
 class AppearanceConfig(BaseModel):
     theme: Theme
     language: str
+    font_size: int = 14
 
 
 class ServerConfig(BaseModel):

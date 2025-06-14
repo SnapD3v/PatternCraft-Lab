@@ -7,13 +7,15 @@ from flask import (
     request,
     jsonify,
     make_response,
-    render_template
+    render_template, redirect, url_for
 )
 
 from app.database import db, Problem, Solution, Review, Test, TheoryText, TextsBlock
 from app.dto import ProblemDTO, SolutionDTO
 from app.services import ProblemService
+from .. import PatternCraftAuthClient
 from ..constants import Difficulty
+from ..services.service_adapter import ServiceAdapter
 
 problems_bp = Blueprint('problems', __name__)
 
@@ -169,3 +171,18 @@ def test_solution():
     solution_code = request.json['solution_code']
     tests_results = problem_service.test_solution(problem, solution_code)
     return jsonify({'tests_results': tests_results})
+
+
+@problems_bp.route("/api/training/<int:id>", methods=["POST"])
+def copy_problem(id: int):
+    auth_client: PatternCraftAuthClient = current_app.dependencies['api_client']
+
+    problem = cast(Optional[Problem], Problem.query.get(id))
+
+    print(id)
+
+    if not problem:
+        service_adapter = ServiceAdapter(auth_client=auth_client)
+        problem = service_adapter.download_problem(problem_id=id)
+
+    return redirect(url_for('problems.problem', id=id))
