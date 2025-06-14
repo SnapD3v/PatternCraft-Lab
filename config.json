@@ -12,5 +12,10 @@
         "host": "127.0.0.1",
         "port": 8000,
         "debug": true
+    },
+    "auth": {
+        "email": "test@gmail.com",
+        "password": "Password123$",
+        "base_url": "http://127.0.0.1:5000/"
     }
 }

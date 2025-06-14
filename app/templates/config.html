@@ -1,48 +1,60 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Конфигурация
+    Конфигурация
 {% endblock %}
 
 {% block content %}
-<h2>Конфигурация</h2>
-<br>
+    <h2>Конфигурация</h2>
+    <br>
 
-<form method="post">
+    <form method="post">
 
-	<h3>API</h3>
-	<p>Ключ</p>
-	<input name="key" class="block-light full-width" type="text" value="{{ config.api.key }}">
-	<br>
-	<p>Модель</p>
-	<input name="model" class="block-light full-width" type="text" value="{{ config.api.model }}">
-	<br>
-	<p>Base URL</p>
-	<input name="base_url" class="block-light full-width" type="text" value="{{ config.api.base_url }}">
-	<br><br>
+        <h3>API</h3>
+        <p>Ключ</p>
+        <input name="key" class="block-light full-width" type="text" value="{{ config.api.key }}">
+        <br>
+        <p>Модель</p>
+        <input name="model" class="block-light full-width" type="text" value="{{ config.api.model }}">
+        <br>
+        <p>Base URL</p>
+        <input name="base_url" class="block-light full-width" type="text" value="{{ config.api.base_url }}">
+        <br><br>
 
-	<h3>Внешний вид</h3>
-	<p>Тема</p>
-	<select name="theme" class="block-light" name="theme">
-		<option value="light" {% if config.appearance.theme == 'light' %}selected{% endif %}>Светлая</option>
-		<option value="dark" {% if config.appearance.theme == 'dark' %}selected{% endif %}>Тёмная</option>
-	</select>
-	<br>
 
-	<p>Язык</p>
-	<select name="language" class="block-light" name="language">
-		<option value="ru" {% if config.appearance.language == 'ru' %}selected{% endif %}>Русский</option>
-		<option value="en" {% if config.appearance.language == 'en' %}selected{% endif %}>English</option>
-	</select>
-	<br><br>
+        <h3>Авторизация</h3>
+        <p>Email</p>
+        <input name="auth.email" class="block-light full-width" type="text" value="{{ config.auth.email }}">
+        <br>
+        <p>Пароль</p>
+        <input name="auth.password" class="block-light full-width" type="password" value="{{ config.auth.password }}">
+        <br>
+        <p>Base URL</p>
+        <input name="auth.base_url" class="block-light full-width" type="text" value="{{ config.auth.base_url }}">
+        <br><br>
 
-	<br>
+        <h3>Внешний вид</h3>
+        <p>Тема</p>
+        <select name="theme" class="block-light" name="theme">
+            <option value="light" {% if config.appearance.theme == 'light' %}selected{% endif %}>Светлая</option>
+            <option value="dark" {% if config.appearance.theme == 'dark' %}selected{% endif %}>Тёмная</option>
+        </select>
+        <br>
 
-	<input type="submit" class="button card block-light" href="#" value="Установить">
+        <p>Язык</p>
+        <select name="language" class="block-light" name="language">
+            <option value="ru" {% if config.appearance.language == 'ru' %}selected{% endif %}>Русский</option>
+            <option value="en" {% if config.appearance.language == 'en' %}selected{% endif %}>English</option>
+        </select>
+        <br><br>
 
-</form>
+        <br>
 
-<br><br>
+        <input type="submit" class="button card block-light" href="#" value="Установить">
+
+    </form>
+
+    <br><br>
 {% endblock %}
 
 {% block script %}
