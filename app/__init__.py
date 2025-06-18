@@ -20,15 +20,17 @@ def configure_app(
         config.api.model
     )
     task_writer = TaskWriter(
+        constants.IDEA_SYSTEM_PROMPT,
+        constants.TASK_SYSTEM_PROMPT,
         text_generator,
-        constants.TASK_WRITER_SYSTEM_PROMPT,
-        constants.TASK_WRITER_USER_PROMPT
     )
-    test_writer = TestWriter(text_generator, constants.TEST_WRITER_SYSTEM_PROMPT)
+    test_writer = TestWriter(
+        text_generator, constants.TEST_WRITER_SYSTEM_PROMPT)
     problem_creator = ProblemCreator(task_writer, test_writer)
     test_runner = TestRunner()
     reviewer = Reviewer(text_generator, constants.REVIEWER_PROMPT)
-    adjudicator = Adjudicator(text_generator, constants.ADJUDICATOR_SYSTEM_PROMPT)
+    adjudicator = Adjudicator(
+        text_generator, constants.ADJUDICATOR_SYSTEM_PROMPT)
     solution_checker = SolutionChecker(test_runner, reviewer, adjudicator)
     problem_service = ProblemService(problem_creator, solution_checker)
 

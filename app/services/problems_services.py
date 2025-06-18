@@ -1,6 +1,4 @@
 from typing import Dict, List, Tuple
-
-from ..utils import strip_markdown
 from ..test_runner import TestRunner
 from ..ai import TaskWriter, TestWriter, Reviewer, Adjudicator
 from ..database import (
@@ -10,6 +8,7 @@ from ..database import (
     TheoryText
 )
 from ..constants import Difficulty
+
 
 class ProblemCreator:
     def __init__(
@@ -27,17 +26,12 @@ class ProblemCreator:
         difficulty: Difficulty = Difficulty.EASY,
         previous_problems: List[Problem] = []
     ) -> Tuple[str, str, str]:
-        name_and_task = self.task_writer.generate(
+        name, task = self.task_writer.generate(
             tags,
             additional_instructions,
             difficulty,
             previous_problems
         )
-        name, task = name_and_task.split('\n', 1)
-        name = strip_markdown(name.strip())
-        task = task.strip()
-        if not task:
-            raise ValueError("Generated task is empty")
 
         tests_code = self.test_writer.generate(task)
         tests_code = tests_code.strip('```').replace('python', '')
