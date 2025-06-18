@@ -22,6 +22,8 @@ def configure_app(
     task_writer = TaskWriter(
         constants.IDEA_SYSTEM_PROMPT,
         constants.TASK_SYSTEM_PROMPT,
+        constants.IDEA_USER_PROMPT,
+        constants.TASK_USER_PROMPT,
         text_generator,
     )
     test_writer = TestWriter(

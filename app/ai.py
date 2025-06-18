@@ -17,10 +17,14 @@ class TaskWriter:
         self,
         idea_system_prompt: str,
         task_system_prompt: str,
+        idea_user_prompt: str,
+        task_user_prompt: str,
         text_generator: ITextGenerator,
     ) -> None:
         self.idea_system_prompt = idea_system_prompt
         self.task_system_prompt = task_system_prompt
+        self.idea_user_prompt = idea_user_prompt
+        self.task_user_prompt = task_user_prompt
         self.text_generator = text_generator
 
     def generate(
@@ -31,31 +35,39 @@ class TaskWriter:
         previous_problems: List[Problem]
     ) -> str:
         idea_history: HistoryData = []
+
         idea_history.append({
             "role": "system",
-            "content": self.idea_system_prompt.format(
+            "content": self.idea_system_prompt,
+        })
+
+        idea_history.append({
+            "role": "user",
+            "content": self.idea_user_prompt.format(
                 tags=', '.join([tag.name for tag in tags]),
+                ideas='; '.join(
+                    [problem.name for problem in previous_problems]),
             )
         })
-        for problem in previous_problems:
-            idea_history.append({
-                "role": "assistant",
-                "content": problem.name
-            })
 
         idea = self.text_generator.generate(idea_history)
 
         if not idea:
             raise ValueError('Name generation is failed!')
 
-        task = self.text_generator.generate([{
-            "role": "system",
-            "content": self.task_system_prompt.format(
+        task = self.text_generator.generate([
+            {
+                "role": "system",
+                "content": self.task_system_prompt,
+            },
+            {
+                "role": "user",
+                "content": self.task_user_prompt.format(
                     idea=idea,
                     additional_instructions=additional_instructions,
                     difficulty=difficulty.value
-            ),
-        }])
+                ),
+            }])
 
         if not task:
             raise ValueError('Task generation is failed!')
