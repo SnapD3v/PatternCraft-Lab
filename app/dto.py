@@ -1,7 +1,7 @@
 from typing import List
 import json
 
-from .utils import markdown_process, strip_markdown
+from .utils import markdown_process
 from .database import (
     Problem,
     Solution,

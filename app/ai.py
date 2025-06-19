@@ -9,7 +9,6 @@ from .database import (
     TheoryText,
 )
 from .constants import Difficulty
-from app.utils import strip_markdown
 
 
 class TaskWriter:
@@ -98,7 +97,7 @@ class TestWriter:
         })
         history.append({
             "role": "user",
-            "content": strip_markdown(task)
+            "content": task
         })
         return self.text_generator.generate(history)
 
@@ -125,7 +124,7 @@ class Reviewer:
         history.append({
             "role": "system",
             "content": self.system_prompt.format(
-                task=strip_markdown(task),
+                task=task,
                 tags=tags,
                 tests=tests,
                 tests_results=json.dumps(
@@ -178,7 +177,7 @@ class Adjudicator:
         history.append({
             "role": "system",
             "content": self.system_prompt.format(
-                task=strip_markdown(task)
+                task=task
             )
         })
         history.append({
