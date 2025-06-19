@@ -55,6 +55,12 @@ class TaskWriter:
         if not idea:
             raise ValueError('Name generation is failed!')
 
+        print('[DEBUG] Idea history:', json.dumps(
+            idea_history,
+            ensure_ascii=False,
+            indent=4
+        ))
+
         task = self.text_generator.generate([
             {
                 "role": "system",
