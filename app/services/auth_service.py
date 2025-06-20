@@ -57,6 +57,7 @@ class PatternCraftAuthClient:
         self.email = email
         self.password = password
         self.session = requests.Session()
+        self.id = None
         self.is_authenticated = False
 
         self.login()
@@ -79,12 +80,16 @@ class PatternCraftAuthClient:
             "login-password": self.password,
         }
 
-        response = self.session.post(f"{self.base_url}/login", data=data)
-        if response.url.endswith("/login"):
+        response = self.session.post(f"{self.base_url}/api/login", data=data)
+        response_data = response.json()
+        user_id = response_data.get("id")
+        if not user_id:
             print(AUTH_ERROR_MESSAGE)
+            self.id = None
             self.is_authenticated = False
             return
 
+        self.id = user_id
         self.is_authenticated = True
 
     def request(self, method, path, **kwargs):

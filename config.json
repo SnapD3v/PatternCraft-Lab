@@ -6,7 +6,8 @@
     },
     "appearance": {
         "theme": "dark",
-        "language": "ru"
+        "language": "ru",
+        "font_size": 14
     },
     "server": {
         "host": "127.0.0.1",
@@ -14,8 +15,8 @@
         "debug": true
     },
     "auth": {
-        "email": "test@gmail.com",
-        "password": "Password123$",
+        "email": "lgatin1711@gmail.com",
+        "password": "Titan109!",
         "base_url": "http://127.0.0.1:5000/"
     }
 }
