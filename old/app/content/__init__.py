@@ -1,3 +1,0 @@
-"""
-Content management related modules
-"""

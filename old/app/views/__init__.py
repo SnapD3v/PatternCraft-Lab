@@ -1,3 +1,0 @@
-"""
-Web application related modules
-"""
