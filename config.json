@@ -1,7 +1,7 @@
 {
     "api": {
         "base_url": "https://openrouter.ai/api/v1",
-        "key": "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",
+        "key": "dummy",
         "model": "deepseek/deepseek-chat-v3-0324:free"
     },
     "appearance": {
@@ -15,8 +15,8 @@
         "debug": true
     },
     "auth": {
-        "email": "lgatin1711@gmail.com",
-        "password": "Titan109!",
+        "email": "dummy",
+        "password": "dummy",
         "base_url": "http://127.0.0.1:5000/"
     }
 }

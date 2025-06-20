@@ -1,5 +1,6 @@
 from typing import List, Optional, cast
 import json
+import requests
 
 from flask import (
     Blueprint,
@@ -110,6 +111,30 @@ def delete_problem():
     return jsonify({"message": "Задача успешно удалена"})
 
 
+@problems_bp.route("/send_problem", methods=["POST"])
+def send_problem():
+    problem_id = int(request.json["problem_id"])
+    problem = cast(Optional[Problem], Problem.query.get(problem_id))
+    if not problem:
+        return jsonify({"error": "Задача не найдена"})
+
+    json_response = requests.post(
+        "https://127.0.0.1:5000/api/create-task",
+        data={
+            "name": problem.name,
+            "description": problem.task,
+            "tests": problem.tests,
+            "tags": problem.tags,
+            "difficulty": problem.difficulty,
+            "language": problem.language,
+            "author_id": None,
+        },
+        cookies=None,
+    )
+
+    return json_response
+
+
 @problems_bp.route("/check_solution", methods=["POST"])
 def check_solution():
     problem_service: ProblemService = current_app.dependencies["problem_service"]
@@ -143,6 +168,24 @@ def check_solution():
     )
 
 
+@problems_bp.route("/change_solution", methods=["POST"])
+def change_solution():
+    request_data = request.get_json()
+    solution_id = int(request_data["solution_id"])
+    solution = cast(Optional[Solution], Solution.query.get(solution_id))
+    solution_code = request_data["solution_code"]
+    if not solution_code:
+        return jsonify({"error": "Решение не может быть пустым"})
+    if not solution:
+        return jsonify({"error": "Решение не найдено"})
+
+    solution.content = solution_code
+
+    db.session.add(solution)
+    db.session.commit()
+    return jsonify({"message": "Решение успешно обновлено"})
+
+
 @problems_bp.route("/change_tests", methods=["POST"])
 def change_tests():
     problem_id = int(request.json["problem_id"])
@@ -168,6 +211,29 @@ def test_solution():
     solution_code = request.json["solution_code"]
     tests_results = problem_service.test_solution(problem, solution_code)
     return jsonify({"tests_results": tests_results})
+
+
+@problems_bp.route("/send_solution", methods=["POST"])
+def send_solution():
+    problem_id = int(request.json["problem_id"])
+    solution_id = int(request.json["solution_id"])
+    solution = cast(Optional[Problem], Problem.query.get(solution_id))
+    if not solution:
+        return jsonify({"error": "Решение не найдено"})
+
+    api_client: PatternCraftAuthClient = current_app.dependencies["api_client"]
+    response = api_client.request("POST",
+        "/api/submit-solution",
+        data={
+            "problem_id": problem_id,
+            "solution": solution.id,
+            "user_id": api_client.id,
+            "is_seeded": False,
+        },
+        cookies=None,
+    )
+
+    return response
 
 
 @problems_bp.route("/api/training/<int:id>", methods=["POST"])

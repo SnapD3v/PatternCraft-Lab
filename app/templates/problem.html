@@ -19,6 +19,13 @@
     {% endif %}
     {{ problem.name }}
 </h3>
+
+<form id="send-problem">
+    <button class="button block-light cursor-pointer small-text-size" type="submit">Отправить в хаб веб-сервиса</button>
+</form>
+<br>
+<div id="send-problem-content"></div>
+
 <span class="cards-area gap-10">
     <span class="block-light difficulty-{{problem.difficulty}} selected">
         {{ problem.difficulty | capitalize }}
@@ -55,16 +62,27 @@
 <br>
 
 {% if solution %}
-<div class="code-display">
-    <textarea class="code-snippet">{{ solution.content }}</textarea>
-</div>
+<form id="send-saved-solution">
+    <div class="code-display">
+        <textarea class="code-editor" name="solution_code">{{ solution.content }}</textarea>
+    </div>
+    <br>
+    <button class="button block-light cursor-pointer small-text-size" type="submit">Отправить в хаб веб-сервиса</button>
+    <button id="change-saved-solution-btn" class="button block-light cursor-pointer small-text-size" type="button">Изменить</button>
+</form>
 <br>
+<div id="send-solution-status"></div>
+<div id="change-solution-status"></div>
+<br>
+
+<h3>Рецензия от ИИ эксперта</h3>
 
 <div class="block-light">
     <p class="formatted-text">{{ solution.review.content | safe }}</p>
 </div>
-
 <br>
+
+<h3>Результаты тестов</h3>
 <!-- Новый блок для результатов тестов текущего решения -->
 <div id="current-solution-summary"></div>
 <div id="current-solution-result"></div>
@@ -101,6 +119,7 @@
 // --- CodeMirror инициализация ---
 const editors = document.querySelectorAll('.code-editor');
 let solutionEditor = null;
+let savedSolutionEditor = null;
 editors.forEach((element, idx) => {
     const cm = CodeMirror.fromTextArea(element, {
         mode: "python",
@@ -112,6 +131,7 @@ editors.forEach((element, idx) => {
             "Ctrl-Space": "autocomplete"
         }
     });
+    if (idx === editors.length - 2) savedSolutionEditor = cm;
     if (idx === editors.length - 1) solutionEditor = cm;
 });
 
@@ -198,9 +218,31 @@ function renderTestsResults(results, summaryElemId, detailsElemId, reviewHtml) {
     document.getElementById(detailsElemId).innerHTML = html;
 }
 
+document.getElementById('send-problem').onsubmit = async function(e) {
+    e.preventDefault();
+    const statusDiv = document.getElementById('send-solution-status');
+    statusDiv.innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
+    const problem_id = {{ problem.id }};
+    try {
+        const response = await fetch('/send_problem', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ problem_id })
+        });
+        const data = await response.json();
+        if (data.message) {
+            statusDiv.innerHTML = `<span class="status status-success">✅ ${data.message}</span>`;
+        } else if (data.error) {
+            statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
+        }
+    } catch (err) {
+        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+    }
+};
+
 document.getElementById('change-tests-form').onsubmit = async function(e) {
     e.preventDefault();
-    const statusDiv = document.getElementById('change-tests-status');
+    const statusDiv = document.getElementById('change-solution-status');
     statusDiv.innerHTML = '<span class="status status-muted">⏳ Сохраняем...</span>';
     const editor = document.querySelectorAll('.code-editor')[0];
     let cmTestEditor = editor.nextSibling && editor.nextSibling.CodeMirror;
@@ -214,6 +256,54 @@ document.getElementById('change-tests-form').onsubmit = async function(e) {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ problem_id, tests_code })
+        });
+        const data = await response.json();
+        if (data.message) {
+            statusDiv.innerHTML = `<span class="status status-success">✅ ${data.message}</span>`;
+        } else if (data.error) {
+            statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
+        }
+    } catch (err) {
+        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+    }
+};
+
+document.getElementById('send-saved-solution').onsubmit = async function(e) {
+    e.preventDefault();
+    const statusDiv = document.getElementById('send-solution-status');
+    statusDiv.innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
+    document.getElementById('change-solution-status').innerHTML = '';
+    const solution_id = {{ solution.id }};
+    try {
+        const response = await fetch('/send_solution', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ solution_id })
+        });
+        const data = await response.json();
+        if (data.message) {
+            statusDiv.innerHTML = `<span class="status status-success">✅ ${data.message}</span>`;
+        } else if (data.error) {
+            statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
+        }
+    } catch (err) {
+        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+    }
+};
+
+document.getElementById('change-saved-solution-btn').onclick = async function(e) {
+    e.preventDefault();
+    const statusDiv = document.getElementById('change-solution-status');
+    statusDiv.innerHTML = '<span class="status status-muted">⏳ Сохраняем...</span>';
+    document.getElementById('send-solution-status').innerHTML = '';
+    const solution_code = savedSolutionEditor.getValue();
+    console.log(solution_code)
+    const solution_id = {{ solution.id }};
+    try {
+        const response = await fetch('/change_solution', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ solution_id, solution_code })
         });
         const data = await response.json();
         if (data.message) {

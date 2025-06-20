@@ -108,11 +108,11 @@ class TestRunner:
         if proc.is_alive():              # таймаут!
             proc.terminate()
             proc.join()
-            return {'__timeout__': 'timeout'}
+            return {'__timeout__': {"status": "timeout"}}
 
         # дочерний процесс завершился раньше таймаута
         if not queue.empty():
             return queue.get()
 
         # должно быть крайне редко, но пусть будет
-        return {'__error__': 'no result returned from worker'}
+        return {'__error__': {"status": "no result returned from worker"}}
