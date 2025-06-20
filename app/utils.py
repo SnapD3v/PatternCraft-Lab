@@ -54,8 +54,9 @@ def build_nested_update_auto_with_cast(
             nested_sub: Dict[str, Any] = {}
 
             for sub_field in annotation.model_fields.keys():
-                if sub_field in form_data:
-                    nested_sub[sub_field] = form_data[sub_field]
+                full_field_name = f"{field_name}.{sub_field}"
+                if full_field_name in form_data:
+                    nested_sub[sub_field] = form_data[full_field_name]
 
             if nested_sub:
                 nested[field_name] = annotation(**nested_sub)

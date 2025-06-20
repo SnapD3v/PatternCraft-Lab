@@ -16,6 +16,7 @@ class APIConfig(BaseModel):
 class AppearanceConfig(BaseModel):
     theme: Theme
     language: str
+    font_size: int = 14
 
 
 class ServerConfig(BaseModel):
@@ -24,7 +25,14 @@ class ServerConfig(BaseModel):
     debug: bool = False
 
 
+class AuthConfig(BaseModel):
+    email: str
+    password: str
+    base_url: HttpUrl
+
+
 class AppConfig(BaseModel):
     api: APIConfig
     appearance: AppearanceConfig
     server: ServerConfig
+    auth: AuthConfig

@@ -5,19 +5,19 @@ from .services import ProblemService
 from app import constants
 from app.text_generator import APITextGenerator
 from app.ai import TaskWriter, TestWriter, Reviewer, Adjudicator
-from app.services import ProblemCreator, SolutionChecker, ProblemService
+from app.services import (
+    ProblemCreator,
+    SolutionChecker,
+    ProblemService,
+    PatternCraftAuthClient,
+)
 from app.test_runner import TestRunner
 from . import constants
 
 
-def configure_app(
-    app: Flask,
-    config: AppConfig
-) -> Flask:
+def configure_app(app: Flask, config: AppConfig) -> Flask:
     text_generator = APITextGenerator(
-        str(config.api.base_url),
-        config.api.key,
-        config.api.model
+        str(config.api.base_url), config.api.key, config.api.model
     )
     task_writer = TaskWriter(
         constants.IDEA_SYSTEM_PROMPT,
@@ -36,10 +36,15 @@ def configure_app(
     solution_checker = SolutionChecker(test_runner, reviewer, adjudicator)
     problem_service = ProblemService(problem_creator, solution_checker)
 
+    user_client = PatternCraftAuthClient(
+        str(config.auth.base_url), config.auth.email, config.auth.password
+    )
+
     app.dependencies = {
-        'app_config': config,
-        'problem_service': problem_service,
-        'text_generator': text_generator,
+        "app_config": config,
+        "problem_service": problem_service,
+        "text_generator": text_generator,
+        "api_client": user_client,
     }
 
     return app

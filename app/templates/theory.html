@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<link rel="stylesheet" href="/static/css/quill.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/quill.css">
 {% endblock %}
 
 {% block title %}
-{{ theory.name }}
+    {{ theory.name }}
 {% endblock %}
 
 {% block content %}
-<h2>{{ theory.name }}</h2>
-<br>
+    <h2>{{ theory.name }}</h2>
+    <br>
 
 <div class="sequential-card">
 	<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/theory/{{ theory.id }}.png {% endif %}" alt="{{ theory.name }}">
@@ -21,36 +21,37 @@
 	</div>
 </div>
 
-<br>
+    <br>
 
-<div class="block-light" id="editor"></div>
+    <div class="block-light" id="editor" style="font-size: {{ config.appearance.font_size }}px;"></div>
 
-<p>
-	{% if not theory.in_practice %}❌ Не участвует
-	{% else %}✅ Участвует
-	{% endif %}
-	в списке при генерации задач</p>
 
-<a class="button card block-light" href="/theory/edit/{{ theory.id }}">Редактировать</a>
+    <p>
+        {% if not theory.in_practice %}❌ Не участвует
+        {% else %}✅ Участвует
+        {% endif %}
+        в списке при генерации задач</p>
 
-<br><br>
+    <a class="button card block-light" href="/theory/edit/{{ theory.id }}">Редактировать</a>
+
+    <br><br>
 {% endblock %}
 
 {% block script %}
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script>
-	var quill = new Quill('#editor', { 
-		readOnly: true,
-		modules: { syntax: true }
-	});
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        var quill = new Quill('#editor', {
+            readOnly: true,
+            modules: {syntax: true}
+        });
 
-	var delta = JSON.parse({{ theory.content | tojson }});
-	quill.setContents(delta);
+        var delta = JSON.parse({{ theory.content | tojson }});
+        quill.setContents(delta);
 
-	// После установки контента вызываем подсветку
-	setTimeout(function() {
-		hljs.highlightAll();
-	}, 100);
-</script>
+        // После установки контента вызываем подсветку
+        setTimeout(function () {
+            hljs.highlightAll();
+        }, 100);
+    </script>
 {% endblock %}
