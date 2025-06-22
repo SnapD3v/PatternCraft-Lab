@@ -36,7 +36,9 @@ app.states = {"task_generating": False}
 def inject_app_config():
     api_client: PatternCraftAuthClient = app.dependencies.get("api_client")
     is_authenticated = api_client.is_authenticated if api_client else False
-    return dict(config=app.dependencies["app_config"],is_authenticated=is_authenticated )
+    return dict(
+        config=app.dependencies["app_config"], is_authenticated=is_authenticated
+    )
 
 
 if __name__ == "__main__":
