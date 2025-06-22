@@ -1,6 +1,6 @@
 from typing import List, Optional, cast
 import json
-import requests
+
 
 from flask import (
     Blueprint,
@@ -116,23 +116,35 @@ def send_problem():
     problem_id = int(request.json["problem_id"])
     problem = cast(Optional[Problem], Problem.query.get(problem_id))
     if not problem:
-        return jsonify({"error": "Задача не найдена"})
+        return jsonify({"error": "Задача не найдена"}), 404
 
-    json_response = requests.post(
-        "https://127.0.0.1:5000/api/create-task",
-        data={
+    api_client: PatternCraftAuthClient = current_app.dependencies["api_client"]
+
+    # Get CSRF token from cookies
+    csrf_token = api_client.session.cookies.get("csrftoken")
+
+    headers = {"X-CSRFToken": csrf_token}
+
+    response = api_client.request(
+        "POST",
+        "/api/create-task",
+        json={
             "name": problem.name,
             "description": problem.task,
-            "tests": problem.tests,
+            # "tests": problem.tests,
             "tags": problem.tags,
-            "difficulty": problem.difficulty,
-            "language": problem.language,
-            "author_id": None,
+            "difficulty": problem.difficulty.name,
+            "language": problem.language.name,
+            "author_id": api_client.id,
         },
-        cookies=None,
+        cookies=api_client.session.cookies,
+        headers=headers
     )
 
-    return json_response
+    if response.status_code != 200:
+        return response.text, response.status_code
+
+    return response.json(), response.status_code
 
 
 @problems_bp.route("/check_solution", methods=["POST"])
@@ -217,23 +229,34 @@ def test_solution():
 def send_solution():
     problem_id = int(request.json["problem_id"])
     solution_id = int(request.json["solution_id"])
-    solution = cast(Optional[Problem], Problem.query.get(solution_id))
+    solution = cast(Optional[Solution], Solution.query.get(solution_id))
     if not solution:
         return jsonify({"error": "Решение не найдено"})
 
     api_client: PatternCraftAuthClient = current_app.dependencies["api_client"]
-    response = api_client.request("POST",
+
+    # Get CSRF token from cookies
+    csrf_token = api_client.session.cookies.get("csrftoken")
+
+    headers = {"X-CSRFToken": csrf_token}
+
+    response = api_client.request(
+        "POST",
         "/api/submit-solution",
-        data={
+        json={
             "problem_id": problem_id,
-            "solution": solution.id,
-            "user_id": api_client.id,
-            "is_seeded": False,
+            "solution": solution.content,
+            "user_id": api_client.id
         },
-        cookies=None,
+        cookies=api_client.session.cookies,
+        headers=headers
     )
 
-    return response
+    if response.status_code != 200:
+        print(response.text)
+        return response.text, response.status_code
+
+    return response.json(), response.status_code
 
 
 @problems_bp.route("/api/training/<int:id>", methods=["POST"])

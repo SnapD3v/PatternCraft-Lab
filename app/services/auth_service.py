@@ -64,10 +64,25 @@ class PatternCraftAuthClient:
 
     def _get_csrf_token(self):
         login_page = self.session.get(f"{self.base_url}/login")
+
+        # Update session with all cookies from the login page response
+        for cookie in login_page.cookies:
+            self.session.cookies.set(
+                cookie.name, cookie.value, domain=cookie.domain, path=cookie.path
+            )
+
         soup = BeautifulSoup(login_page.text, "html.parser")
         csrf_input = soup.find("input", {"name": "login-csrf_token"})
         if not csrf_input:
             raise RuntimeError("CSRF token not found on login page")
+
+        csrf_token = csrf_input["value"]
+
+        # Manually set csrftoken cookie if not present
+        if "csrftoken" not in login_page.cookies:
+            self.session.cookies.set(
+                "csrftoken", csrf_token, domain="127.0.0.1", path="/"
+            )
 
         return csrf_input["value"]
 
