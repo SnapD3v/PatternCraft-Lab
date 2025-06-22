@@ -220,7 +220,7 @@ function renderTestsResults(results, summaryElemId, detailsElemId, reviewHtml) {
 
 document.getElementById('send-problem').onsubmit = async function(e) {
     e.preventDefault();
-    const statusDiv = document.getElementById('send-solution-status');
+    const statusDiv = document.getElementById("send-problem-content");
     statusDiv.innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
     const problem_id = {{ problem.id }};
     try {
@@ -242,7 +242,7 @@ document.getElementById('send-problem').onsubmit = async function(e) {
 
 document.getElementById('change-tests-form').onsubmit = async function(e) {
     e.preventDefault();
-    const statusDiv = document.getElementById('change-solution-status');
+    const statusDiv = document.getElementById('change-tests-status');
     statusDiv.innerHTML = '<span class="status status-muted">⏳ Сохраняем...</span>';
     const editor = document.querySelectorAll('.code-editor')[0];
     let cmTestEditor = editor.nextSibling && editor.nextSibling.CodeMirror;

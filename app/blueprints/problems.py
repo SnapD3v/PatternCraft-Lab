@@ -145,12 +145,11 @@ def send_problem():
         return response.text, response.status_code
 
     json_response = response.json()
-    print("="*50, json_response)
     server_problem_id = json_response.get("id")
     problem.server_problem_id = server_problem_id
     db.session.commit()
 
-    return json_response, response.status_code
+    return jsonify({"message": "Задача успешно отправлена"})
 
 
 @problems_bp.route("/check_solution", methods=["POST"])
@@ -260,10 +259,9 @@ def send_solution():
     )
 
     if response.status_code != 201:
-        print(response.text)
         return response.text, response.status_code
 
-    return response.json(), response.status_code
+    return jsonify({"message": "Решение успешно отправлено"})
 
 
 @problems_bp.route("/api/training/<int:id>", methods=["POST"])
