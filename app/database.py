@@ -16,7 +16,7 @@ from sqlalchemy import (
     Column
 )
 
-from .constants import Difficulty
+from .constants import Difficulty, Language
 
 # Убираем создание отдельного Flask приложения
 db = SQLAlchemy()
@@ -70,6 +70,12 @@ class Problem(db.Model):
     name: Mapped[str] = mapped_column(String, nullable=False)
     task: Mapped[str] = mapped_column(Text, nullable=False)
     tags: Mapped[str] = mapped_column(String, nullable=False)
+    language: Mapped[Language] = mapped_column(
+        Enum(Language, name="language_enum"),
+        nullable=False,
+        default=Language.PYTHON,
+        server_default=Language.PYTHON.name
+    )
     difficulty: Mapped[Difficulty] = mapped_column(
         Enum(Difficulty, name="difficulty_enum"),  # вот здесь!
         nullable=False,

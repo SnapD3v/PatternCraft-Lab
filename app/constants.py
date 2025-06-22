@@ -1,6 +1,10 @@
 from enum import Enum
 
 
+class Language(Enum):
+    PYTHON = 'python'
+
+
 class Difficulty(Enum):
     EASY = 'easy'
     MEDIUM = 'medium'
