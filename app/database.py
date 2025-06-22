@@ -56,7 +56,7 @@ class TheoryText(db.Model):
     block_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey('texts_blocks.id'),
-        nullable=False
+        nullable=True
     )
 
     block: Mapped[TextsBlock] = relationship(

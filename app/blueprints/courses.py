@@ -1,6 +1,9 @@
 from typing import List, Optional, cast
 
-from flask import Blueprint, jsonify, request, make_response, render_template, redirect
+from flask import Blueprint, current_app, jsonify, request, make_response, render_template, redirect
+
+from app.services.auth_service import PatternCraftAuthClient
+from app.services.service_adapter import ServiceAdapter
 
 from ..database import Course, TextsBlock, TheoryText, Problem, db
 from ..dto import CourseDTO
@@ -141,3 +144,19 @@ def create_course():
     db.session.commit()
     id = course.id
     return make_response(redirect(f'/course/{id}'))
+
+
+
+@courses_bp.route("/api/courses/<int:id>", methods=["POST"])
+def copy_course(id: int):
+    auth_client: PatternCraftAuthClient = current_app.dependencies["api_client"]
+
+    course = cast(Optional[Course], Course.query.get(id))
+
+    print(id)
+
+    if not course:
+        service_adapter = ServiceAdapter(auth_client=auth_client)
+        course = service_adapter.download_course(course_id=id)
+
+    return jsonify({"ok": True})
