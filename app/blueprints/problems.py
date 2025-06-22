@@ -138,13 +138,19 @@ def send_problem():
             "author_id": api_client.id,
         },
         cookies=api_client.session.cookies,
-        headers=headers
+        headers=headers,
     )
 
-    if response.status_code != 200:
+    if response.status_code != 201:
         return response.text, response.status_code
 
-    return response.json(), response.status_code
+    json_response = response.json()
+    print("="*50, json_response)
+    server_problem_id = json_response.get("id")
+    problem.server_problem_id = server_problem_id
+    db.session.commit()
+
+    return json_response, response.status_code
 
 
 @problems_bp.route("/check_solution", methods=["POST"])
@@ -227,9 +233,10 @@ def test_solution():
 
 @problems_bp.route("/send_solution", methods=["POST"])
 def send_solution():
-    problem_id = int(request.json["problem_id"])
     solution_id = int(request.json["solution_id"])
     solution = cast(Optional[Solution], Solution.query.get(solution_id))
+    server_problem_id = solution.problem.server_problem_id
+
     if not solution:
         return jsonify({"error": "Решение не найдено"})
 
@@ -244,15 +251,15 @@ def send_solution():
         "POST",
         "/api/submit-solution",
         json={
-            "problem_id": problem_id,
+            "server_problem_id": server_problem_id,
             "solution": solution.content,
-            "user_id": api_client.id
+            "user_id": api_client.id,
         },
         cookies=api_client.session.cookies,
-        headers=headers
+        headers=headers,
     )
 
-    if response.status_code != 200:
+    if response.status_code != 201:
         print(response.text)
         return response.text, response.status_code
 

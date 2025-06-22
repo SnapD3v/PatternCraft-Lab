@@ -273,13 +273,12 @@ document.getElementById('send-saved-solution').onsubmit = async function(e) {
     const statusDiv = document.getElementById('send-solution-status');
     statusDiv.innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
     document.getElementById('change-solution-status').innerHTML = '';
-    const problem_id = {{ problem.id }};
     const solution_id = {{ solution.id }};
     try {
         const response = await fetch('/send_solution', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ problem_id, solution_id })
+            body: JSON.stringify({ solution_id })
         });
         const data = await response.json();
         if (data.message) {
