@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>PatternCraft Lab - Редактирование профиля</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="account-info wrapper">
+    <div class="profile-header">
+        <h2 class="big-text-size">Редактировать профиль</h2>
+    </div>
+    <p class="small-text-size formatted-text">Обновите ваши данные ниже.</p>
+
+    <form class="edit-form card block-light">
+        <div class="form-group">
+            <label for="username"><strong>Логин:</strong></label>
+            <input type="text" id="username" name="username" value="{{ current_user.username | default('') }}" class="block-light full-width" placeholder="Логин">
+        </div>
+        <div class="form-group">
+            <label for="email"><strong>Email:</strong></label>
+            <input type="email" id="email" name="email" value="{{ current_user.email | default('') }}" class="block-light full-width" placeholder="Email">
+        </div>
+        <div class="actions cards-area gap-10">
+            <button type="submit" class="button block-dark full-width gradient-button" aria-label="Сохранить изменения профиля">
+                Сохранить изменения
+            </button>
+            <a href="{{ url_for('profile.profile') }}" class="button block-dark full-width gradient-button" role="button" aria-label="Отменить редактирование">
+                Отмена
+            </a>
+        </div>
+    </form>
+</section>
+{% endblock %}
