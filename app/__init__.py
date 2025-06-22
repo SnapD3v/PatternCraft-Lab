@@ -1,4 +1,5 @@
 from flask import Flask
+from requests.exceptions import ConnectionError
 
 from .config import AppConfig
 from .services import ProblemService
@@ -36,9 +37,12 @@ def configure_app(app: Flask, config: AppConfig) -> Flask:
     solution_checker = SolutionChecker(test_runner, reviewer, adjudicator)
     problem_service = ProblemService(problem_creator, solution_checker)
 
-    user_client = PatternCraftAuthClient(
-        str(config.auth.base_url), config.auth.email, config.auth.password
-    )
+    try:
+        user_client = PatternCraftAuthClient(
+            str(config.auth.base_url), config.auth.email, config.auth.password
+        )
+    except ConnectionError:
+        user_client = None
 
     app.dependencies = {
         "app_config": config,

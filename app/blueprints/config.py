@@ -9,7 +9,7 @@ from flask import (
 
 from ..config import AppConfig
 from ..utils import build_nested_update_auto_with_cast
-from .. import configure_app, PatternCraftAuthClient
+from .. import configure_app
 
 config_bp = Blueprint("config", __name__)
 
@@ -28,22 +28,9 @@ def configuration():
 
     # Обновляем DI
     configure_app(current_app, app_config)
-    update_auth_client(current_app, app_config)
 
 
     json_config = app_config.model_dump_json(indent=4, exclude_none=True)
     with open("config.json", "w") as f:
         f.write(json_config)
     return make_response(redirect("/config"))
-
-
-def update_auth_client(current_app, config: AppConfig):
-    auth_client = PatternCraftAuthClient(
-        base_url=str(config.auth.base_url),
-        email=config.auth.email,
-        password=config.auth.password,
-    )
-
-    current_app.dependencies["api_client"] = auth_client
-
-    print(f"[DEBUG] API client updated, status={auth_client.is_authenticated!r}")
