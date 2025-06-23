@@ -59,6 +59,14 @@
     <a class="button block-light" id="delete-btn">Удалить курс<a>
 </div>
 
+<br><br>
+
+<form id="send-course">
+    <button class="button block-light cursor-pointer small-text-size" type="submit">Отправить в хаб веб-сервиса</button>
+</form>
+<br>
+<div id="send-course-content"></div>
+
 <!-- Модальное окно подтверждения -->
 <div id="confirm-modal" class="modal" style="display:none;">
     <div class="modal-content">
@@ -116,5 +124,28 @@
         }
     });
 });
+
+document.getElementById('send-course').onsubmit = async function(e) {
+    e.preventDefault();
+    const statusDiv = document.getElementById("send-course-content");
+    statusDiv.innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
+    const course_id = {{ course.id }};
+    try {
+        const response = await fetch('/send_course', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ course_id })
+        });
+        const data = await response.json();
+        if (data.message) {
+            statusDiv.innerHTML = `<span class="status status-success">✅ ${data.message}</span>`;
+        } else if (data.error) {
+            statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
+        }
+    } catch (err) {
+        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+    }
+};
+
 </script>
 {% endblock %}

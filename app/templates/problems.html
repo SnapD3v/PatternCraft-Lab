@@ -44,7 +44,13 @@ Main
         </a>
     {% endif %}
 </div>
-<br>
+<br><br>
+<form action="/download_problem" method="get">
+	<div class="one-line" style="justify-content: space-between; align-items: center;">
+		<input class="block-light" type="text" name="problem_link" placeholder="Ссылка на задачу" required>
+		<input type="submit" class="button block-light" value="Скачать задачу">
+	</div>
+</form>
 <!-- Модальное окно подтверждения -->
 <div id="confirm-modal" class="modal" style="display:none;">
     <div class="modal-content">

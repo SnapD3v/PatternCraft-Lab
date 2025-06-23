@@ -1,10 +1,15 @@
 from flask import Flask, current_app
 from flask_migrate import Migrate
 from flask_cors import CORS
+import multiprocessing as mp
 
 from app.config import AppConfig
 from app.database import db
 from app import configure_app, register_blueprints, PatternCraftAuthClient
+
+# Защита для Windows multiprocessing
+if __name__ == "__main__":
+    mp.set_start_method('spawn', force=True)
 
 config = AppConfig.parse_file("config.json")  # type: ignore
 

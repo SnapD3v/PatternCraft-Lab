@@ -15,8 +15,8 @@
         "debug": true
     },
     "auth": {
-        "email": "resulting51@punkproof.com",
+        "email": "unpleasantmarnia@punkproof.com",
         "password": "132546-Hh2",
-        "base_url": "http://31.59.120.151/"
+        "base_url": "http://localhost/"
     }
 }

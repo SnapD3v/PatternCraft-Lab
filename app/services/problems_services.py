@@ -113,6 +113,8 @@ class ProblemService:
         solution_code: str
     ) -> Dict[str, Dict[str, str]]:
         tests_code = problem.tests[0].code
+        print('[DEBUG] Testing solution:', solution_code)
+        print('[DEBUG] Using tests:', tests_code)
         return self.solution_checker.test_runner.run_tests(
             solution_code,
             tests_code

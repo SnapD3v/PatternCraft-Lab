@@ -111,6 +111,54 @@ def delete_problem():
     return jsonify({"message": "Задача успешно удалена"})
 
 
+@problems_bp.route("/download_problem", methods=["GET"])
+def download_problem():
+    problem_link = request.args['problem_link']
+    id = int(problem_link.split('/')[-1])  # Получаем ID курса из ссылки
+    auth_client: PatternCraftAuthClient = current_app.dependencies["api_client"]
+    service_adapter = ServiceAdapter(auth_client=auth_client)
+    problem = service_adapter.download_problem(problem_id=id)
+
+    return redirect(f'/problem/{problem.id}')
+
+
+@problems_bp.route("/send_solution", methods=["POST"])
+def send_problem_solution():
+    solution_id = int(request.json["solution_id"])
+    solution = cast(Optional[Solution], Solution.query.get(solution_id))
+    if not solution:
+        return jsonify({"error": "Решение не найдено"}), 404
+    if not solution.review.is_solved:
+        return jsonify({"error": "Решение не верно"}), 400
+    
+    problem = solution.problem
+    api_client: PatternCraftAuthClient = current_app.dependencies["api_client"]
+
+    # Get CSRF token from cookies
+    csrf_token = api_client.session.cookies.get("csrftoken")
+
+    headers = {"X-CSRFToken": csrf_token}
+
+    response = api_client.request(
+        "POST",
+        "/api/submit-solution",
+        json={
+            "server_problem_id": problem.server_problem_id,
+            "solution": solution.content,
+        },
+        cookies=api_client.session.cookies,
+        headers=headers,
+    )
+
+    if response.status_code != 201:
+        return response.text, response.status_code
+
+    json_response = response.json()
+    server_problem_id = json_response.get("id")
+
+    return jsonify({"message": "Решение успешно отправлено"})
+    
+
 @problems_bp.route("/send_problem", methods=["POST"])
 def send_problem():
     problem_id = int(request.json["problem_id"])
@@ -131,10 +179,11 @@ def send_problem():
         json={
             "name": problem.name,
             "description": problem.task,
-            # "tests": problem.tests,
+            "tests": problem.tests[0].code,
             "tags": problem.tags,
             "difficulty": problem.difficulty.name,
             "language": problem.language.name,
+            'is_hidden': False,
             "author_id": api_client.id,
         },
         cookies=api_client.session.cookies,
