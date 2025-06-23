@@ -7,6 +7,7 @@ from app.services.service_adapter import ServiceAdapter
 
 from ..database import Course, TextsBlock, TheoryText, Problem, db
 from ..dto import CourseDTO
+import base64
 
 courses_bp = Blueprint('courses', __name__)
 
@@ -147,16 +148,115 @@ def create_course():
 
 
 
-@courses_bp.route("/api/courses/<int:id>", methods=["POST"])
-def copy_course(id: int):
+@courses_bp.route("/download_course", methods=["GET"])
+def download_course():
+    course_link = request.args['course_link']
+    id = int(course_link.split('/')[-1])  # Получаем ID курса из ссылки
     auth_client: PatternCraftAuthClient = current_app.dependencies["api_client"]
+    service_adapter = ServiceAdapter(auth_client=auth_client)
+    course = service_adapter.download_course(course_id=id)
 
-    course = cast(Optional[Course], Course.query.get(id))
+    return redirect(f'/course/{course.id}')
 
-    print(id)
 
+@courses_bp.route("/send_course", methods=["POST"])
+def send_course():
+    course_id = int(request.json["course_id"])
+    course = cast(Optional[Course], Course.query.get(course_id))
     if not course:
-        service_adapter = ServiceAdapter(auth_client=auth_client)
-        course = service_adapter.download_course(course_id=id)
+        return jsonify({"error": "Курс не найден"}), 404
 
-    return jsonify({"ok": True})
+    api_client: PatternCraftAuthClient = current_app.dependencies["api_client"]
+
+    # Get CSRF token from cookies
+    csrf_token = api_client.session.cookies.get("csrftoken")
+
+    headers = {"X-CSRFToken": csrf_token}
+
+    for problem in course.problems:
+        response = api_client.request(
+            "POST",
+            "/api/create-task",
+            json={
+                "name": problem.name,
+                "description": problem.task,
+                "tests": problem.tests[0].code,
+                "tags": problem.tags,
+                "difficulty": problem.difficulty.name,
+                "language": problem.language.name,
+                "author_id": api_client.id,
+                "is_hidden": course.is_hidden
+            },
+            cookies=api_client.session.cookies,
+            headers=headers,
+        )
+
+        if response.status_code != 201:
+            return response.text, response.status_code
+        
+        json_response = response.json()
+        server_problem_id = json_response.get("id")
+        problem.server_problem_id = server_problem_id
+        db.session.commit()
+    
+    for theory in course.theories:
+        image_data = theory.image_url
+        if not theory.image_url:
+            filename = f'app/static/img/theory/{theory.id}.png'
+            with open(filename, "rb") as image_file:
+                image_data = image_file.read()
+                image_data = 'data:image/png;base64,' + base64.b64encode(image_data).decode('utf-8')
+
+        response = api_client.request(
+            "POST",
+            "/api/create-theory",
+            json={
+                "name": theory.name,
+                "description": theory.description,
+                "content": theory.content,
+                "image": image_data,
+                "author_id": api_client.id,
+                "is_hidden": course.is_hidden
+            },
+            cookies=api_client.session.cookies,
+            headers=headers,
+        )
+
+        if response.status_code != 201:
+            return response.text, response.status_code
+        
+        json_response = response.json()
+        server_theory_id = json_response.get("id")
+        theory.server_theory_id = server_theory_id
+        db.session.commit()
+
+    image_data = course.image_url
+    if not course.image_url:
+        filename = f'app/static/img/courses/{course.id}.png'
+        with open(filename, "rb") as image_file:
+            image_data = image_file.read()
+            image_data = 'data:image/png;base64,' + base64.b64encode(image_data).decode('utf-8')
+
+    response = api_client.request(
+        "POST",
+        "/courses/api/create-course",
+        json={
+            "name": course.name,
+            "description": course.description,
+            "image": image_data,
+            "theories": [theory.server_theory_id for theory in course.theories],
+            "problems": [problem.server_problem_id for problem in course.problems],
+            "is_hidden": course.is_hidden,
+            "author_id": api_client.id
+        },
+        cookies=api_client.session.cookies,
+        headers=headers,
+    )
+
+    json_response = response.json()
+    print(json_response)
+    server_course_id = json_response.get("id")
+    course.server_course_id = server_course_id
+    db.session.commit()
+
+    return jsonify({"message": "Курс успешно отправлен"})

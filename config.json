@@ -1,7 +1,7 @@
 {
     "api": {
         "base_url": "https://openrouter.ai/api/v1",
-        "key": "dummy",
+        "key": "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",
         "model": "deepseek/deepseek-chat-v3-0324:free"
     },
     "appearance": {
@@ -15,8 +15,8 @@
         "debug": true
     },
     "auth": {
-        "email": "lynxvs66@gmail.com",
-        "password": "Perdun228$",
-        "base_url": "http://127.0.0.1:5000/"
+        "email": "unpleasantmarnia@punkproof.com",
+        "password": "132546-Hh2",
+        "base_url": "http://localhost/"
     }
 }

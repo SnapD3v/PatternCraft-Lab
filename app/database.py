@@ -53,6 +53,11 @@ class TheoryText(db.Model):
         server_default='1',
         nullable=False
     )
+    server_theory_id: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        nullable=True,
+        server_default=None
+    )
     block_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey('texts_blocks.id'),

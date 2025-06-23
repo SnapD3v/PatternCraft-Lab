@@ -95,7 +95,13 @@ class PatternCraftAuthClient:
             "login-password": self.password,
         }
 
-        response = self.session.post(f"{self.base_url}/api/login", data=data)
+        headers = {"Referer": f"{self.base_url}/login"}
+
+        response = self.session.post(
+            f"{self.base_url}/api/login",
+            data=data,
+            headers=headers
+        )
         response_data = response.json()
         user_id = response_data.get("id")
         if not user_id:

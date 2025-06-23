@@ -46,8 +46,7 @@ class TestRunner:
             else:
                 yield test
 
-    # ──────────────────────────────────────────────────────────────────────
-    def _run_inline(self, solution_code: str, tests_code: str) -> dict[str, dict]:
+    # ──────────────────────────────────────────────────────────────────────    def _run_inline(self, solution_code: str, tests_code: str) -> dict[str, dict]:
         """Запускает тесты внутри текущего процесса (без таймаута)."""
         try:
             # 1. динамически создаём модуль с решением
@@ -99,9 +98,7 @@ class TestRunner:
             statuses[test.id()] = {"status": self._MAP['skipped'],
                                    "message": reason}
 
-        return statuses
-
-    # ──────────────────────────────────────────────────────────────────────
+        return statuses    # ──────────────────────────────────────────────────────────────────────
     def run_tests(self,
                   solution_code: str,
                   tests_code: str,
@@ -117,7 +114,7 @@ class TestRunner:
             try:
                 return self._run_inline(solution_code, tests_code)
             except Exception as e:
-                return {'__error__': {'status': 'error', 'message': f'Test execution failed: {str(e)}'}}
+                return {'__error__': f'Test execution failed: {str(e)}'}
         
         # На других ОС используем multiprocessing
         queue: mp.Queue = mp.Queue()
@@ -128,11 +125,11 @@ class TestRunner:
         if proc.is_alive():              # таймаут!
             proc.terminate()
             proc.join()
-            return {'__timeout__': {'status': 'timeout', 'message': 'Test execution timed out'}}
+            return {'__timeout__': 'timeout'}
 
         # дочерний процесс завершился раньше таймаута
         if not queue.empty():
             return queue.get()
 
         # должно быть крайне редко, но пусть будет
-        return {'__error__': {'status': 'error', 'message': 'no result returned from worker'}}
+        return {'__error__': 'no result returned from worker'}
