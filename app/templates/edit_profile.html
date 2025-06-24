@@ -12,20 +12,20 @@
     </div>
     <p class="small-text-size formatted-text">Обновите ваши данные ниже.</p>
 
-    <form class="edit-form card block-light">
-        <div class="form-group">
+    <form class="profile-edit-form card block-light">
+        <div class="profile-form-group">
             <label for="username"><strong>Логин:</strong></label>
             <input type="text" id="username" name="username" value="{{ current_user.username | default('') }}" class="block-light full-width" placeholder="Логин">
         </div>
-        <div class="form-group">
+        <div class="profile-form-group">
             <label for="email"><strong>Email:</strong></label>
             <input type="email" id="email" name="email" value="{{ current_user.email | default('') }}" class="block-light full-width" placeholder="Email">
         </div>
         <div class="actions cards-area gap-10">
-            <button type="submit" class="button block-dark full-width gradient-button" aria-label="Сохранить изменения профиля">
+            <button type="submit" class="button block-dark full-width gradient-button profile-action" aria-label="Сохранить изменения профиля">
                 Сохранить изменения
             </button>
-            <a href="{{ url_for('profile.profile') }}" class="button block-dark full-width gradient-button" role="button" aria-label="Отменить редактирование">
+            <a href="{{ url_for('profile.profile') }}" class="button block-dark full-width profile-action" role="button" aria-label="Отменить редактирование">
                 Отмена
             </a>
         </div>
