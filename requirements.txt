@@ -7,3 +7,4 @@ quill-delta[html]==1.0.3
 requests~=2.32.3
 beautifulsoup4~=4.12.3
 flask-cors
+webview
