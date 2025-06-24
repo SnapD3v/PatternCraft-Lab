@@ -3,13 +3,14 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 import multiprocessing as mp
 import webview
+from typing import Union
 
 from app.config import AppConfig
 from app.database import db
 from app import configure_app, register_blueprints, PatternCraftAuthClient
 
 
-def run_server(server_config: dict, app_config: AppConfig, ready_event: mp.Event) -> None:
+def run_server(server_config: dict, app_config: AppConfig, ready_event: Union[mp.Event, None]) -> None:
     migrate = Migrate()
 
     flask_app = Flask(__name__, static_folder="app/static",
@@ -42,7 +43,8 @@ def run_server(server_config: dict, app_config: AppConfig, ready_event: mp.Event
             config=app.dependencies["app_config"], is_authenticated=is_authenticated
         )
 
-    ready_event.set()
+    if ready_event is not None:
+        ready_event.set()
 
     app.run(
         host=server_config["host"],
@@ -77,4 +79,4 @@ if __name__ == "__main__":
 
     # Запуск в режиме дебага
     else:
-        run_server(server_config, app_config)
+        run_server(server_config, app_config, None)
