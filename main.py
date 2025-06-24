@@ -9,7 +9,7 @@ from app.database import db
 from app import configure_app, register_blueprints, PatternCraftAuthClient
 
 
-def run_server(server_config: dict, app_config: AppConfig) -> None:
+def run_server(server_config: dict, app_config: AppConfig, ready_event: mp.Event) -> None:
     migrate = Migrate()
 
     flask_app = Flask(__name__, static_folder="app/static",
@@ -42,6 +42,8 @@ def run_server(server_config: dict, app_config: AppConfig) -> None:
             config=app.dependencies["app_config"], is_authenticated=is_authenticated
         )
 
+    ready_event.set()
+
     app.run(
         host=server_config["host"],
         port=server_config["port"],
@@ -55,18 +57,22 @@ if __name__ == "__main__":
 
     app_config = AppConfig.parse_file("config.json")  # type: ignore
     server_config = app_config.server.model_dump()
+    server_url = f'http://{server_config['host']}:{server_config['port']}'
 
     # Запуск в режиме инференса
     if not server_config["debug"]:
+        backend_ready = mp.Event()
         # Запускаем сервер в фоновом процессе
         server_process = mp.Process(target=run_server, kwargs={
-                                    "server_config": server_config, "app_config": app_config})
+                                    "server_config": server_config, "app_config": app_config, "ready_event": backend_ready})
         server_process.daemon = True
         server_process.start()
 
+        # Ожидаем, пока сервер не станет доступен
+        backend_ready.wait()
         # Создаем окно с веб-контентом
         webview.create_window(title='PatternCraft Lab',
-                              url=f'http://{server_config['host']}:{server_config['port']}', fullscreen=True)
+                              url=server_url, fullscreen=True)
         webview.start()
 
     # Запуск в режиме дебага
