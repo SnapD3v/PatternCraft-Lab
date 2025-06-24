@@ -46,12 +46,17 @@
             <img src="/static/img/ai_icon.png" alt="">
             <span>AI-ассистент</span>
         </a>
-        <a class="button" href="/profile">
-
-            <img src="/static/img/profile.png" alt="">
-            <span>Профиль</span>
-
-        </a>
+        {% if is_authenticated %}
+            <a class="button" href="/profile">
+                <img src="/static/img/profile.png" alt="">
+                <span>Профиль</span>
+            </a>
+        {% else %}
+            <a class="button" href="/login">
+                <img src="/static/img/profile.png" alt="">
+                <span>Профиль</span>
+            </a>
+        {% endif %}
 
         <br><br>
         <span class="small-text-size"><strong>Системное</strong></span>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>PatternCraft Lab - Изменение пароля</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="account-info wrapper">
+    <div class="profile-header">
+        <h2 class="big-text-size">Вход в аккаунт</h2>
+    </div>
+    <p class="small-text-size formatted-text">Введите данные с вашего аккаунта на веб-сервисе.</p>
+
+    <form class="change-password-form card block-light" method="POST">
+        <div class="profile-form-group">
+            <label for="base_url"><strong>URL ссылка на веб-сервис:</strong></label>
+            <input type="text" id="base_url" name="auth.base_url" class="block-light full-width"
+            value="{{ base_url or 'http://localhost/' }}">
+        </div>
+        <div class="profile-form-group">
+            <label for="email"><strong>Логин:</strong></label>
+            <input type="text" id="email" name="auth.email" class="block-light full-width" placeholder="Ваш Email"
+            value="{{ email }}">
+        </div>
+        <div class="profile-form-group">
+            <label for="password"><strong>Пароль:</strong></label>
+            <input type="password" id="password" name="auth.password" class="block-light full-width" placeholder="Пароль"
+            value="{{ password }}">
+        </div>
+        <div class="actions cards-area gap-10">
+            <button type="submit" class="button block-dark full-width gradient-button profile-action" aria-label="Войти в аккаунт">
+                Войти
+            </button>
+        </div>
+    </form>
+</section>
+{% endblock %}

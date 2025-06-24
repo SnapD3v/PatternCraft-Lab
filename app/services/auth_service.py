@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 AUTH_ERROR_MESSAGE = (
     "\n"
@@ -58,6 +59,8 @@ class PatternCraftAuthClient:
         self.password = password
         self.session = requests.Session()
         self.id = None
+        self.username = None
+        self.created_at = None
         self.is_authenticated = False
 
         self.login()
@@ -104,13 +107,19 @@ class PatternCraftAuthClient:
         )
         response_data = response.json()
         user_id = response_data.get("id")
-        if not user_id:
+        username = response_data.get("username")
+        created_at = response_data.get("created_at")
+        if not (user_id and username and created_at):
             print(AUTH_ERROR_MESSAGE)
             self.id = None
+            self.username = None
+            self.created_at = None
             self.is_authenticated = False
             return
 
         self.id = user_id
+        self.username = username
+        self.created_at = datetime.fromisoformat(created_at)
         self.is_authenticated = True
 
     def request(self, method, path, **kwargs):

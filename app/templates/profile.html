@@ -8,16 +8,16 @@
 {% block content %}
 <section class="account-info wrapper">
     <div class="profile-header">
-        <h2 class="big-text-size">Добро пожаловать{% if current_user.username %}, <span class="username">{{ current_user.username }}</span>{% endif %}!</h2>
+        <h2 class="big-text-size">Добро пожаловать{% if username %}, <span class="username">{{ username }}</span>{% endif %}!</h2>
     </div>
     <p class="small-text-size formatted-text">Здесь вы можете просмотреть и изменить информацию о вашем аккаунте.</p>
 
     <div class="info-block card block-light">
         <h3 class="big-text-size">Данные профиля</h3>
         <ul>
-            <li><strong>Логин:</strong> {{ current_user.username | default('Не указано') }}</li>
-            <li><strong>Email:</strong> {{ current_user.email | default('Не указано') }}</li>
-            <li><strong>Дата регистрации:</strong> {{ current_user.created_at.strftime('%d.%m.%Y') if current_user.created_at else 'Не указано' }}</li>
+            <li><strong>Логин:</strong> {{ username | default('Не указано') }}</li>
+            <li><strong>Email:</strong> {{ email | default('Не указано') }}</li>
+            <li><strong>Дата регистрации:</strong> {{ created_at.strftime('%d.%m.%Y') if created_at else 'Не указано' }}</li>
         </ul>
     </div>
 
@@ -27,6 +27,9 @@
         </a>
         <a href="{{ url_for('profile.change_password') }}" class="button block-dark full-width gradient-button profile-action" role="button" aria-label="Изменить пароль учетной записи">
             Изменить пароль
+        </a>
+        <a href="{{ url_for('profile.logout') }}" class="button block-dark full-width gradient-button profile-action" role="button" aria-label="Выйти из аккаунта">
+            Выйти из аккаунта
         </a>
     </div>
 </section>
