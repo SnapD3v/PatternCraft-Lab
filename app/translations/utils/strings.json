@@ -1,0 +1,610 @@
+{
+  "base_theory": {
+    "en": "Theory",
+    "ru": "Теория"
+  },
+  "base_tasks": {
+    "en": "Tasks",
+    "ru": "Задачи"
+  },
+  "base_courses": {
+    "en": "Courses",
+    "ru": "Курсы"
+  },
+  "base_ai_assistant": {
+    "en": "AI-Assistant",
+    "ru": "AI-ассистент"
+  },
+  "base_profile": {
+    "en": "Profile",
+    "ru": "Профиль"
+  },
+  "base_configuration": {
+    "en": "Configuration",
+    "ru": "Конфигурация"
+  },
+  "chats_ai_assistant": {
+    "en": "AI-Assistant",
+    "ru": "AI-ассистент"
+  },
+  "chats_new_chat": {
+    "en": "New chat",
+    "ru": "Новый чат"
+  },
+  "chats_select_chat": {
+    "en": "Select chat",
+    "ru": "Выберите чат"
+  },
+  "chats_assistant_thinking": {
+    "en": "Assistant is thinking",
+    "ru": "Ассистент думает"
+  },
+  "chats_input_placeholder": {
+    "en": "Enter your request",
+    "ru": "Введите запрос"
+  },
+  "chats_send_button": {
+    "en": "Send",
+    "ru": "Отправить"
+  },
+  "password_change": {
+    "en": "Change password",
+    "ru": "Изменить пароль"
+  },
+  "password_change_instruction": {
+    "en": "Enter your current and new password to update.",
+    "ru": "Введите текущий и новый пароль для обновления."
+  },
+  "password_current_password_label": {
+    "en": "Current password:",
+    "ru": "Текущий пароль:"
+  },
+  "password_current_password_placeholder": {
+    "en": "Enter your current password",
+    "ru": "Введите текущий пароль"
+  },
+  "password_new_password_label": {
+    "en": "New password:",
+    "ru": "Новый пароль:"
+  },
+  "password_new_password_placeholder": {
+    "en": "Enter your request",
+    "ru": "Введите запрос"
+  },
+  "password_confirm_password_label": {
+    "en": "Confirm new password:",
+    "ru": "Подтвердите новый пароль:"
+  },
+  "password_confirm_password_placeholder": {
+    "en": "Confirm your new password",
+    "ru": "Подтвердите новый пароль"
+  },
+  "password_save_button_label": {
+    "en": "Save new password",
+    "ru": "Сохранить новый пароль"
+  },
+  "password_save_button_text": {
+    "en": "Save password",
+    "ru": "Сохранить пароль"
+  },
+  "password_cancel_button_label": {
+    "en": "Cancel editing",
+    "ru": "Отменить редактирование"
+  },
+  "password_cancel_button_text": {
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  "config_title": {
+    "en": "Configuration",
+    "ru": "Конфигурация"
+  },
+  "config_header": {
+    "en": "Configuration",
+    "ru": "Конфигурация"
+  },
+  "config_api_section": {
+    "en": "API Settings",
+    "ru": "Настройка API"
+  },
+  "config_api_key": {
+    "en": "API Key",
+    "ru": "Ключ"
+  },
+  "config_api_model": {
+    "en": "Model",
+    "ru": "Модель"
+  },
+  "config_api_base_url": {
+    "en": "Base URL",
+    "ru": "Base URL"
+  },
+  "config_appearance_section": {
+    "en": "Appearance",
+    "ru": "Внешний вид"
+  },
+  "config_theme": {
+    "en": "Theme",
+    "ru": "Тема"
+  },
+  "config_theme_light": {
+    "en": "Light",
+    "ru": "Светлая"
+  },
+  "config_theme_dark": {
+    "en": "Dark",
+    "ru": "Тёмная"
+  },
+  "config_language": {
+    "en": "Language",
+    "ru": "Язык"
+  },
+  "config_language_ru": {
+    "en": "Russian",
+    "ru": "Русский"
+  },
+  "config_language_en": {
+    "en": "English",
+    "ru": "English"
+  },
+  "config_font_size": {
+    "en": "Font size (px)",
+    "ru": "Размер шрифта (px)"
+  },
+  "config_submit": {
+    "en": "Apply",
+    "ru": "Установить"
+  },
+  "course_title": {
+    "en": "Course ",
+    "ru": "Курс "
+  },
+  "course_theory_header": {
+    "en": "Theory:",
+    "ru": "Теория:"
+  },
+  "course_problems_header": {
+    "en": "Tasks:",
+    "ru": "Задачи:"
+  },
+  "course_edit_button": {
+    "en": "Send",
+    "ru": "Отправить"
+  },
+  "course_delete_button": {
+    "en": "Delete course",
+    "ru": "Удалить курс"
+  },
+  "course_send_to_hub_button": {
+    "en": "Send",
+    "ru": "Отправить"
+  },
+  "course_confirm_delete_text": {
+    "en": "Are you sure you want to delete the course?",
+    "ru": "Вы уверены, что хотите удалить курс?"
+  },
+  "course_cancel_button": {
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  "course_confirm_delete_button": {
+    "en": "Delete",
+    "ru": "Удалить"
+  },
+  "error_connection_server": {
+    "en": "Connection/server error",
+    "ru": "Ошибка соединения/сервера"
+  },
+  "course_form_edit_title": {
+    "en": "Edit course",
+    "ru": "Редактирование курса"
+  },
+  "course_form_create_title": {
+    "en": "Create course",
+    "ru": "Создание курса"
+  },
+  "course_form_edit_header": {
+    "en": "Edit course",
+    "ru": "Редактирование курса"
+  },
+  "course_form_create_header": {
+    "en": "Create course",
+    "ru": "Создание курса"
+  },
+  "course_form_name_label": {
+    "en": "Name",
+    "ru": "Название"
+  },
+  "course_form_description_label": {
+    "en": "Course description",
+    "ru": "Описание курса"
+  },
+  "course_form_image_label": {
+    "en": "Image",
+    "ru": "Изображение"
+  },
+  "course_form_current_image": {
+    "en": "Current:",
+    "ru": "Текущее:"
+  },
+  "course_form_new_image": {
+    "en": "New:",
+    "ru": "Новое:"
+  },
+  "course_form_image_url_placeholder": {
+    "en": "Image URL",
+    "ru": "Ссылка на Изображение"
+  },
+  "course_form_or": {
+    "en": "or",
+    "ru": "или"
+  },
+  "course_form_select_theory": {
+    "en": "Select theory:",
+    "ru": "Выберите теорию:"
+  },
+  "course_form_select_problems": {
+    "en": "Select tasks:",
+    "ru": "Выберите задачи:"
+  },
+  "course_form_hide_course": {
+    "en": "Hide course",
+    "ru": "Скрыть курс"
+  },
+  "course_form_submit": {
+    "en": "Save course",
+    "ru": "Сохранить курс"
+  },
+  "courses_list_title": {
+    "en": "Courses",
+    "ru": "Курсы"
+  },
+  "courses_list_create_course": {
+    "en": "Create course",
+    "ru": "Создать курс"
+  },
+  "courses_list_course_link_placeholder": {
+    "en": "Course link",
+    "ru": "Ссылка на курс"
+  },
+  "courses_list_download_course": {
+    "en": "Download course",
+    "ru": "Скачать курс"
+  },
+  "edit_profile_title": {
+    "en": "Editing profile",
+    "ru": "Редактирование профиля"
+  },
+  "edit_profile_header": {
+    "en": "Edit profile",
+    "ru": "Редактировать профиль"
+  },
+  "edit_profile_instruction": {
+    "en": "Update your details below.",
+    "ru": "Обновите ваши данные ниже."
+  },
+  "edit_profile_username_label": {
+    "en": "Login:",
+    "ru": "Логин:"
+  },
+  "edit_profile_username_placeholder": {
+    "en": "Login",
+    "ru": "Логин"
+  },
+  "edit_profile_email_label": {
+    "en": "Email:",
+    "ru": "Email:"
+  },
+  "edit_profile_email_placeholder": {
+    "en": "Email",
+    "ru": "Email"
+  },
+  "edit_profile_save_button_label": {
+    "en": "Save new password",
+    "ru": "Сохранить новый пароль"
+  },
+  "edit_profile_save_button_text": {
+    "en": "Save password",
+    "ru": "Сохранить пароль"
+  },
+  "edit_profile_cancel_button_label": {
+    "en": "Cancel editing",
+    "ru": "Отменить редактирование"
+  },
+  "edit_profile_cancel_button_text": {
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  "login_title": {
+    "en": "Sign in",
+    "ru": "Вход в аккаунт"
+  },
+  "login_header": {
+    "en": "Sign in to your account",
+    "ru": "Вход в аккаунт"
+  },
+  "login_info": {
+    "en": "Enter the data from your account on the web-service.",
+    "ru": "Введите данные с вашего аккаунта на веб-сервисе."
+  },
+  "login_base_url": {
+    "en": "URL link to web-service:",
+    "ru": "URL ссылка на веб-сервис:"
+  },
+  "login_email_title": {
+    "en": "Login:",
+    "ru": "Логин:"
+  },
+  "login_email_header": {
+    "en": "Your Email",
+    "ru": "Ваш Email"
+  },
+  "login_password_title": {
+    "en": "Password:",
+    "ru": "Пароль:"
+  },
+  "login_passowrd_header": {
+    "en": "Password",
+    "ru": "Пароль"
+  },
+  "login_submit_header": {
+    "en": "Sign in to your account",
+    "ru": "Войти в аккаунт"
+  },
+  "login_submit_title": {
+    "en": "Sign in",
+    "ru": "Войти"
+  },
+  "problem_form_title": {
+    "en": "Create task",
+    "ru": "Создание задачи"
+  },
+  "problem_form_select_topics": {
+    "en": "Select topics:",
+    "ru": "Выберите темы:"
+  },
+  "problem_form_difficulty": {
+    "en": "Difficulty:",
+    "ru": "Сложность:"
+  },
+  "problem_form_difficulty_easy": {
+    "en": "Easy",
+    "ru": "Легкая"
+  },
+  "problem_form_difficulty_medium": {
+    "en": "Medium",
+    "ru": "Средняя"
+  },
+  "problem_form_difficulty_hard": {
+    "en": "Hard",
+    "ru": "Тяжелая"
+  },
+  "problem_form_additional_instructions": {
+    "en": "Additional instructions",
+    "ru": "Дополнительные инструкции"
+  },
+  "problem_form_create_problem": {
+    "en": "Create task",
+    "ru": "Создать задачу"
+  },
+  "problem_form_task_generating": {
+    "en": "Task is being generated, please wait.",
+    "ru": "Задача генерируется, дождитесь окончания."
+  },
+  "problems_title": {
+    "en": "Tasks",
+    "ru": "Задачи"
+  },
+  "problems_delete_problem": {
+    "en": "Delete task",
+    "ru": "Удалить задачу"
+  },
+  "problems_create_problem": {
+    "en": "Create task",
+    "ru": "Создать задачу"
+  },
+  "problems_task_generating": {
+    "en": "Task is being generated",
+    "ru": "Задача создается"
+  },
+  "problems_problem_link_placeholder": {
+    "en": "Task link",
+    "ru": "Ссылка на задачу"
+  },
+  "problems_download_problem": {
+    "en": "Download task",
+    "ru": "Скачать задачу"
+  },
+  "problems_confirm_delete_problem": {
+    "en": "Are you sure you want to delete the task?",
+    "ru": "Вы уверены, что хотите удалить задачу?"
+  },
+  "problems_cancel": {
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  "problems_delete": {
+    "en": "Delete",
+    "ru": "Удалить"
+  },
+  "problems_error_deleting": {
+    "en": "Delete error",
+    "ru": "Ошибка удаления"
+  },
+  "problems_error_network": {
+    "en": "Network error",
+    "ru": "Ошибка сети"
+  },
+  "profile_title": {
+    "en": "Profile",
+    "ru": "Личный кабинет"
+  },
+  "profile_welcome": {
+    "en": "Welcome",
+    "ru": "Добро пожаловать"
+  },
+  "profile_instruction": {
+    "en": "Enter your current and new password to update.",
+    "ru": "Введите текущий и новый пароль для обновления."
+  },
+  "profile_data_header": {
+    "en": "Profile data",
+    "ru": "Данные профиля"
+  },
+  "profile_username_label": {
+    "en": "Username:",
+    "ru": "Логин:"
+  },
+  "profile_not_specified": {
+    "en": "Not specified",
+    "ru": "Не указано"
+  },
+  "profile_email_label": {
+    "en": "Email:",
+    "ru": "Email:"
+  },
+  "profile_created_at_label": {
+    "en": "Registration date:",
+    "ru": "Дата регистрации:"
+  },
+  "profile_edit_button_label": {
+    "en": "Save new password",
+    "ru": "Сохранить новый пароль"
+  },
+  "profile_edit_button_text": {
+    "en": "Save password",
+    "ru": "Сохранить пароль"
+  },
+  "profile_change_password_button_label": {
+    "en": "Save new password",
+    "ru": "Сохранить новый пароль"
+  },
+  "profile_change_password_button_text": {
+    "en": "Save password",
+    "ru": "Сохранить пароль"
+  },
+  "profile_logout_button_label": {
+    "en": "Cancel editing",
+    "ru": "Отменить редактирование"
+  },
+  "profile_logout_button_text": {
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  "section_form_edit_title": {
+    "en": "Edit section",
+    "ru": "Редактирование раздела"
+  },
+  "section_form_create_title": {
+    "en": "Create section",
+    "ru": "Создание раздела"
+  },
+  "section_form_name": {
+    "en": "Name",
+    "ru": "Название"
+  },
+  "section_form_description": {
+    "en": "Description",
+    "ru": "Описание"
+  },
+  "section_form_add_to_practice": {
+    "en": "Add to practice",
+    "ru": "Добавить в практику"
+  },
+  "section_form_edit": {
+    "en": "Edit",
+    "ru": "Редактировать"
+  },
+  "section_form_create": {
+    "en": "Create",
+    "ru": "Создать"
+  },
+  "theory_in_practice_no": {
+    "en": "Not included",
+    "ru": "Не участвует"
+  },
+  "theory_in_practice_yes": {
+    "en": "Included",
+    "ru": "Участвует"
+  },
+  "theory_in_practice_in_tasks": {
+    "en": "in the list for task generation",
+    "ru": "в списке при генерации задач"
+  },
+  "theory_edit": {
+    "en": "Edit",
+    "ru": "Редактировать"
+  },
+  "theory_form_edit_title": {
+    "en": "Edit {theory_name}",
+    "ru": "Редактирование {theory_name}"
+  },
+  "theory_form_create_title": {
+    "en": "Create",
+    "ru": "Создание"
+  },
+  "theory_form_edit_header": {
+    "en": "Edit",
+    "ru": "Редактирование"
+  },
+  "theory_form_create_header": {
+    "en": "Create",
+    "ru": "Создание"
+  },
+  "theory_form_theory": {
+    "en": "theory",
+    "ru": "теории"
+  },
+  "theory_form_name": {
+    "en": "Name",
+    "ru": "Название"
+  },
+  "theory_form_description": {
+    "en": "Description",
+    "ru": "Описание"
+  },
+  "theory_form_image": {
+    "en": "Image",
+    "ru": "Изображение"
+  },
+  "theory_form_current": {
+    "en": "Current:",
+    "ru": "Текущее:"
+  },
+  "theory_form_new": {
+    "en": "New:",
+    "ru": "Новое:"
+  },
+  "theory_form_image_url_placeholder": {
+    "en": "Image URL",
+    "ru": "Ссылка на Изображение"
+  },
+  "theory_form_or": {
+    "en": "or",
+    "ru": "или"
+  },
+  "theory_form_add_to_practice": {
+    "en": "Add to practice",
+    "ru": "Добавить в практику"
+  },
+  "theory_form_save": {
+    "en": "Save",
+    "ru": "Сохранить"
+  },
+  "theory_list_title": {
+    "en": "Theory",
+    "ru": "Теория"
+  },
+  "theory_list_section_edit": {
+    "en": "Edit section",
+    "ru": "Настройка раздела"
+  },
+  "theory_list_add_card": {
+    "en": "Add card",
+    "ru": "Добавить карточку"
+  },
+  "theory_list_add_section": {
+    "en": "Add section",
+    "ru": "Добавить раздел"
+  }
+}

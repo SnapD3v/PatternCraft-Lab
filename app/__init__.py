@@ -3,6 +3,11 @@ from requests.exceptions import ConnectionError
 
 from .config import AppConfig
 from .services import ProblemService
+from .extensions import (
+    babel,
+    get_locale,
+    get_timezone,
+)
 from app import constants
 from app.text_generator import APITextGenerator
 from app.ai import TaskWriter, TestWriter, Reviewer, Adjudicator
@@ -36,6 +41,12 @@ def configure_app(app: Flask, config: AppConfig) -> Flask:
         text_generator, constants.ADJUDICATOR_SYSTEM_PROMPT)
     solution_checker = SolutionChecker(test_runner, reviewer, adjudicator)
     problem_service = ProblemService(problem_creator, solution_checker)
+    babel.init_app(
+        app,
+        locale_selector=get_locale,
+        timezone_selector=get_timezone,
+        default_translation_directories=config.translations.directory,
+    )
 
     try:
         user_client = PatternCraftAuthClient(

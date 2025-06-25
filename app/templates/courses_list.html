@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Курсы	
+{{ _('courses_list_title') }}
 {% endblock %}
 
 {% block content %}
-<h2>Курсы</h2>
+<h2>{{ _('courses_list_title') }}</h2>
 <div class="cards-area">
 	{% for course in courses %}
 		<a href="/course/{{ course.id }}" class="button block-light card sequential-card">
@@ -19,15 +19,15 @@
 	<a href="/course/create" class="button block-light card sequential-card">
 		<img src="/static/img/add.png" alt="">
 		<div class="information">
-			<p><strong>Создать курс</strong></p>
+			<p><strong>{{ _('courses_list_create_course') }}</strong></p>
 		</div>
 	</a>
 </div>
 <br><br>
 <form action="/download_course" method="get">
 	<div class="one-line" style="justify-content: space-between; align-items: center;">
-		<input class="block-light" type="text" name="course_link" placeholder="Ссылка на курс" required>
-		<input type="submit" class="button block-light" value="Скачать курс">
+		<input class="block-light" type="text" name="course_link" placeholder="{{ _('courses_list_course_link_placeholder') }}" required>
+		<input type="submit" class="button block-light" value="{{ _('courses_list_download_course') }}">
 	</div>
 </form>
 {% endblock %}

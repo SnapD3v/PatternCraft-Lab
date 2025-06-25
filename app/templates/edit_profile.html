@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title>PatternCraft Lab - Редактирование профиля</title>
+    <title>PatternCraft Lab - {{ _('edit_profile_title') }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
 <section class="account-info wrapper">
     <div class="profile-header">
-        <h2 class="big-text-size">Редактировать профиль</h2>
+        <h2 class="big-text-size">{{ _('edit_profile_header') }}</h2>
     </div>
-    <p class="small-text-size formatted-text">Обновите ваши данные ниже.</p>
+    <p class="small-text-size formatted-text">{{ _('edit_profile_instruction') }}</p>
 
     <form class="profile-edit-form card block-light">
         <div class="profile-form-group">
-            <label for="username"><strong>Логин:</strong></label>
-            <input type="text" id="username" name="username" value="{{ current_user.username | default('') }}" class="block-light full-width" placeholder="Логин">
+            <label for="username"><strong>{{ _('edit_profile_username_label') }}</strong></label>
+            <input type="text" id="username" name="username" value="{{ current_user.username | default('') }}" class="block-light full-width" placeholder="{{ _('edit_profile_username_placeholder') }}">
         </div>
         <div class="profile-form-group">
-            <label for="email"><strong>Email:</strong></label>
-            <input type="email" id="email" name="email" value="{{ current_user.email | default('') }}" class="block-light full-width" placeholder="Email">
+            <label for="email"><strong>{{ _('edit_profile_email_label') }}</strong></label>
+            <input type="email" id="email" name="email" value="{{ current_user.email | default('') }}" class="block-light full-width" placeholder="{{ _('edit_profile_email_placeholder') }}">
         </div>
         <div class="actions cards-area gap-10">
-            <button type="submit" class="button block-dark full-width gradient-button profile-action" aria-label="Сохранить изменения профиля">
-                Сохранить изменения
+            <button type="submit" class="button block-dark full-width gradient-button profile-action" aria-label="{{ _('edit_profile_save_button_label') }}">
+                {{ _('edit_profile_save_button_text') }}
             </button>
-            <a href="{{ url_for('profile.profile') }}" class="button block-dark full-width profile-action" role="button" aria-label="Отменить редактирование">
-                Отмена
+            <a href="{{ url_for('profile.profile') }}" class="button block-dark full-width profile-action" role="button" aria-label="{{ _('edit_profile_cancel_button_label') }}">
+                {{ _('edit_profile_cancel_button_text') }}
             </a>
         </div>
     </form>

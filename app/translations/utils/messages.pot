@@ -1,0 +1,628 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-06-26 02:24+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app/templates/base.html:35
+msgid "base_theory"
+msgstr ""
+
+#: app/templates/base.html:39
+msgid "base_tasks"
+msgstr ""
+
+#: app/templates/base.html:43
+msgid "base_courses"
+msgstr ""
+
+#: app/templates/base.html:47
+msgid "base_ai_assistant"
+msgstr ""
+
+#: app/templates/base.html:52 app/templates/base.html:57
+msgid "base_profile"
+msgstr ""
+
+#: app/templates/base.html:66
+msgid "base_configuration"
+msgstr ""
+
+#: app/templates/base.html:84
+msgid "chats_ai_assistant"
+msgstr ""
+
+#: app/templates/base.html:86
+msgid "chats_new_chat"
+msgstr ""
+
+#: app/templates/base.html:97
+msgid "chats_select_chat"
+msgstr ""
+
+#: app/templates/base.html:101
+msgid "chats_assistant_thinking"
+msgstr ""
+
+#: app/templates/base.html:104
+msgid "chats_input_placeholder"
+msgstr ""
+
+#: app/templates/base.html:105
+msgid "chats_send_button"
+msgstr ""
+
+#: app/templates/change_password.html:11
+msgid "password_change"
+msgstr ""
+
+#: app/templates/change_password.html:13
+msgid "password_change_instruction"
+msgstr ""
+
+#: app/templates/change_password.html:17
+msgid "password_current_password_label"
+msgstr ""
+
+#: app/templates/change_password.html:18
+msgid "password_current_password_placeholder"
+msgstr ""
+
+#: app/templates/change_password.html:21
+msgid "password_new_password_label"
+msgstr ""
+
+#: app/templates/change_password.html:22
+msgid "password_new_password_placeholder"
+msgstr ""
+
+#: app/templates/change_password.html:25
+msgid "password_confirm_password_label"
+msgstr ""
+
+#: app/templates/change_password.html:26
+msgid "password_confirm_password_placeholder"
+msgstr ""
+
+#: app/templates/change_password.html:29
+msgid "password_save_button_label"
+msgstr ""
+
+#: app/templates/change_password.html:30
+msgid "password_save_button_text"
+msgstr ""
+
+#: app/templates/change_password.html:32
+msgid "password_cancel_button_label"
+msgstr ""
+
+#: app/templates/change_password.html:33
+msgid "password_cancel_button_text"
+msgstr ""
+
+#: app/templates/config.html:4
+msgid "config_title"
+msgstr ""
+
+#: app/templates/config.html:8
+msgid "config_header"
+msgstr ""
+
+#: app/templates/config.html:13
+msgid "config_api_section"
+msgstr ""
+
+#: app/templates/config.html:14
+msgid "config_api_key"
+msgstr ""
+
+#: app/templates/config.html:17
+msgid "config_api_model"
+msgstr ""
+
+#: app/templates/config.html:20
+msgid "config_api_base_url"
+msgstr ""
+
+#: app/templates/config.html:24
+msgid "config_appearance_section"
+msgstr ""
+
+#: app/templates/config.html:26
+msgid "config_theme"
+msgstr ""
+
+#: app/templates/config.html:28
+msgid "config_theme_light"
+msgstr ""
+
+#: app/templates/config.html:29
+msgid "config_theme_dark"
+msgstr ""
+
+#: app/templates/config.html:33
+msgid "config_language"
+msgstr ""
+
+#: app/templates/config.html:35
+msgid "config_language_ru"
+msgstr ""
+
+#: app/templates/config.html:36
+msgid "config_language_en"
+msgstr ""
+
+#: app/templates/config.html:40
+msgid "config_font_size"
+msgstr ""
+
+#: app/templates/config.html:53
+msgid "config_submit"
+msgstr ""
+
+#: app/templates/course.html:4 app/templates/course.html:8
+msgid "course_title"
+msgstr ""
+
+#: app/templates/course.html:17
+msgid "course_theory_header"
+msgstr ""
+
+#: app/templates/course.html:30
+msgid "course_problems_header"
+msgstr ""
+
+#: app/templates/course.html:60
+msgid "course_edit_button"
+msgstr ""
+
+#: app/templates/course.html:61
+msgid "course_delete_button"
+msgstr ""
+
+#: app/templates/course.html:67
+msgid "course_send_to_hub_button"
+msgstr ""
+
+#: app/templates/course.html:75
+msgid "course_confirm_delete_text"
+msgstr ""
+
+#: app/templates/course.html:77
+msgid "course_cancel_button"
+msgstr ""
+
+#: app/templates/course.html:78
+msgid "course_confirm_delete_button"
+msgstr ""
+
+#: app/templates/course.html:148
+msgid "error_connection_server"
+msgstr ""
+
+#: app/templates/course_form.html:4
+msgid "course_form_edit_title"
+msgstr ""
+
+#: app/templates/course_form.html:4
+msgid "course_form_create_title"
+msgstr ""
+
+#: app/templates/course_form.html:10
+msgid "course_form_edit_header"
+msgstr ""
+
+#: app/templates/course_form.html:12
+msgid "course_form_create_header"
+msgstr ""
+
+#: app/templates/course_form.html:18
+msgid "course_form_name_label"
+msgstr ""
+
+#: app/templates/course_form.html:23
+msgid "course_form_description_label"
+msgstr ""
+
+#: app/templates/course_form.html:27
+msgid "course_form_image_label"
+msgstr ""
+
+#: app/templates/course_form.html:31
+msgid "course_form_current_image"
+msgstr ""
+
+#: app/templates/course_form.html:37
+msgid "course_form_new_image"
+msgstr ""
+
+#: app/templates/course_form.html:39
+msgid "course_form_image_url_placeholder"
+msgstr ""
+
+#: app/templates/course_form.html:40
+msgid "course_form_or"
+msgstr ""
+
+#: app/templates/course_form.html:47
+msgid "course_form_select_theory"
+msgstr ""
+
+#: app/templates/course_form.html:67
+msgid "course_form_select_problems"
+msgstr ""
+
+#: app/templates/course_form.html:88
+msgid "course_form_hide_course"
+msgstr ""
+
+#: app/templates/course_form.html:95
+msgid "course_form_submit"
+msgstr ""
+
+#: app/templates/courses_list.html:4 app/templates/courses_list.html:8
+msgid "courses_list_title"
+msgstr ""
+
+#: app/templates/courses_list.html:22
+msgid "courses_list_create_course"
+msgstr ""
+
+#: app/templates/courses_list.html:29
+msgid "courses_list_course_link_placeholder"
+msgstr ""
+
+#: app/templates/courses_list.html:30
+msgid "courses_list_download_course"
+msgstr ""
+
+#: app/templates/edit_profile.html:4
+msgid "edit_profile_title"
+msgstr ""
+
+#: app/templates/edit_profile.html:11
+msgid "edit_profile_header"
+msgstr ""
+
+#: app/templates/edit_profile.html:13
+msgid "edit_profile_instruction"
+msgstr ""
+
+#: app/templates/edit_profile.html:17
+msgid "edit_profile_username_label"
+msgstr ""
+
+#: app/templates/edit_profile.html:18
+msgid "edit_profile_username_placeholder"
+msgstr ""
+
+#: app/templates/edit_profile.html:21
+msgid "edit_profile_email_label"
+msgstr ""
+
+#: app/templates/edit_profile.html:22
+msgid "edit_profile_email_placeholder"
+msgstr ""
+
+#: app/templates/edit_profile.html:25
+msgid "edit_profile_save_button_label"
+msgstr ""
+
+#: app/templates/edit_profile.html:26
+msgid "edit_profile_save_button_text"
+msgstr ""
+
+#: app/templates/edit_profile.html:28
+msgid "edit_profile_cancel_button_label"
+msgstr ""
+
+#: app/templates/edit_profile.html:29
+msgid "edit_profile_cancel_button_text"
+msgstr ""
+
+#: app/templates/login.html:4
+msgid "login_title"
+msgstr ""
+
+#: app/templates/login.html:11
+msgid "login_header"
+msgstr ""
+
+#: app/templates/login.html:13
+msgid "login_info"
+msgstr ""
+
+#: app/templates/login.html:17
+msgid "login_base_url"
+msgstr ""
+
+#: app/templates/login.html:22
+msgid "login_email_title"
+msgstr ""
+
+#: app/templates/login.html:23
+msgid "login_email_header"
+msgstr ""
+
+#: app/templates/login.html:27
+msgid "login_password_title"
+msgstr ""
+
+#: app/templates/login.html:28
+msgid "login_passowrd_header"
+msgstr ""
+
+#: app/templates/login.html:32
+msgid "login_submit_header"
+msgstr ""
+
+#: app/templates/login.html:33
+msgid "login_submit_title"
+msgstr ""
+
+#: app/templates/problem_form.html:4 app/templates/problem_form.html:8
+msgid "problem_form_title"
+msgstr ""
+
+#: app/templates/problem_form.html:12
+msgid "problem_form_select_topics"
+msgstr ""
+
+#: app/templates/problem_form.html:29
+msgid "problem_form_difficulty"
+msgstr ""
+
+#: app/templates/problem_form.html:31
+msgid "problem_form_difficulty_easy"
+msgstr ""
+
+#: app/templates/problem_form.html:32
+msgid "problem_form_difficulty_medium"
+msgstr ""
+
+#: app/templates/problem_form.html:33
+msgid "problem_form_difficulty_hard"
+msgstr ""
+
+#: app/templates/problem_form.html:37
+msgid "problem_form_additional_instructions"
+msgstr ""
+
+#: app/templates/problem_form.html:46 app/templates/problem_form.html:54
+msgid "problem_form_create_problem"
+msgstr ""
+
+#: app/templates/problem_form.html:49
+msgid "problem_form_task_generating"
+msgstr ""
+
+#: app/templates/problems.html:4 app/templates/problems.html:8
+msgid "problems_title"
+msgstr ""
+
+#: app/templates/problems.html:32
+msgid "problems_delete_problem"
+msgstr ""
+
+#: app/templates/problems.html:38
+msgid "problems_create_problem"
+msgstr ""
+
+#: app/templates/problems.html:43
+msgid "problems_task_generating"
+msgstr ""
+
+#: app/templates/problems.html:50
+msgid "problems_problem_link_placeholder"
+msgstr ""
+
+#: app/templates/problems.html:51
+msgid "problems_download_problem"
+msgstr ""
+
+#: app/templates/problems.html:57
+msgid "problems_confirm_delete_problem"
+msgstr ""
+
+#: app/templates/problems.html:59
+msgid "problems_cancel"
+msgstr ""
+
+#: app/templates/problems.html:60
+msgid "problems_delete"
+msgstr ""
+
+#: app/templates/problems.html:104
+msgid "problems_error_deleting"
+msgstr ""
+
+#: app/templates/problems.html:110
+msgid "problems_error_network"
+msgstr ""
+
+#: app/templates/profile.html:4
+msgid "profile_title"
+msgstr ""
+
+#: app/templates/profile.html:11
+msgid "profile_welcome"
+msgstr ""
+
+#: app/templates/profile.html:13
+msgid "profile_instruction"
+msgstr ""
+
+#: app/templates/profile.html:16
+msgid "profile_data_header"
+msgstr ""
+
+#: app/templates/profile.html:18
+msgid "profile_username_label"
+msgstr ""
+
+#: app/templates/profile.html:18 app/templates/profile.html:19
+#: app/templates/profile.html:20
+msgid "profile_not_specified"
+msgstr ""
+
+#: app/templates/profile.html:19
+msgid "profile_email_label"
+msgstr ""
+
+#: app/templates/profile.html:20
+msgid "profile_created_at_label"
+msgstr ""
+
+#: app/templates/profile.html:25
+msgid "profile_edit_button_label"
+msgstr ""
+
+#: app/templates/profile.html:26
+msgid "profile_edit_button_text"
+msgstr ""
+
+#: app/templates/profile.html:28
+msgid "profile_change_password_button_label"
+msgstr ""
+
+#: app/templates/profile.html:29
+msgid "profile_change_password_button_text"
+msgstr ""
+
+#: app/templates/profile.html:31
+msgid "profile_logout_button_label"
+msgstr ""
+
+#: app/templates/profile.html:32
+msgid "profile_logout_button_text"
+msgstr ""
+
+#: app/templates/section_form.html:5 app/templates/section_form.html:14
+msgid "section_form_edit_title"
+msgstr ""
+
+#: app/templates/section_form.html:7 app/templates/section_form.html:16
+msgid "section_form_create_title"
+msgstr ""
+
+#: app/templates/section_form.html:22
+msgid "section_form_name"
+msgstr ""
+
+#: app/templates/section_form.html:25
+msgid "section_form_description"
+msgstr ""
+
+#: app/templates/section_form.html:40
+msgid "section_form_add_to_practice"
+msgstr ""
+
+#: app/templates/section_form.html:48
+msgid "section_form_edit"
+msgstr ""
+
+#: app/templates/section_form.html:48
+msgid "section_form_create"
+msgstr ""
+
+#: app/templates/theory.html:30
+msgid "theory_in_practice_no"
+msgstr ""
+
+#: app/templates/theory.html:31
+msgid "theory_in_practice_yes"
+msgstr ""
+
+#: app/templates/theory.html:33
+msgid "theory_in_practice_in_tasks"
+msgstr ""
+
+#: app/templates/theory.html:36
+msgid "theory_edit"
+msgstr ""
+
+#: app/templates/theory_form.html:10
+msgid "theory_form_edit_title"
+msgstr ""
+
+#: app/templates/theory_form.html:10
+msgid "theory_form_create_title"
+msgstr ""
+
+#: app/templates/theory_form.html:16
+msgid "theory_form_edit_header"
+msgstr ""
+
+#: app/templates/theory_form.html:16
+msgid "theory_form_create_header"
+msgstr ""
+
+#: app/templates/theory_form.html:16
+msgid "theory_form_theory"
+msgstr ""
+
+#: app/templates/theory_form.html:18
+msgid "theory_form_name"
+msgstr ""
+
+#: app/templates/theory_form.html:22
+msgid "theory_form_description"
+msgstr ""
+
+#: app/templates/theory_form.html:26
+msgid "theory_form_image"
+msgstr ""
+
+#: app/templates/theory_form.html:30
+msgid "theory_form_current"
+msgstr ""
+
+#: app/templates/theory_form.html:36
+msgid "theory_form_new"
+msgstr ""
+
+#: app/templates/theory_form.html:38
+msgid "theory_form_image_url_placeholder"
+msgstr ""
+
+#: app/templates/theory_form.html:39
+msgid "theory_form_or"
+msgstr ""
+
+#: app/templates/theory_form.html:67
+msgid "theory_form_add_to_practice"
+msgstr ""
+
+#: app/templates/theory_form.html:71
+msgid "theory_form_save"
+msgstr ""
+
+#: app/templates/theory_list.html:4 app/templates/theory_list.html:8
+msgid "theory_list_title"
+msgstr ""
+
+#: app/templates/theory_list.html:12
+msgid "theory_list_section_edit"
+msgstr ""
+
+#: app/templates/theory_list.html:27
+msgid "theory_list_add_card"
+msgstr ""
+
+#: app/templates/theory_list.html:34
+msgid "theory_list_add_section"
+msgstr ""
+

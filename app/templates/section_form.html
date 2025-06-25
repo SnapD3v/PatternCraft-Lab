@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{% if section %}Редактирование раздела
-{% else %}Создание раздела
+{% if section %}
+    {{ _('section_form_edit_title') }}
+{% else %}
+    {{ _('section_form_create_title') }}
 {% endif %}
 {% endblock %}
 
 {% block content %}
 <h2>
     {% if section %}
-        Редактирование раздела
+        {{ _('section_form_edit_title') }}
     {% else %}
-        Создание раздела
+        {{ _('section_form_create_title') }}
     {% endif %}
 </h2>
 <br>
 
 <form method="post">
-    <p>Название</p>
+    <p>{{ _('section_form_name') }}</p>
     <input name="name" class="block-light full-width" type="text" value="{{ section.name }}">
     <br>
-    <p>Описание</p>
+    <p>{{ _('section_form_description') }}</p>
     <input name="description" class="block-light full-width" type="text" value="{{ section.description }}">
     <br><br>
 
@@ -35,7 +37,7 @@
             >
             <span class="slider"></span>
         </label>
-        <span>Добавить в практику</span>
+        <span>{{ _('section_form_add_to_practice') }}</span>
     </div>
     <br><br>
 
@@ -43,7 +45,7 @@
         type="submit"
         class="button card block-light"
         href="#" 
-        value="{% if section %}Редактировать{% else %}Создать{% endif %}"
+        value="{% if section %}{{ _('section_form_edit') }}{% else %}{{ _('section_form_create') }}{% endif %}"
     >
 
 </form>

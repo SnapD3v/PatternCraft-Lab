@@ -1,0 +1,630 @@
+# English translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-06-26 02:24+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app/templates/base.html:35
+msgid "base_theory"
+msgstr "Theory"
+
+#: app/templates/base.html:39
+msgid "base_tasks"
+msgstr "Tasks"
+
+#: app/templates/base.html:43
+msgid "base_courses"
+msgstr "Courses"
+
+#: app/templates/base.html:47
+msgid "base_ai_assistant"
+msgstr "AI-Assistant"
+
+#: app/templates/base.html:52 app/templates/base.html:57
+msgid "base_profile"
+msgstr "Profile"
+
+#: app/templates/base.html:66
+msgid "base_configuration"
+msgstr "Configuration"
+
+#: app/templates/base.html:84
+msgid "chats_ai_assistant"
+msgstr "AI-Assistant"
+
+#: app/templates/base.html:86
+msgid "chats_new_chat"
+msgstr "New chat"
+
+#: app/templates/base.html:97
+msgid "chats_select_chat"
+msgstr "Select chat"
+
+#: app/templates/base.html:101
+msgid "chats_assistant_thinking"
+msgstr "Assistant is thinking"
+
+#: app/templates/base.html:104
+msgid "chats_input_placeholder"
+msgstr "Enter your request"
+
+#: app/templates/base.html:105
+msgid "chats_send_button"
+msgstr "Send"
+
+#: app/templates/change_password.html:11
+msgid "password_change"
+msgstr "Change password"
+
+#: app/templates/change_password.html:13
+msgid "password_change_instruction"
+msgstr "Enter your current and new password to update."
+
+#: app/templates/change_password.html:17
+msgid "password_current_password_label"
+msgstr "Current password:"
+
+#: app/templates/change_password.html:18
+msgid "password_current_password_placeholder"
+msgstr "Enter your current password"
+
+#: app/templates/change_password.html:21
+msgid "password_new_password_label"
+msgstr "New password:"
+
+#: app/templates/change_password.html:22
+msgid "password_new_password_placeholder"
+msgstr "Enter your request"
+
+#: app/templates/change_password.html:25
+msgid "password_confirm_password_label"
+msgstr "Confirm new password:"
+
+#: app/templates/change_password.html:26
+msgid "password_confirm_password_placeholder"
+msgstr "Confirm your new password"
+
+#: app/templates/change_password.html:29
+msgid "password_save_button_label"
+msgstr "Save new password"
+
+#: app/templates/change_password.html:30
+msgid "password_save_button_text"
+msgstr "Save password"
+
+#: app/templates/change_password.html:32
+msgid "password_cancel_button_label"
+msgstr "Cancel editing"
+
+#: app/templates/change_password.html:33
+msgid "password_cancel_button_text"
+msgstr "Cancel"
+
+#: app/templates/config.html:4
+msgid "config_title"
+msgstr "Configuration"
+
+#: app/templates/config.html:8
+msgid "config_header"
+msgstr "Configuration"
+
+#: app/templates/config.html:13
+msgid "config_api_section"
+msgstr "API Settings"
+
+#: app/templates/config.html:14
+msgid "config_api_key"
+msgstr "API Key"
+
+#: app/templates/config.html:17
+msgid "config_api_model"
+msgstr "Model"
+
+#: app/templates/config.html:20
+msgid "config_api_base_url"
+msgstr "Base URL"
+
+#: app/templates/config.html:24
+msgid "config_appearance_section"
+msgstr "Appearance"
+
+#: app/templates/config.html:26
+msgid "config_theme"
+msgstr "Theme"
+
+#: app/templates/config.html:28
+msgid "config_theme_light"
+msgstr "Light"
+
+#: app/templates/config.html:29
+msgid "config_theme_dark"
+msgstr "Dark"
+
+#: app/templates/config.html:33
+msgid "config_language"
+msgstr "Language"
+
+#: app/templates/config.html:35
+msgid "config_language_ru"
+msgstr "Russian"
+
+#: app/templates/config.html:36
+msgid "config_language_en"
+msgstr "English"
+
+#: app/templates/config.html:40
+msgid "config_font_size"
+msgstr "Font size (px)"
+
+#: app/templates/config.html:53
+msgid "config_submit"
+msgstr "Apply"
+
+#: app/templates/course.html:4 app/templates/course.html:8
+msgid "course_title"
+msgstr "Course "
+
+#: app/templates/course.html:17
+msgid "course_theory_header"
+msgstr "Theory:"
+
+#: app/templates/course.html:30
+msgid "course_problems_header"
+msgstr "Tasks:"
+
+#: app/templates/course.html:60
+msgid "course_edit_button"
+msgstr "Send"
+
+#: app/templates/course.html:61
+msgid "course_delete_button"
+msgstr "Delete course"
+
+#: app/templates/course.html:67
+msgid "course_send_to_hub_button"
+msgstr "Send"
+
+#: app/templates/course.html:75
+msgid "course_confirm_delete_text"
+msgstr "Are you sure you want to delete the course?"
+
+#: app/templates/course.html:77
+msgid "course_cancel_button"
+msgstr "Cancel"
+
+#: app/templates/course.html:78
+msgid "course_confirm_delete_button"
+msgstr "Delete"
+
+#: app/templates/course.html:148
+msgid "error_connection_server"
+msgstr "Connection/server error"
+
+#: app/templates/course_form.html:4
+msgid "course_form_edit_title"
+msgstr "Edit course"
+
+#: app/templates/course_form.html:4
+msgid "course_form_create_title"
+msgstr "Create course"
+
+#: app/templates/course_form.html:10
+msgid "course_form_edit_header"
+msgstr "Edit course"
+
+#: app/templates/course_form.html:12
+msgid "course_form_create_header"
+msgstr "Create course"
+
+#: app/templates/course_form.html:18
+msgid "course_form_name_label"
+msgstr "Name"
+
+#: app/templates/course_form.html:23
+msgid "course_form_description_label"
+msgstr "Course description"
+
+#: app/templates/course_form.html:27
+msgid "course_form_image_label"
+msgstr "Image"
+
+#: app/templates/course_form.html:31
+msgid "course_form_current_image"
+msgstr "Current:"
+
+#: app/templates/course_form.html:37
+msgid "course_form_new_image"
+msgstr "New:"
+
+#: app/templates/course_form.html:39
+msgid "course_form_image_url_placeholder"
+msgstr "Image URL"
+
+#: app/templates/course_form.html:40
+msgid "course_form_or"
+msgstr "or"
+
+#: app/templates/course_form.html:47
+msgid "course_form_select_theory"
+msgstr "Select theory:"
+
+#: app/templates/course_form.html:67
+msgid "course_form_select_problems"
+msgstr "Select tasks:"
+
+#: app/templates/course_form.html:88
+msgid "course_form_hide_course"
+msgstr "Hide course"
+
+#: app/templates/course_form.html:95
+msgid "course_form_submit"
+msgstr "Save course"
+
+#: app/templates/courses_list.html:4 app/templates/courses_list.html:8
+msgid "courses_list_title"
+msgstr "Courses"
+
+#: app/templates/courses_list.html:22
+msgid "courses_list_create_course"
+msgstr "Create course"
+
+#: app/templates/courses_list.html:29
+msgid "courses_list_course_link_placeholder"
+msgstr "Course link"
+
+#: app/templates/courses_list.html:30
+msgid "courses_list_download_course"
+msgstr "Download course"
+
+#: app/templates/edit_profile.html:4
+msgid "edit_profile_title"
+msgstr "Editing profile"
+
+#: app/templates/edit_profile.html:11
+msgid "edit_profile_header"
+msgstr "Edit profile"
+
+#: app/templates/edit_profile.html:13
+msgid "edit_profile_instruction"
+msgstr "Update your details below."
+
+#: app/templates/edit_profile.html:17
+msgid "edit_profile_username_label"
+msgstr "Login:"
+
+#: app/templates/edit_profile.html:18
+msgid "edit_profile_username_placeholder"
+msgstr "Login"
+
+#: app/templates/edit_profile.html:21
+msgid "edit_profile_email_label"
+msgstr "Email:"
+
+#: app/templates/edit_profile.html:22
+msgid "edit_profile_email_placeholder"
+msgstr "Email"
+
+#: app/templates/edit_profile.html:25
+msgid "edit_profile_save_button_label"
+msgstr "Save new password"
+
+#: app/templates/edit_profile.html:26
+msgid "edit_profile_save_button_text"
+msgstr "Save password"
+
+#: app/templates/edit_profile.html:28
+msgid "edit_profile_cancel_button_label"
+msgstr "Cancel editing"
+
+#: app/templates/edit_profile.html:29
+msgid "edit_profile_cancel_button_text"
+msgstr "Cancel"
+
+#: app/templates/login.html:4
+msgid "login_title"
+msgstr "Sign in"
+
+#: app/templates/login.html:11
+msgid "login_header"
+msgstr "Sign in to your account"
+
+#: app/templates/login.html:13
+msgid "login_info"
+msgstr "Enter the data from your account on the web-service."
+
+#: app/templates/login.html:17
+msgid "login_base_url"
+msgstr "URL link to web-service:"
+
+#: app/templates/login.html:22
+msgid "login_email_title"
+msgstr "Login:"
+
+#: app/templates/login.html:23
+msgid "login_email_header"
+msgstr "Your Email"
+
+#: app/templates/login.html:27
+msgid "login_password_title"
+msgstr "Password:"
+
+#: app/templates/login.html:28
+msgid "login_passowrd_header"
+msgstr "Password"
+
+#: app/templates/login.html:32
+msgid "login_submit_header"
+msgstr "Sign in to your account"
+
+#: app/templates/login.html:33
+msgid "login_submit_title"
+msgstr "Sign in"
+
+#: app/templates/problem_form.html:4 app/templates/problem_form.html:8
+msgid "problem_form_title"
+msgstr "Create task"
+
+#: app/templates/problem_form.html:12
+msgid "problem_form_select_topics"
+msgstr "Select topics:"
+
+#: app/templates/problem_form.html:29
+msgid "problem_form_difficulty"
+msgstr "Difficulty:"
+
+#: app/templates/problem_form.html:31
+msgid "problem_form_difficulty_easy"
+msgstr "Easy"
+
+#: app/templates/problem_form.html:32
+msgid "problem_form_difficulty_medium"
+msgstr "Medium"
+
+#: app/templates/problem_form.html:33
+msgid "problem_form_difficulty_hard"
+msgstr "Hard"
+
+#: app/templates/problem_form.html:37
+msgid "problem_form_additional_instructions"
+msgstr "Additional instructions"
+
+#: app/templates/problem_form.html:46 app/templates/problem_form.html:54
+msgid "problem_form_create_problem"
+msgstr "Create task"
+
+#: app/templates/problem_form.html:49
+msgid "problem_form_task_generating"
+msgstr "Task is being generated, please wait."
+
+#: app/templates/problems.html:4 app/templates/problems.html:8
+msgid "problems_title"
+msgstr "Tasks"
+
+#: app/templates/problems.html:32
+msgid "problems_delete_problem"
+msgstr "Delete task"
+
+#: app/templates/problems.html:38
+msgid "problems_create_problem"
+msgstr "Create task"
+
+#: app/templates/problems.html:43
+msgid "problems_task_generating"
+msgstr "Task is being generated"
+
+#: app/templates/problems.html:50
+msgid "problems_problem_link_placeholder"
+msgstr "Task link"
+
+#: app/templates/problems.html:51
+msgid "problems_download_problem"
+msgstr "Download task"
+
+#: app/templates/problems.html:57
+msgid "problems_confirm_delete_problem"
+msgstr "Are you sure you want to delete the task?"
+
+#: app/templates/problems.html:59
+msgid "problems_cancel"
+msgstr "Cancel"
+
+#: app/templates/problems.html:60
+msgid "problems_delete"
+msgstr "Delete"
+
+#: app/templates/problems.html:104
+msgid "problems_error_deleting"
+msgstr "Delete error"
+
+#: app/templates/problems.html:110
+msgid "problems_error_network"
+msgstr "Network error"
+
+#: app/templates/profile.html:4
+msgid "profile_title"
+msgstr "Profile"
+
+#: app/templates/profile.html:11
+msgid "profile_welcome"
+msgstr "Welcome"
+
+#: app/templates/profile.html:13
+msgid "profile_instruction"
+msgstr "Enter your current and new password to update."
+
+#: app/templates/profile.html:16
+msgid "profile_data_header"
+msgstr "Profile data"
+
+#: app/templates/profile.html:18
+msgid "profile_username_label"
+msgstr "Username:"
+
+#: app/templates/profile.html:18 app/templates/profile.html:19
+#: app/templates/profile.html:20
+msgid "profile_not_specified"
+msgstr "Not specified"
+
+#: app/templates/profile.html:19
+msgid "profile_email_label"
+msgstr "Email:"
+
+#: app/templates/profile.html:20
+msgid "profile_created_at_label"
+msgstr "Registration date:"
+
+#: app/templates/profile.html:25
+msgid "profile_edit_button_label"
+msgstr "Save new password"
+
+#: app/templates/profile.html:26
+msgid "profile_edit_button_text"
+msgstr "Save password"
+
+#: app/templates/profile.html:28
+msgid "profile_change_password_button_label"
+msgstr "Save new password"
+
+#: app/templates/profile.html:29
+msgid "profile_change_password_button_text"
+msgstr "Save password"
+
+#: app/templates/profile.html:31
+msgid "profile_logout_button_label"
+msgstr "Cancel editing"
+
+#: app/templates/profile.html:32
+msgid "profile_logout_button_text"
+msgstr "Cancel"
+
+#: app/templates/section_form.html:5 app/templates/section_form.html:14
+msgid "section_form_edit_title"
+msgstr "Edit section"
+
+#: app/templates/section_form.html:7 app/templates/section_form.html:16
+msgid "section_form_create_title"
+msgstr "Create section"
+
+#: app/templates/section_form.html:22
+msgid "section_form_name"
+msgstr "Name"
+
+#: app/templates/section_form.html:25
+msgid "section_form_description"
+msgstr "Description"
+
+#: app/templates/section_form.html:40
+msgid "section_form_add_to_practice"
+msgstr "Add to practice"
+
+#: app/templates/section_form.html:48
+msgid "section_form_edit"
+msgstr "Edit"
+
+#: app/templates/section_form.html:48
+msgid "section_form_create"
+msgstr "Create"
+
+#: app/templates/theory.html:30
+msgid "theory_in_practice_no"
+msgstr "Not included"
+
+#: app/templates/theory.html:31
+msgid "theory_in_practice_yes"
+msgstr "Included"
+
+#: app/templates/theory.html:33
+msgid "theory_in_practice_in_tasks"
+msgstr "in the list for task generation"
+
+#: app/templates/theory.html:36
+msgid "theory_edit"
+msgstr "Edit"
+
+#: app/templates/theory_form.html:10
+msgid "theory_form_edit_title"
+msgstr "Edit {theory_name}"
+
+#: app/templates/theory_form.html:10
+msgid "theory_form_create_title"
+msgstr "Create"
+
+#: app/templates/theory_form.html:16
+msgid "theory_form_edit_header"
+msgstr "Edit"
+
+#: app/templates/theory_form.html:16
+msgid "theory_form_create_header"
+msgstr "Create"
+
+#: app/templates/theory_form.html:16
+msgid "theory_form_theory"
+msgstr "theory"
+
+#: app/templates/theory_form.html:18
+msgid "theory_form_name"
+msgstr "Name"
+
+#: app/templates/theory_form.html:22
+msgid "theory_form_description"
+msgstr "Description"
+
+#: app/templates/theory_form.html:26
+msgid "theory_form_image"
+msgstr "Image"
+
+#: app/templates/theory_form.html:30
+msgid "theory_form_current"
+msgstr "Current:"
+
+#: app/templates/theory_form.html:36
+msgid "theory_form_new"
+msgstr "New:"
+
+#: app/templates/theory_form.html:38
+msgid "theory_form_image_url_placeholder"
+msgstr "Image URL"
+
+#: app/templates/theory_form.html:39
+msgid "theory_form_or"
+msgstr "or"
+
+#: app/templates/theory_form.html:67
+msgid "theory_form_add_to_practice"
+msgstr "Add to practice"
+
+#: app/templates/theory_form.html:71
+msgid "theory_form_save"
+msgstr "Save"
+
+#: app/templates/theory_list.html:4 app/templates/theory_list.html:8
+msgid "theory_list_title"
+msgstr "Theory"
+
+#: app/templates/theory_list.html:12
+msgid "theory_list_section_edit"
+msgstr "Edit section"
+
+#: app/templates/theory_list.html:27
+msgid "theory_list_add_card"
+msgstr "Add card"
+
+#: app/templates/theory_list.html:34
+msgid "theory_list_add_section"
+msgstr "Add section"
+

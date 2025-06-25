@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Создание задачи
+{{ _('problem_form_title') }}
 {% endblock %}
 
 {% block content %}
-<h2>Создание задачи</h2>
+<h2>{{ _('problem_form_title') }}</h2>
 
 <form id="create-problem-form" onsubmit="return false;">
     <div>
-        <h4>Выберите темы:</h4>
+        <h4>{{ _('problem_form_select_topics') }}</h4>
         <div id="tag-container">
             {% for section in sections %}
                 {% set practice_texts = section.texts | selectattr('in_practice') | list %}
@@ -26,15 +26,15 @@
     </div>
     <br>
     <div>
-        <h4>Сложность:</h4>
+        <h4>{{ _('problem_form_difficulty') }}</h4>
         <div id="difficulty-container" class="cards-area gap-10">
-            <div class="card block-light cursor-pointer difficulty difficulty-easy" data-difficulty="easy">Легкая</div>
-            <div class="card block-light cursor-pointer difficulty difficulty-medium" data-difficulty="medium">Средняя</div>
-            <div class="card block-light cursor-pointer difficulty difficulty-hard" data-difficulty="hard">Тяжелая</div>
+            <div class="card block-light cursor-pointer difficulty difficulty-easy" data-difficulty="easy">{{ _('problem_form_difficulty_easy') }}</div>
+            <div class="card block-light cursor-pointer difficulty difficulty-medium" data-difficulty="medium">{{ _('problem_form_difficulty_medium') }}</div>
+            <div class="card block-light cursor-pointer difficulty difficulty-hard" data-difficulty="hard">{{ _('problem_form_difficulty_hard') }}</div>
         </div>
     </div>
     <br>
-    <h4>Дополнительные инструкции</h4>
+    <h4>{{ _('problem_form_additional_instructions') }}</h4>
     <textarea class="block-light full-width" name="additional_instructions" id="additional-instructions"></textarea>
 
     <br><br>
@@ -43,15 +43,15 @@
         <input
             class="button block-light cursor-pointer small-text-size"
             type="submit"
-            value="Создать задачу"
+            value="{{ _('problem_form_create_problem') }}"
             disabled
         >
-        <p style="color: #c44; margin-top:10px;">Задача генерируется, дождитесь окончания.</p>
+        <p style="color: #c44; margin-top:10px;">{{ _('problem_form_task_generating') }}</p>
     {% else %}
         <input
             class="button block-light cursor-pointer small-text-size"
             type="submit"
-            value="Создать задачу"
+            value="{{ _('problem_form_create_problem') }}"
         >
     {% endif %}
 

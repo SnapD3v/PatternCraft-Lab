@@ -1,43 +1,43 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Конфигурация
+    {{ _('config_title') }}
 {% endblock %}
 
 {% block content %}
-    <h2>Конфигурация</h2>
+    <h2>{{ _('config_header') }}
     <br>
 
     <form method="post">
 
-        <h3>API</h3>
-        <p>Ключ</p>
+        <h3>{{ _('config_api_section') }}</h3>
+        <p>{{ _('config_api_key') }}</p>
         <input name="api.key" class="block-light full-width" type="text" value="{{ config.api.key }}">
         <br>
-        <p>Модель</p>
+        <p>{{ _('config_api_model') }}</p>
         <input name="api.model" class="block-light full-width" type="text" value="{{ config.api.model }}">
         <br>
-        <p>Base URL</p>
+        <p>{{ _('config_api_base_url') }}</p>
         <input name="api.base_url" class="block-light full-width" type="text" value="{{ config.api.base_url }}">
         <br><br>
 
-        <h3>Внешний вид</h3>
+        <h3>{{ _('config_appearance_section') }}</h3>
 
-        <p>Тема</p>
+        <p>{{ _('config_theme') }}</p>
         <select name="appearance.theme" class="block-light">
-            <option value="light" {% if config.appearance.theme == 'light' %}selected{% endif %}>Светлая</option>
-            <option value="dark" {% if config.appearance.theme == 'dark' %}selected{% endif %}>Тёмная</option>
+            <option value="light" {% if config.appearance.theme == 'light' %}selected{% endif %}>{{ _('config_theme_light') }}</option>
+            <option value="dark" {% if config.appearance.theme == 'dark' %}selected{% endif %}>{{ _('config_theme_dark') }}</option>
         </select>
         <br>
 
-        <p>Язык</p>
+        <p>{{ _('config_language') }}</p>
         <select name="appearance.language" class="block-light">
-            <option value="ru" {% if config.appearance.language == 'ru' %}selected{% endif %}>Русский</option>
-            <option value="en" {% if config.appearance.language == 'en' %}selected{% endif %}>English</option>
+            <option value="ru" {% if config.appearance.language == 'ru' %}selected{% endif %}>{{ _('config_language_ru') }}</option>
+            <option value="en" {% if config.appearance.language == 'en' %}selected{% endif %}>{{ _('config_language_en') }}</option>
         </select>
         <br>
 
-        <p>Размер шрифта (px)</p>
+        <p>{{ _('config_font_size') }}</p>
         <input
                 type="number"
                 name="appearance.font_size"
@@ -50,7 +50,7 @@
 
         <br>
 
-        <input type="submit" class="button card block-light" href="#" value="Установить">
+        <input type="submit" class="button card block-light" href="#" value="{{ _('config_submit') }}">
 
     </form>
 

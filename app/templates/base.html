@@ -32,29 +32,29 @@
         <br>
         <a class="button" href="/theory">
             <img src="/static/img/theory.png" alt="">
-            <span>Теория</span>
+            <span>{{ _('base_theory') }}</span>
         </a>
         <a class="button" href="/problems">
             <img src="/static/img/problems.png" alt="">
-            <span>Задачи</span>
+            <span>{{ _('base_tasks') }}</span>
         </a>
         <a class="button" href="/courses">
             <img src="/static/img/courses.png" alt="">
-            <span>Курсы</span>
+            <span>{{ _('base_courses') }}</span>
         </a>
         <a class="button" id="assistant-button">
             <img src="/static/img/ai_icon.png" alt="">
-            <span>AI-ассистент</span>
+            <span>{{ _('base_ai_assistant') }}</span>
         </a>
         {% if is_authenticated %}
             <a class="button" href="/profile">
                 <img src="/static/img/profile.png" alt="">
-                <span>Профиль</span>
+                <span>{{ _('base_profile') }}</span>
             </a>
         {% else %}
             <a class="button" href="/login">
                 <img src="/static/img/profile.png" alt="">
-                <span>Профиль</span>
+                <span>{{ _('base_profile') }}</span>
             </a>
         {% endif %}
 
@@ -63,7 +63,7 @@
         <br>
         <a class="button" href="/config">
             <img src="/static/img/configuration.png" alt="">
-            <span>Конфигурация</span>
+            <span>{{ _('base_configuration') }}</span>
         </a>
     </div>
     <div class="sidebar-ledge">
@@ -81,9 +81,9 @@
             <!-- Chat List Sidebar -->
             <div class="chat-list-sidebar">
                 <div class="chat-list-header">
-                    <h3>AI-Ассистент</h3>
+                    <h3>{{ _('chats_ai_assistant') }}</h3>
                     <button id="new-chat-button" class="new-chat-btn">
-                        <span>Новый чат</span>
+                        <span>{{ _('chats_new_chat') }}</span>
                     </button>
                 </div>
                 <div class="chat-list">
@@ -94,15 +94,15 @@
             <!-- Chat Content -->
             <div class="chat-content">
                 <div class="chat-title">
-                    <h3 id="current-chat-title">Выберите чат</h3>
+                    <h3 id="current-chat-title">{{ _('chats_select_chat') }}</h3>
                 </div>
                 <div class="messages-container">
                     <div class="messages"></div>
-                    <div class="message-loading-indicator">Ассистент думает</div>
+                    <div class="message-loading-indicator">{{ _('chats_assistant_thinking') }}</div>
                 </div>
                 <div class="chat-input unified-input">
-                    <textarea placeholder="Введите запрос" rows="3"></textarea>
-                    <button class="send-icon-button" id="send-button" type="button" title="Отправить">
+                    <textarea placeholder="{{ _('chats_input_placeholder') }}" rows="3"></textarea>
+                    <button class="send-icon-button" id="send-button" type="button" title="{{ _('chats_send_button') }}">
                         <i class="fas fa-arrow-up"></i>
                     </button>
                 </div>

@@ -27,12 +27,13 @@
 
 
     <p>
-        {% if not theory.in_practice %}❌ Не участвует
-        {% else %}✅ Участвует
+        {% if not theory.in_practice %}❌ {{ _('theory_in_practice_no') }}
+        {% else %}✅ {{ _('theory_in_practice_yes') }}
         {% endif %}
-        в списке при генерации задач</p>
+        {{ _('theory_in_practice_in_tasks') }}
+    </p>
 
-    <a class="button card block-light" href="/theory/edit/{{ theory.id }}">Редактировать</a>
+    <a class="button card block-light" href="/theory/edit/{{ theory.id }}">{{ _('theory_edit') }}</a>
 
     <br><br>
 {% endblock %}

@@ -1,0 +1,37 @@
+Инструкция: Как обновить переводы.
+
+- Внимание! Перед обновлением вытащи файлы export_strings.py и import_strings.py в корневую папку проекта. После завершения работы верни файлы на место.
+
+-= Добавление новых строк =-
+1. Извлекаем новые строки
+pybabel extract -F app/translations/utils/babel.cfg -o app/translations/utils/messages.pot .
+
+2. Обновляем файлы переводов
+pybabel update -i app/translations/utils/messages.pot -d app/translations
+
+3. Экспортируем строки в strings.json
+(export_strings.py)
+
+4. Пишем новые переводы в strings.json
+
+5. Импортируем новые переводы обратно в .po
+(import_strings.py)
+
+6. Обновляем файлы переводов
+pybabel update -i app/translations/utils/messages.pot -d app/translations
+
+7. Компилируем файлы переводов
+pybabel compile -d app/translations -f
+-= ----------------------- =-
+
+Чтобы изменить старые строки, проделайте всё то же самое, но с 4 по 7 пункт.
+
+
+###
+export_strings.py - выгружает все переводы из .po в strings.json
+import_strings.py - загружает переводы из strings.json в .po
+{{ _('text_name') }} - стандартный шаблон текста для template файлов
+
+(для себя):
+если автоматически не работает venv, то
+.venv\Scripts\pybabel.exe

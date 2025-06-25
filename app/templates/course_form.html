@@ -1,48 +1,50 @@
 {% extends 'base.html' %}
 
-{% block title %}Создание курса{% endblock %}
+{% block title %}
+    {% if course %}{{ _('course_form_edit_title') }}{% else %}{{ _('course_form_create_title') }}{% endif %}
+{% endblock %}
 
 {% block content %}
 <h3>
     {% if course %}
-    Редактирование курса
+    {{ _('course_form_edit_header') }}
     {% else %}
-    Создание курса
+    {{ _('course_form_create_header') }}
     {% endif %}
 </h3>
 
 <form id="create-course-form" method="post" enctype="multipart/form-data">
     <div>
-        <p>Название</p>
+        <p>{{ _('course_form_name_label') }}</p>
         <input class="block-light full-width" type="text" name="name" id="name" value="{{ course.name if course else '' }}" required>
     </div>
 
     <div>
-        <p>Описание курса</p>
+        <p>{{ _('course_form_description_label') }}</p>
         <textarea class="block-light full-width" name="description" id="description">{{ course.description if course else '' }}</textarea>
     </div>
 
-    <p>Изображение</p>
+    <p>{{ _('course_form_image_label') }}</p>
 	<div class="sequential-card">
 		{% if course %}
 		<div>
-			<p>Текущее:</p>
+			<p>{{ _('course_form_current_image') }}</p>
 			<img src="{% if course.image_url %} {{ course.image_url }} {% else %} /static/img/courses/{{ course.id }}.png {% endif %}" alt="{{ course.name }}">
 		</div>
 		{% endif %}
 		<div>
 			{% if course %}
-			<p>Новое:</p>
+			<p>{{ _('course_form_new_image') }}</p>
 			{% endif %}
-			<input class="block-light full-width" name="image_url" type="text" placeholder="Ссылка на Изображение" value="{{ course.image_url }}">
-			<p>или</p>
+			<input class="block-light full-width" name="image_url" type="text" placeholder="{{ _('course_form_image_url_placeholder') }}" value="{{ course.image_url }}">
+			<p>{{ _('course_form_or') }}</p>
 			<input class="block-light full-width" name="image" type="file">
 		</div>
 	</div>
     
     <br><br>
 
-    <h3>Выберите теорию:</h3>
+    <h3>{{ _('course_form_select_theory') }}</h3>
     <div id="theory-container">
         {% for block in sections %}
             {% if block.texts %}
@@ -62,7 +64,7 @@
 
     <br><br>
 
-    <h3>Выберите задачи:</h3>
+    <h3>{{ _('course_form_select_problems') }}</h3>
     <div id="problems-container">
         <div class="cards-area gap-10">
             {% for problem in problems %}
@@ -83,14 +85,14 @@
             <input type="checkbox" name="is_hidden" id="is_hidden" {% if course and course.is_hidden %}checked{% endif %}>
             <span class="slider"></span>
         </label>
-        <span>Скрыть курс</span>
+        <span>{{ _('course_form_hide_course') }}</span>
     </div>
 
     <br><br><br>
     <input
         class="button block-light cursor-pointer small-text-size"
         type="submit"
-        value="Сохранить курс">
+        value="{{ _('course_form_submit') }}">
 </form>
 {% endblock %}
 

@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Теория	
+{{ _('theory_list_title') }}
 {% endblock %}
 
 {% block content %}
-<h2>Теория</h2>
+<h2>{{ _('theory_list_title') }}</h2>
 {% for texts_block in theory %}
 	<h3>{{ texts_block.name }}</h3>
 	<p>{{ texts_block.description }}</p>
-	<a class="button card block-light" href="/section/edit/{{texts_block.id}}">Настройка раздела</a>
+	<a class="button card block-light" href="/section/edit/{{texts_block.id}}">{{ _('theory_list_section_edit') }}</a>
 	<br><br>
 	<div class="cards-area">
 	{% for theory in texts_block.texts %}
@@ -24,14 +24,14 @@
 		<a href="/theory/create/{{ texts_block.id }}" class="button block-light card sequential-card">
 			<img src="/static/img/add.png" alt="">
 			<div class="information">
-				<p><strong>Добавить карточку</strong></p>
+				<p><strong>{{ _('theory_list_add_card') }}</strong></p>
 			</div>
 		</a>
 	</div>
 	<br>
 {% endfor %}
 	<br><br>
-	<a class="button card block-light" href="/section/create">Добавить раздел</a>
+	<a class="button card block-light" href="/section/create">{{ _('theory_list_add_section') }}</a>
 	<br><br>
 {% endblock %}
 

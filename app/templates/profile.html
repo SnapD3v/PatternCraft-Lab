@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title>PatternCraft Lab - Личный кабинет</title>
+    <title>PatternCraft Lab - {{ _('profile_title') }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
 <section class="account-info wrapper">
     <div class="profile-header">
-        <h2 class="big-text-size">Добро пожаловать{% if username %}, <span class="username">{{ username }}</span>{% endif %}!</h2>
+        <h2 class="big-text-size">{{ _('profile_welcome') }}{% if username %}, <span class="username">{{ username }}</span>{% endif %}!</h2>
     </div>
-    <p class="small-text-size formatted-text">Здесь вы можете просмотреть и изменить информацию о вашем аккаунте.</p>
+    <p class="small-text-size formatted-text">{{ _('profile_instruction') }}</p>
 
     <div class="info-block card block-light">
-        <h3 class="big-text-size">Данные профиля</h3>
+        <h3 class="big-text-size">{{ _('profile_data_header') }}</h3>
         <ul>
-            <li><strong>Логин:</strong> {{ username | default('Не указано') }}</li>
-            <li><strong>Email:</strong> {{ email | default('Не указано') }}</li>
-            <li><strong>Дата регистрации:</strong> {{ created_at.strftime('%d.%m.%Y') if created_at else 'Не указано' }}</li>
+            <li><strong>{{ _('profile_username_label') }}</strong> {{ username | default(_('profile_not_specified')) }}</li>
+            <li><strong>{{ _('profile_email_label') }}</strong> {{ email | default(_('profile_not_specified')) }}</li>
+            <li><strong>{{ _('profile_created_at_label') }}</strong> {{ created_at.strftime('%d.%m.%Y') if created_at else _('profile_not_specified') }}</li>
         </ul>
     </div>
 
     <div class="actions cards-area gap-10">
-        <a href="{{ url_for('profile.edit_profile') }}" class="button block-dark gradient-button profile-action" role="button" aria-label="Редактировать информацию профиля">
-            Редактировать профиль
+        <a href="{{ url_for('profile.edit_profile') }}" class="button block-dark gradient-button profile-action" role="button" aria-label="{{ _('profile_edit_button_label') }}">
+            {{ _('profile_edit_button_text') }}
         </a>
-        <a href="{{ url_for('profile.change_password') }}" class="button block-dark full-width gradient-button profile-action" role="button" aria-label="Изменить пароль учетной записи">
-            Изменить пароль
+        <a href="{{ url_for('profile.change_password') }}" class="button block-dark full-width gradient-button profile-action" role="button" aria-label="{{ _('profile_change_password_button_label') }}">
+            {{ _('profile_change_password_button_text') }}
         </a>
-        <a href="{{ url_for('profile.logout') }}" class="button block-dark full-width gradient-button profile-action" role="button" aria-label="Выйти из аккаунта">
-            Выйти из аккаунта
+        <a href="{{ url_for('profile.logout') }}" class="button block-dark full-width gradient-button profile-action" role="button" aria-label="{{ _('profile_logout_button_label') }}">
+            {{ _('profile_logout_button_text') }}
         </a>
     </div>
 </section>

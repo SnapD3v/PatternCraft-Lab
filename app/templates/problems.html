@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Main
+{{ _('problems_title') }}
 {% endblock %}
 
 {% block content %}
-<h2>Задачи</h2>
+<h2>{{ _('problems_title') }}</h2>
 <div class="cards-area">
 {% for problem in problems %}
     <div class="button block-light card sequential-card problem-card one-line" style="justify-content: space-between; position: relative;">
@@ -29,35 +29,35 @@ Main
                 </span>
             </p>
         </a>
-        <button class="delete-btn" data-problem-id="{{ problem.id }}" title="Удалить задачу">&times;</button>
+        <button class="delete-btn" data-problem-id="{{ problem.id }}" title="{{ _('problems_delete_problem') }}">&times;</button>
     </div>
 {% endfor %}
     {% if not task_generating %}
         <a href="/problem/create" class="button block-light card sequential-card problem-card">
             <img src="/static/img/add.png" alt="">
-            <p><strong>Создать задачу</strong></p>
+            <p><strong>{{ _('problems_create_problem') }}</strong></p>
         </a>
     {% else %}
         <a class="button block-light card sequential-card problem-card">
             <img class="rotating" src="/static/img/load.png" alt="">
-            <p><strong>Задача создается</strong></p>
+            <p><strong>{{ _('problems_task_generating') }}</strong></p>
         </a>
     {% endif %}
 </div>
 <br><br>
 <form action="/download_problem" method="get">
 	<div class="one-line" style="justify-content: space-between; align-items: center;">
-		<input class="block-light" type="text" name="problem_link" placeholder="Ссылка на задачу" required>
-		<input type="submit" class="button block-light" value="Скачать задачу">
+		<input class="block-light" type="text" name="problem_link" placeholder="{{ _('problems_problem_link_placeholder') }}" required>
+		<input type="submit" class="button block-light" value="{{ _('problems_download_problem') }}">
 	</div>
 </form>
 <!-- Модальное окно подтверждения -->
 <div id="confirm-modal" class="modal" style="display:none;">
     <div class="modal-content">
-        <p>Вы уверены, что хотите удалить задачу?</p>
+        <p>{{ _('problems_confirm_delete_problem') }}</p>
         <div style="display:flex; gap:20px; justify-content: flex-end;">
-            <button id="cancel-delete" class="block-dark">Отмена</button>
-            <button id="confirm-delete" class="block-light" style="background-color: #aa2222;">Удалить</button>
+            <button id="cancel-delete" class="block-dark">{{ _('problems_cancel') }}</button>
+            <button id="confirm-delete" class="block-light" style="background-color: #aa2222;">{{ _('problems_delete') }}</button>
         </div>
     </div>
 </div>
@@ -101,13 +101,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 let btn = document.querySelector('.delete-btn[data-problem-id="'+problemIdToDelete+'"]');
                 if (btn) btn.closest('.problem-card').remove();
             } else {
-                alert(data.error || 'Ошибка удаления');
+                alert(data.error || '{{ _("problems_error_deleting") }}');
             }
             modal.style.display = 'none';
             problemIdToDelete = null;
         })
         .catch(() => {
-            alert('Ошибка сети');
+            alert('{{ _("problems_error_network") }}');
             modal.style.display = 'none';
             problemIdToDelete = null;
         });

@@ -8,11 +8,11 @@
 {% endblock %}
 
 {% block title %}
-{{ problem.name }}
+{{ _('problem_title', problem_name=problem.name) }}
 {% endblock %}
 
 {% block content %}
-<h2>Задача</h2>
+<h2>{{ _('problem_header') }}</h2>
 <h3>
     {% if problem.is_solved %}
         ✅
@@ -21,7 +21,7 @@
 </h3>
 
 <form id="send-problem">
-    <button class="button block-light cursor-pointer small-text-size" type="submit">Отправить в хаб веб-сервиса</button>
+    <button class="button block-light cursor-pointer small-text-size" type="submit">{{ _('problem_send_to_hub_button') }}</button>
 </form>
 <br>
 <div id="send-problem-content"></div>
@@ -38,18 +38,18 @@
 </span>
 <p class="formatted-text">{{ problem.task | safe }}</p>
 
-<h3>Тесты</h3>
+<h3>{{ _('problem_tests_header') }}</h3>
 <form id="change-tests-form">
     <div class="editor-wrapper">
         <textarea class="code-editor" name="tests_code">{{ problem.tests_code }}</textarea>
     </div>
     <br>
-    <button class="button block-light cursor-pointer small-text-size" type="submit">Изменить</button>
+    <button class="button block-light cursor-pointer small-text-size" type="submit">{{ _('problem_change_tests_button') }}</button>
 </form>
 <br>
 <div id="change-tests-status"></div>
 <br>
-<h3>Ваши решения</h3>
+<h3>{{ _('problem_solutions_header') }}</h3>
 
 <div class="cards-area gap-10">
     {% for i in range(1, solutions_count + 1) %}
@@ -84,7 +84,7 @@
 
     {% if solution.review.is_solved %}
         <form id="send-solution">
-            <button class="button block-light cursor-pointer small-text-size" type="submit">Опубликовать решение</button>
+            <button class="button block-light cursor-pointer small-text-size" type="submit">{{ _('problem_submit_solution') }}</button>
         </form>
         <br>
         <div id="send-solution-content"></div>
@@ -99,8 +99,8 @@
         <textarea class="code-editor" name="solution_code"></textarea>
     </div>
     <br>
-    <button class="button block-light cursor-pointer small-text-size" type="submit">Отправить</button>
-    <button id="test-solution-btn" class="button block-light cursor-pointer small-text-size" type="button">Протестировать решение</button>
+    <button class="button block-light cursor-pointer small-text-size" type="submit">{{ _('problem_submit') }}</button>
+    <button id="test-solution-btn" class="button block-light cursor-pointer small-text-size" type="button">{{ _('problem_test_solution') }}</button>
 </form>
 <br>
 <div id="send-solution-summary"></div>
@@ -181,10 +181,10 @@ function getSummary(tests_results) {
 function renderTestsResults(results, summaryElemId, detailsElemId, reviewHtml) {
     let summary = '', html = '';
     if (results.__timeout__ === 'timeout') {
-        summary = `<span class="status status-warning status-large">⏱ Таймаут — решение слишком долго выполнялось</span>`;
+        summary = `<span class="status status-warning status-large">⏱ {{ _('problem_timeout') }}</span>`;
         html = '';
     } else if (results.__worker_error__) {
-        summary = `<span class="status status-danger status-large">❗ Ошибка при запуске: ${results.__worker_error__}<br><code class="traceback">${results.__traceback__ || ''}</code></span>`;
+        summary = `<span class="status status-danger status-large">❗ {{ _('problem_worker_error') }}: ${results.__worker_error__}<br><code class="traceback">${results.__traceback__ || ''}</code></span>`;
         html = '';
     } else if (results.__error__) {
         summary = `<span class="status status-danger status-large">❗ ${results.__error__}</span>`;
@@ -194,8 +194,8 @@ function renderTestsResults(results, summaryElemId, detailsElemId, reviewHtml) {
         let colorClass = stat.failed || stat.error ? 'status-danger' : (stat.passed === stat.total ? 'status-success' : 'status-muted');
         let icon = stat.failed || stat.error ? '❌' : (stat.passed === stat.total ? '✅' : '➖');
         let text = stat.passed === stat.total
-            ? `Все ${stat.total} тестов успешно пройдены`
-            : `Пройдено: ${stat.passed}/${stat.total} &nbsp; | &nbsp; Ошибки: ${stat.failed} &nbsp; | &nbsp; Исключения: ${stat.error} &nbsp; | &nbsp; Пропущено: ${stat.skipped}`;
+            ? `{{ _('problem_all_tasks_passed_1') }} ${stat.total} {{ _('problem_all_tasks_passed_2') }}`
+            : `{{ _('problem_pass_count') }}: ${stat.passed}/${stat.total} &nbsp; | &nbsp; {{ _('problem_mistakes_count') }}: ${stat.failed} &nbsp; | &nbsp; {{ _('problem_exceptions_count') }}: ${stat.error} &nbsp; | &nbsp; {{ _('problem_skip_count') }}: ${stat.skipped}`;
 
         summary = `<span class="status ${colorClass} status-large">${icon} ${text}</span>`;
         html += '<ul class="test-results-list">';
@@ -221,7 +221,7 @@ function renderTestsResults(results, summaryElemId, detailsElemId, reviewHtml) {
 document.getElementById('change-tests-form').onsubmit = async function(e) {
     e.preventDefault();
     const statusDiv = document.getElementById('change-tests-status');
-    statusDiv.innerHTML = '<span class="status status-muted">⏳ Сохраняем...</span>';
+    statusDiv.innerHTML = '<span class="status status-muted">⏳ {{ _("problem_saving") }}...</span>';
     const editor = document.querySelectorAll('.code-editor')[0];
     let cmTestEditor = editor.nextSibling && editor.nextSibling.CodeMirror;
     if (!cmTestEditor) {
@@ -242,7 +242,7 @@ document.getElementById('change-tests-form').onsubmit = async function(e) {
             statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
         }
     } catch (err) {
-        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+        statusDiv.innerHTML = `<span class="status status-danger">{{ _('error_connection_server') }}</span>`;
     }
 };
 
@@ -250,7 +250,7 @@ document.getElementById('test-solution-btn').onclick = async function () {
     const solution_code = solutionEditor.getValue();
     const problem_id = {{ problem.id }};
     document.getElementById('test-solution-result').innerHTML = '';
-    document.getElementById('test-solution-summary').innerHTML = '<span class="status status-muted">⏳ Проверка...</span>';
+    document.getElementById('test-solution-summary').innerHTML = '<span class="status status-muted">⏳ {{ _("problem_checking") }}...</span>';
 
     try {
         const response = await fetch('/test_solution', {
@@ -262,14 +262,14 @@ document.getElementById('test-solution-btn').onclick = async function () {
         renderTestsResults(data.tests_results, "test-solution-summary", "test-solution-result");
     } catch (err) {
         document.getElementById('test-solution-summary').innerHTML =
-            '<span class="status status-danger">Ошибка соединения или сервера</span>';
+            '<span class="status status-danger">{{ _("error_connection_server") }}</span>';
         document.getElementById('test-solution-result').innerHTML = '';
     }
 };
 
 document.getElementById('solution-form').onsubmit = async function(e) {
     e.preventDefault();
-    document.getElementById('send-solution-summary').innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
+    document.getElementById('send-solution-summary').innerHTML = '<span class="status status-muted">⏳ {{ _("problem_pending") }}...</span>';
     document.getElementById('send-solution-result').innerHTML = '';
 
     const solution_code = solutionEditor.getValue();
@@ -284,7 +284,7 @@ document.getElementById('solution-form').onsubmit = async function(e) {
         window.location.href = '/problem/{{ problem.id }}';
     } catch (err) {
         document.getElementById('send-solution-summary').innerHTML =
-            '<span class="status status-danger">Ошибка соединения или сервера</span>';
+            '<span class="status status-danger">{{ _(error_connection_server") }}</span>';
         document.getElementById('send-solution-result').innerHTML = '';
     }
 };
@@ -303,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function() {
 document.getElementById('send-problem').onsubmit = async function(e) {
     e.preventDefault();
     const statusDiv = document.getElementById("send-problem-content");
-    statusDiv.innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
+    statusDiv.innerHTML = '<span class="status status-muted">⏳ {{ _("problem_pending") }}...</span>';
     const problem_id = {{ problem.id }};
     try {
         const response = await fetch('/send_problem', {
@@ -318,7 +318,7 @@ document.getElementById('send-problem').onsubmit = async function(e) {
             statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
         }
     } catch (err) {
-        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+        statusDiv.innerHTML = `<span class="status status-danger">{{ _("error_connection_server") }}</span>`;
     }
 };
 
@@ -326,7 +326,7 @@ document.getElementById('send-problem').onsubmit = async function(e) {
 document.getElementById('send-solution').onsubmit = async function(e) {
     e.preventDefault();
     const statusDiv = document.getElementById("send-solution-content");
-    statusDiv.innerHTML = '<span class="status status-muted">⏳ Отправка...</span>';
+    statusDiv.innerHTML = '<span class="status status-muted">⏳ {{ _("problem_pending") }}...</span>';
     const solution_id = {{ solution.id }};
     try {
         const response = await fetch('/send_solution', {
@@ -341,7 +341,7 @@ document.getElementById('send-solution').onsubmit = async function(e) {
             statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
         }
     } catch (err) {
-        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+        statusDiv.innerHTML = `<span class="status status-danger">{{ _("error_connection_server") }}</span>`;
     }
 };
 {% endif %}

@@ -18,5 +18,8 @@
         "email": "unpleasantmarnia@punkproof.com",
         "password": "132546-Hh2",
         "base_url": "http://localhost/"
+    },
+    "translations": {
+        "directory": "app/translations"
     }
 }

@@ -31,8 +31,13 @@ class AuthConfig(BaseModel):
     base_url: HttpUrl
 
 
+class TranslationsConfig(BaseModel):
+    directory: str
+
+
 class AppConfig(BaseModel):
     api: APIConfig
     appearance: AppearanceConfig
     server: ServerConfig
     auth: AuthConfig
+    translations: TranslationsConfig

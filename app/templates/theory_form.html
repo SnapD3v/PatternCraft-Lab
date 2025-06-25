@@ -7,36 +7,36 @@
 {% endblock %}
 
 {% block title %}
-Редактирование {{ theory.name }}
+{% if theory %}{{ _('theory_form_edit_title', theory_name=theory.name) }} {% else %}{{ _('theory_form_create_title') }} {% endif %}
 {% endblock %}
 
 {% block content %}
 <form id="theory-edit-form" method="post" enctype="multipart/form-data">
 
-	<h3>{% if theory %}Редактирование{% else %}Создание{% endif %} теории</h3>
+	<h3>{% if theory %}{{ _('theory_form_edit_header') }} {% else %}{{ _('theory_form_create_header') }} {% endif %} {{ _('theory_form_theory') }}</h3>
 
-	<p>Название</p>
+	<p>{{ _('theory_form_name') }}</p>
 	<input name="name" class="block-light full-width" type="text" value="{{ theory.name }}">
 	<br>
 
-	<p>Описание</p>
+	<p>{{ _('theory_form_description') }}</p>
 	<textarea name="description" class="block-light full-width">{{ theory.description }}</textarea>
 	<br>
 
-	<p>Изображение</p>
+	<p>{{ _('theory_form_image') }}</p>
 	<div class="sequential-card">
 		{% if theory %}
 		<div>
-			<p>Текущее:</p>
+			<p>{{ _('theory_form_current') }}</p>
 			<img src="{% if theory.image_url %} {{ theory.image_url }} {% else %} /static/img/theory/{{ theory.id }}.png {% endif %}" alt="{{ theory.name }}">
 		</div>
 		{% endif %}
 		<div>
 			{% if theory %}
-			<p>Новое:</p>
+			<p>{{ _('theory_form_new') }}</p>
 			{% endif %}
-			<input class="block-light full-width" name="image_url" type="text" placeholder="Ссылка на Изображение" value="{{ theory.image_url }}">
-			<p>или</p>
+			<input class="block-light full-width" name="image_url" type="text" placeholder="{{ _('theory_form_image_url_placeholder') }}" value="{{ theory.image_url }}">
+			<p>{{ _('theory_form_or') }}</p>
 			<input class="block-light full-width" name="image" type="file">
 		</div>
 	</div>
@@ -64,11 +64,11 @@
 			>
             <span class="slider"></span>
         </label>
-        <span>Добавить в практику</span>
+        <span>{{ _('theory_form_add_to_practice') }}</span>
     </div>
     <br><br>
 
-	<input class="button card block-light" type="submit" value="Сохранить">
+	<input class="button card block-light" type="submit" value="{{ _('theory_form_save') }}">
 
 </form>
 

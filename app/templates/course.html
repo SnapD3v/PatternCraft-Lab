@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Курс «{{ course.name }}»{% endblock %}
+{% block title %}
+{{ _('course_title') }} «{{ course.name }}»
+{% endblock %}
 
 {% block content %}
-<h2>Курс «{{ course.name }}»</h2>
+<h2>{{ _('course_title') }} «{{ course.name }}»</h2>
 
 <div class="sequential-card">
 	<img src="{% if course.image_url %} {{ course.image_url }} {% else %} /static/img/courses/{{ course.id }}.png {% endif %}" alt="{{ course.name }}">
@@ -12,7 +14,7 @@
 	</div>
 </div>
 
-<h3>Теория:</h3>
+<h3>{{ _('course_theory_header') }}</h3>
 <div class="cards-area">
     {% for theory in course.theories %}
         <a href="/theory/{{ theory.id }}" class="button block-light card sequential-card">
@@ -25,7 +27,7 @@
 	{% endfor %}
 </div>
 
-<h3>Задачи:</h3>
+<h3>{{ _('course_problems_header') }}</h3>
 <div class="cards-area">
 {% for problem in course.problems %}
     <div class="button block-light card sequential-card problem-card one-line" style="justify-content: space-between; position: relative;">
@@ -55,14 +57,14 @@
 
 <br><br>
 <div class="one-line" style="justify-content: space-between; align-items: center;">
-    <a href="/course/edit/{{ course.id }}" class="button block-light">Редактировать курс</a>
-    <a class="button block-light" id="delete-btn">Удалить курс<a>
+    <a href="/course/edit/{{ course.id }}" class="button block-light">{{ _('course_edit_button') }}</a>
+    <a class="button block-light" id="delete-btn">{{ _('course_delete_button') }}</a>
 </div>
 
 <br><br>
 
 <form id="send-course">
-    <button class="button block-light cursor-pointer small-text-size" type="submit">Отправить в хаб веб-сервиса</button>
+    <button class="button block-light cursor-pointer small-text-size" type="submit">{{ _('course_send_to_hub_button') }}</button>
 </form>
 <br>
 <div id="send-course-content"></div>
@@ -70,10 +72,10 @@
 <!-- Модальное окно подтверждения -->
 <div id="confirm-modal" class="modal" style="display:none;">
     <div class="modal-content">
-        <p>Вы уверены, что хотите удалить курс?</p>
+        <p>{{ _('course_confirm_delete_text') }}</p>
         <div style="display:flex; gap:20px; justify-content: flex-end;">
-            <button id="cancel-delete" class="block-dark">Отмена</button>
-            <button id="confirm-delete" class="block-light" style="background-color: #aa2222;">Удалить</button>
+            <button id="cancel-delete" class="block-dark">{{ _('course_cancel_button') }}</button>
+            <button id="confirm-delete" class="block-light" style="background-color: #aa2222;">{{ _('course_confirm_delete_button') }}</button>
         </div>
     </div>
 </div>
@@ -143,7 +145,7 @@ document.getElementById('send-course').onsubmit = async function(e) {
             statusDiv.innerHTML = `<span class="status status-danger">❌ ${data.error}</span>`;
         }
     } catch (err) {
-        statusDiv.innerHTML = `<span class="status status-danger">Ошибка соединения/сервера</span>`;
+        statusDiv.innerHTML = `<span class="status status-danger">{{ _("error_connection_server") }}</span>`;
     }
 };
 
