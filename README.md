@@ -1,117 +1,61 @@
 # PatternCraft-Lab
 
 ## Project Description
-**PatternCraft Lab** is an interactive learning platform that combines structured theory, AI-driven explanations, and dynamic task generation to teach programming principles (e.g., SOLID) and design patterns. It is aimed at beginners and intermediate learners, offering a game-like, context-aware environment for practicing code refactoring using selected patterns.
+**PatternCraft Lab** is an universal instrument. You can use it as self-education tool or you can use it as interactive learning platform that combines theory, AI-driven explanations, and dynamic task generation to learn and teach programming. It is aimed at learners at various levels and educators.
+We implemented PCL as a web application on your localhost, because it's a most simple solution and it reduces server load.
+PCL supports only Python.
+Created as a semester final project by a team of students to support programming education.
 
 ## What Does the Solution Include?
-**1) Theoretical Foundation:**  
-• Short lessons on principles and patterns with real-world analogies (e.g., "Abstract Factory is like an assembly line for object creation").  
-• Code examples (both best and worst practices), diagrams, and video overviews.  
-• Lists of additional websites and literature for further learning.
+**1) Theory Creation:**  
+• Using Lab interface with implemented Quill text redactor you can easily create a course for your students or make notes while learning new topic. 
+<img alt="Example: Theory Creation" src="docs/theory.png" width=50% />
 
-**2) AI Tutor (e.g., integration with DeepSeek R1):**  
-• Adaptive explanations: Generates examples based on the user's level (e.g., "Explain the Liskov Substitution Principle using a character hierarchy in a game").
+**2) AI Tutor**  
+• Built-in chats with a bot. The AI Tutor answers questions like 'What is a for loop?' based on the current theory page’s content.
+<img alt="Example: AI Tutor" src="docs/ai_assistant.png" width=50% />
 
-**3) Task Generator:**  
-• Creates scenarios requiring multiple patterns to be applied (e.g., "Refactor this order processing system using Builder and Strategy").
+**3) Problem Generator:**  
+• Creates problems with any scenario you like. Enter a prompt like 'Calculate the sum of an array,' and the tool generates a task with sample unit tests.
+<img alt="Example: Problem Generator" src="docs/problem_generation.png" width=50% />
 
-**4) Context Memory:**  
-• Maintains session context, preventing the loss of information while solving multiple tasks.
+**4) AI Expert**  
+• The AI Expert reviews code for syntax errors, logic issues, and style, offering suggestions like ‘Consider using a list comprehension here'.
 
-**5) Code Sandbox:**  
-• Built-in IDE with hints, pattern templates, and code validation.
+**5) Tests for problems**  
+• Unit tests are auto-generated based on the problem scenario but may need tweaking for edge cases. Edit them in the provided test editor to ensure accuracy.
 
-**6) Instant Solution Validation:**  
-• AI analyzes the code and checks if the selected patterns are correctly applied, providing detailed feedback.
+**6) Web Service with accounts**  
+• The Web Service is an optional server-based extension that enables collaborative features like sharing courses and problems. Connect to it via the Lab interface after setting up your own server.
+• Private/public storage for shared courses, problems, and solutions. Private content, such as a teacher’s custom course with theory and problems, can be shared with students via links to these resources, secured by random IDs.
+• Registration/login are implemented. You can connect to your account via interface of Lab, to use Web Service benefits
+• No user data is being collected and processed by us. The only sensitive information used by the Web Service and stored on your server is the users' email addresses.
 
-**7) Progress Tracker:**  
-• Badges (e.g., "Factory Pattern Expert"), personalized recommendations, and weak point analytics.
+**7) Two language support**
+• Right now you can switch between English and Russian languages.
 
+**8) Third-party API AI models (Openrouter)**
+• To use AI features login into Openrouter, get token, paste it into your PCL and specify available model.
+<img alt="Example: Third-party API AI models Configuration" src="docs/configuration.png" width=50% />
 
-## Goal
+## Demo video
+Below is a demonstration of PatternCraft-Lab in action:
 
-**Month 1: Research & Planning**
+<video controls>
+  <source src="docs/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
-*1. Research & Analysis*  
-- Understanding the target audience:  
-• Conduct surveys among beginner and intermediate developers.  
-• Analyze popular learning and gamification platforms.  
-- Competitive analysis:  
-• Study existing platforms (Udemy, Codecademy) to identify their strengths and weaknesses.  
-- Technical analysis:  
-• Define target technologies (React.js, microservices architecture).  
-• Explore AI integration options (DeepSeek R1).
+## Getting started
+• Download and run .exe file on Windows.
+• To use Web Service host it on your server
 
-*2. Concept Development*  
-- Create the platform architecture:  
-• Identify key system components: frontend, backend, database.  
-• Design user scenarios.  
-- Define functional specifications:  
-• Formulate requirements for each core feature (theory, AI tutor, code sandbox, progress tracker).
-
-**Month 2: Prototype Development**
-
-*1. UI Prototype Creation*  
-- User Interface (UI/UX) Design:  
-• Develop platform page mockups with a focus on user experience.  
-• Implement interactive design elements.  
-- Prototype Testing:  
-• Gather feedback from potential users and make adjustments.
-
-*2. Backend Development*  
-- Initial microservice structure:  
-• Implement basic APIs for user and session management.  
-• Set up a database to store user progress and task history.  
-- AI Tutor Integration:  
-• Begin developing algorithms for generating examples and tasks based on user level.
-
-**Month 3: Feature Development & Testing**
-
-*1. Completing Feature Development*  
-- Integration of all components:  
-• Connect frontend and backend, ensuring seamless interaction.  
-• Implement the code sandbox with hints and validation.  
-- Feedback Mechanism Development:  
-• Implement AI-powered solution validation and code analysis module.
-
-*2. System Testing*  
-- Usability Testing:  
-• Identify and fix bugs by gathering user feedback.  
-- Alpha Release:  
-• Launch the platform for a limited user group to test real-world functionality and make necessary improvements.
-
-*3. Launch Preparation*  
-- Marketing Strategy Development:  
-• Prepare promotional materials (webinars, ad campaigns).  
-- Planning the Next Development Phase:  
-• Define actions for enhancing features and introducing new patterns and principles to the platform.
-
-
-## Outcome (Product)
-**Final Result:** An interactive learning platform that combines structured theory, AI-driven explanations, and dynamic task generation to teach programming principles (e.g., SOLID) and design patterns.
-
-
-## Success Metrics  
-What parameters will define success?
-
-**1) User Engagement**  
-- *DAU/MAU Ratio:* >30% (high engagement).  
-- *Avg. Session Duration:* >15 minutes (indicating engaging tasks).  
-- *Task Completion Rate:* >70% (tasks are sufficiently challenging but solvable).
-
-**2) Learning Outcomes**  
-- *Pre/Post-Test Scores:* After completing the course and solving at least one task per topic, students should be familiar with 90% of programming patterns on LeetCode and be capable of solving any Middle-level task.  
-- *User Reviews:* >85% agree with the statement, "I feel more confident applying patterns after using the platform."
-
-**3) Technical Metrics**
-- *Accuracy:* >90% correct solution validation (evaluated against an expert test set).
-- *Response Time:* <2 seconds for task/feedback generation.
-- *Viral Growth:* 25% of users join through referral links (built-in "invite a friend for collaborative problem-solving" system).
+## Contribution
+To contribute, fork the repo, submit a pull request, or report issues on GitHub. The project is no longer actively maintained as of June 26, 2025, but contributions are welcome. You can try to contact with someone from the team. Here is our mail: noreply.pgr@gmail.com.
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Third-Party Components
 This project uses the following AI model:
-- **qwen2.5-coder-1.5b-instruct.Q8_0**: Licensed under the Apache License 2.0. Available at https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct.
-- Other models accessed via OpenRouter are subject to their respective licenses or terms, as outlined at https://openrouter.ai/terms.
+- Models accessed via OpenRouter are subject to their respective licenses or terms, as outlined at https://openrouter.ai/terms.
