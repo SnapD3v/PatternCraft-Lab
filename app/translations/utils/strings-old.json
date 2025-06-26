@@ -1,8 +1,4 @@
 {
-  "config_title": {
-    "en": "Configuration",
-    "ru": "Конфигурация"
-  },
   "base_theory": {
     "en": "Theory",
     "ru": "Теория"
@@ -99,6 +95,10 @@
     "en": "Cancel",
     "ru": "Отмена"
   },
+  "config_title": {
+    "en": "Configuration",
+    "ru": "Конфигурация"
+  },
   "config_header": {
     "en": "Configuration",
     "ru": "Конфигурация"
@@ -112,10 +112,6 @@
     "ru": "Ключ API"
   },
   "config_api_model": {
-    "en": "Model",
-    "ru": "Модель"
-  },
-  "config_api_base_url": {
     "en": "Model",
     "ru": "Модель"
   },
@@ -590,9 +586,5 @@
   "theory_list_add_section": {
     "en": "Add section",
     "ru": "Добавить раздел"
-  },
-  "password": {
-    "en": "Password",
-    "ru": "Пароль"
   }
 }

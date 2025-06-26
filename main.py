@@ -9,8 +9,10 @@ from app.config import AppConfig
 from app.database import db
 from app import configure_app, register_blueprints, PatternCraftAuthClient
 
+from flask_babel import _
 
 if __name__ == "__main__":
+    print(_('config_title'))
     mp.set_start_method('spawn', force=True)
 
 config = AppConfig.parse_file("config.json")  # type: ignore

@@ -8,13 +8,13 @@
     <h2>Профиль</h2>
 
     <form method="post">
-        <p>Base Url web-сервиса</p>
+        <p>Base URL для Web-сервиса</p>
         <input name="auth.base_url" class="block-light full-width" type="text" value="{{ config.auth.base_url }}">
         <br>
         <p>Email</p>
         <input name="auth.email" class="block-light full-width" type="text" value="{{ config.auth.email }}">
         <br>
-        <p>Пароль</p>
+        <p>{{ _('password') }}</p>
         <input name="auth.password" class="block-light full-width" type="password" value="{{ config.auth.password }}">
         <br><br><br>
 

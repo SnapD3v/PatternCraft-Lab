@@ -8,14 +8,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-06-26 02:24+0500\n"
+"POT-Creation-Date: 2025-06-26 11:59+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.16.0\n"
+
+#: app/templates/config.html:4 main.py:15
+msgid "config_title"
+msgstr ""
 
 #: app/templates/base.html:35
 msgid "base_theory"
@@ -33,35 +37,35 @@ msgstr ""
 msgid "base_ai_assistant"
 msgstr ""
 
-#: app/templates/base.html:52 app/templates/base.html:57
+#: app/templates/base.html:51
 msgid "base_profile"
 msgstr ""
 
-#: app/templates/base.html:66
+#: app/templates/base.html:59
 msgid "base_configuration"
 msgstr ""
 
-#: app/templates/base.html:84
+#: app/templates/base.html:77
 msgid "chats_ai_assistant"
 msgstr ""
 
-#: app/templates/base.html:86
+#: app/templates/base.html:79
 msgid "chats_new_chat"
 msgstr ""
 
-#: app/templates/base.html:97
+#: app/templates/base.html:90
 msgid "chats_select_chat"
 msgstr ""
 
-#: app/templates/base.html:101
+#: app/templates/base.html:94
 msgid "chats_assistant_thinking"
 msgstr ""
 
-#: app/templates/base.html:104
+#: app/templates/base.html:97
 msgid "chats_input_placeholder"
 msgstr ""
 
-#: app/templates/base.html:105
+#: app/templates/base.html:98
 msgid "chats_send_button"
 msgstr ""
 
@@ -113,63 +117,59 @@ msgstr ""
 msgid "password_cancel_button_text"
 msgstr ""
 
-#: app/templates/config.html:4
-msgid "config_title"
-msgstr ""
-
 #: app/templates/config.html:8
 msgid "config_header"
 msgstr ""
 
-#: app/templates/config.html:13
+#: app/templates/config.html:12
 msgid "config_api_section"
 msgstr ""
 
-#: app/templates/config.html:14
+#: app/templates/config.html:13
 msgid "config_api_key"
 msgstr ""
 
-#: app/templates/config.html:17
+#: app/templates/config.html:16
 msgid "config_api_model"
 msgstr ""
 
-#: app/templates/config.html:20
+#: app/templates/config.html:19
 msgid "config_api_base_url"
 msgstr ""
 
-#: app/templates/config.html:24
+#: app/templates/config.html:23
 msgid "config_appearance_section"
 msgstr ""
 
-#: app/templates/config.html:26
+#: app/templates/config.html:25
 msgid "config_theme"
 msgstr ""
 
-#: app/templates/config.html:28
+#: app/templates/config.html:27
 msgid "config_theme_light"
 msgstr ""
 
-#: app/templates/config.html:29
+#: app/templates/config.html:28
 msgid "config_theme_dark"
 msgstr ""
 
-#: app/templates/config.html:33
+#: app/templates/config.html:32
 msgid "config_language"
 msgstr ""
 
-#: app/templates/config.html:35
+#: app/templates/config.html:34
 msgid "config_language_ru"
 msgstr ""
 
-#: app/templates/config.html:36
+#: app/templates/config.html:35
 msgid "config_language_en"
 msgstr ""
 
-#: app/templates/config.html:40
+#: app/templates/config.html:39
 msgid "config_font_size"
 msgstr ""
 
-#: app/templates/config.html:53
+#: app/templates/config.html:52
 msgid "config_submit"
 msgstr ""
 
@@ -209,7 +209,9 @@ msgstr ""
 msgid "course_confirm_delete_button"
 msgstr ""
 
-#: app/templates/course.html:148
+#: app/templates/course.html:148 app/templates/problem.html:245
+#: app/templates/problem.html:265 app/templates/problem.html:287
+#: app/templates/problem.html:321 app/templates/problem.html:344
 msgid "error_connection_server"
 msgstr ""
 
@@ -333,44 +335,85 @@ msgstr ""
 msgid "edit_profile_cancel_button_text"
 msgstr ""
 
-#: app/templates/login.html:4
-msgid "login_title"
+#: app/templates/problem.html:11
+msgid "problem_title"
 msgstr ""
 
-#: app/templates/login.html:11
-msgid "login_header"
+#: app/templates/problem.html:15
+msgid "problem_header"
 msgstr ""
 
-#: app/templates/login.html:13
-msgid "login_info"
+#: app/templates/problem.html:24
+msgid "problem_send_to_hub_button"
 msgstr ""
 
-#: app/templates/login.html:17
-msgid "login_base_url"
+#: app/templates/problem.html:41
+msgid "problem_tests_header"
 msgstr ""
 
-#: app/templates/login.html:22
-msgid "login_email_title"
+#: app/templates/problem.html:47
+msgid "problem_change_tests_button"
 msgstr ""
 
-#: app/templates/login.html:23
-msgid "login_email_header"
+#: app/templates/problem.html:52
+msgid "problem_solutions_header"
 msgstr ""
 
-#: app/templates/login.html:27
-msgid "login_password_title"
+#: app/templates/problem.html:87
+msgid "problem_submit_solution"
 msgstr ""
 
-#: app/templates/login.html:28
-msgid "login_passowrd_header"
+#: app/templates/problem.html:102
+msgid "problem_submit"
 msgstr ""
 
-#: app/templates/login.html:32
-msgid "login_submit_header"
+#: app/templates/problem.html:103
+msgid "problem_test_solution"
 msgstr ""
 
-#: app/templates/login.html:33
-msgid "login_submit_title"
+#: app/templates/problem.html:184
+msgid "problem_timeout"
+msgstr ""
+
+#: app/templates/problem.html:187
+msgid "problem_worker_error"
+msgstr ""
+
+#: app/templates/problem.html:197
+msgid "problem_all_tasks_passed_1"
+msgstr ""
+
+#: app/templates/problem.html:197
+msgid "problem_all_tasks_passed_2"
+msgstr ""
+
+#: app/templates/problem.html:198
+msgid "problem_pass_count"
+msgstr ""
+
+#: app/templates/problem.html:198
+msgid "problem_mistakes_count"
+msgstr ""
+
+#: app/templates/problem.html:198
+msgid "problem_exceptions_count"
+msgstr ""
+
+#: app/templates/problem.html:198
+msgid "problem_skip_count"
+msgstr ""
+
+#: app/templates/problem.html:224
+msgid "problem_saving"
+msgstr ""
+
+#: app/templates/problem.html:253
+msgid "problem_checking"
+msgstr ""
+
+#: app/templates/problem.html:272 app/templates/problem.html:306
+#: app/templates/problem.html:329
+msgid "problem_pending"
 msgstr ""
 
 #: app/templates/problem_form.html:4 app/templates/problem_form.html:8
@@ -451,63 +494,6 @@ msgstr ""
 
 #: app/templates/problems.html:110
 msgid "problems_error_network"
-msgstr ""
-
-#: app/templates/profile.html:4
-msgid "profile_title"
-msgstr ""
-
-#: app/templates/profile.html:11
-msgid "profile_welcome"
-msgstr ""
-
-#: app/templates/profile.html:13
-msgid "profile_instruction"
-msgstr ""
-
-#: app/templates/profile.html:16
-msgid "profile_data_header"
-msgstr ""
-
-#: app/templates/profile.html:18
-msgid "profile_username_label"
-msgstr ""
-
-#: app/templates/profile.html:18 app/templates/profile.html:19
-#: app/templates/profile.html:20
-msgid "profile_not_specified"
-msgstr ""
-
-#: app/templates/profile.html:19
-msgid "profile_email_label"
-msgstr ""
-
-#: app/templates/profile.html:20
-msgid "profile_created_at_label"
-msgstr ""
-
-#: app/templates/profile.html:25
-msgid "profile_edit_button_label"
-msgstr ""
-
-#: app/templates/profile.html:26
-msgid "profile_edit_button_text"
-msgstr ""
-
-#: app/templates/profile.html:28
-msgid "profile_change_password_button_label"
-msgstr ""
-
-#: app/templates/profile.html:29
-msgid "profile_change_password_button_text"
-msgstr ""
-
-#: app/templates/profile.html:31
-msgid "profile_logout_button_label"
-msgstr ""
-
-#: app/templates/profile.html:32
-msgid "profile_logout_button_text"
 msgstr ""
 
 #: app/templates/section_form.html:5 app/templates/section_form.html:14
