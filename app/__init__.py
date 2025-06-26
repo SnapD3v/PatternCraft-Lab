@@ -74,7 +74,6 @@ def register_blueprints(app: Flask) -> Flask:
     from app.blueprints.other import other_bp
     from app.blueprints.courses import courses_bp
     from app.blueprints.profile import profile_bp
-    from app.blueprints.auth import auth_bp
 
     # Зарегистрируй блюпринты
     app.register_blueprint(problems_bp)
@@ -84,6 +83,5 @@ def register_blueprints(app: Flask) -> Flask:
     app.register_blueprint(other_bp)
     app.register_blueprint(courses_bp)
     app.register_blueprint(profile_bp)
-    app.register_blueprint(auth_bp)
 
     return app

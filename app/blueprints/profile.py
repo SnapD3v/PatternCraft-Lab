@@ -1,60 +1,35 @@
-from flask import Blueprint, render_template, current_app
-from datetime import datetime
-from app.services import PatternCraftAuthClient
+from flask import (
+    Blueprint,
+    current_app,
+    request,
+    render_template,
+    make_response,
+    redirect,
+)
+
 from ..config import AppConfig
+from ..utils import build_nested_update_auto_with_cast
+from .. import configure_app
 
 profile_bp = Blueprint("profile", __name__)
 
 
-@profile_bp.route("/profile", methods=["GET"])
+@profile_bp.route("/profile", methods=["GET", "POST"])
 def profile():
-    try:
-        api_client = current_app.dependencies.get("api_client")
-
-        return render_template(
-            "profile.html",
-            email=api_client.email,
-            username=api_client.username,
-            created_at=api_client.created_at
-        )
-    except Exception as e:
-        print(f"Ошибка в профиле: {e}")
-        return render_template("profile.html")
-
-
-@profile_bp.route("/edit", methods=["GET"])
-def edit_profile():
-    try:
-        user_data = {"username": "Имя Пользователя", "email": "user@example.com"}
-        return render_template("edit_profile.html", current_user=user_data)
-    except Exception as e:
-        print(f"Ошибка в редактировании профиля: {e}")
-        return render_template("edit_profile.html", current_user={})
-
-
-@profile_bp.route("/change-password", methods=["GET"])
-def change_password():
-    return render_template("change_password.html")
-
-
-@profile_bp.route("/logout")
-def logout():
     app_config: AppConfig = current_app.dependencies["app_config"]
 
-    logout_api_client()
+    if request.method == "GET":
+        return make_response(render_template("profile.html", config=app_config))
 
-    base_url, email, password = (
-        app_config.auth.base_url,
-        app_config.auth.email,
-        app_config.auth.password,
-    )
+    typed_updates = build_nested_update_auto_with_cast(request.form, AppConfig)
+    app_config = app_config.model_copy(update=typed_updates)
 
-    return render_template(
-        "login.html", base_url=base_url, email=email, password=password
-    )
+    print("[DEBUG] app_config=", app_config)
 
+    # Обновляем DI
+    configure_app(current_app, app_config)
 
-def logout_api_client() -> None:
-    api_client = current_app.dependencies.get("api_client")
-    if isinstance(api_client, PatternCraftAuthClient) and api_client.is_authenticated:
-        api_client.is_authenticated = False
+    json_config = app_config.model_dump_json(indent=4, exclude_none=True)
+    with open("config.json", "w") as f:
+        f.write(json_config)
+    return make_response(redirect("/profile"))

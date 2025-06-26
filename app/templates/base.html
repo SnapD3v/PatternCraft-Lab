@@ -46,17 +46,10 @@
             <img src="/static/img/ai_icon.png" alt="">
             <span>{{ _('base_ai_assistant') }}</span>
         </a>
-        {% if is_authenticated %}
-            <a class="button" href="/profile">
-                <img src="/static/img/profile.png" alt="">
-                <span>{{ _('base_profile') }}</span>
-            </a>
-        {% else %}
-            <a class="button" href="/login">
-                <img src="/static/img/profile.png" alt="">
-                <span>{{ _('base_profile') }}</span>
-            </a>
-        {% endif %}
+        <a class="button" href="/profile">
+            <img src="/static/img/profile.png" alt="">
+            <span>{{ _('base_profile') }}</span>
+        </a>
 
         <br><br>
         <span class="small-text-size"><strong>Системное</strong></span>

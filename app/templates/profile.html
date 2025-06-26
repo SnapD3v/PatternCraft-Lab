@@ -1,36 +1,29 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block head %}
-    <title>PatternCraft Lab - {{ _('profile_title') }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% block title %}
+    Аккаунт
 {% endblock %}
 
 {% block content %}
-<section class="account-info wrapper">
-    <div class="profile-header">
-        <h2 class="big-text-size">{{ _('profile_welcome') }}{% if username %}, <span class="username">{{ username }}</span>{% endif %}!</h2>
-    </div>
-    <p class="small-text-size formatted-text">{{ _('profile_instruction') }}</p>
+    <h2>Профиль</h2>
 
-    <div class="info-block card block-light">
-        <h3 class="big-text-size">{{ _('profile_data_header') }}</h3>
-        <ul>
-            <li><strong>{{ _('profile_username_label') }}</strong> {{ username | default(_('profile_not_specified')) }}</li>
-            <li><strong>{{ _('profile_email_label') }}</strong> {{ email | default(_('profile_not_specified')) }}</li>
-            <li><strong>{{ _('profile_created_at_label') }}</strong> {{ created_at.strftime('%d.%m.%Y') if created_at else _('profile_not_specified') }}</li>
-        </ul>
-    </div>
+    <form method="post">
+        <p>Base Url web-сервиса</p>
+        <input name="auth.base_url" class="block-light full-width" type="text" value="{{ config.auth.base_url }}">
+        <br>
+        <p>Email</p>
+        <input name="auth.email" class="block-light full-width" type="text" value="{{ config.auth.email }}">
+        <br>
+        <p>Пароль</p>
+        <input name="auth.password" class="block-light full-width" type="password" value="{{ config.auth.password }}">
+        <br><br><br>
 
-    <div class="actions cards-area gap-10">
-        <a href="{{ url_for('profile.edit_profile') }}" class="button block-dark gradient-button profile-action" role="button" aria-label="{{ _('profile_edit_button_label') }}">
-            {{ _('profile_edit_button_text') }}
-        </a>
-        <a href="{{ url_for('profile.change_password') }}" class="button block-dark full-width gradient-button profile-action" role="button" aria-label="{{ _('profile_change_password_button_label') }}">
-            {{ _('profile_change_password_button_text') }}
-        </a>
-        <a href="{{ url_for('profile.logout') }}" class="button block-dark full-width gradient-button profile-action" role="button" aria-label="{{ _('profile_logout_button_label') }}">
-            {{ _('profile_logout_button_text') }}
-        </a>
-    </div>
-</section>
+        <input type="submit" class="button card block-light" href="#" value="Сохранить">
+
+    </form>
+
+    <br><br>
+{% endblock %}
+
+{% block script %}
 {% endblock %}

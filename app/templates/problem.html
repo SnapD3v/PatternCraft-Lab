@@ -284,7 +284,7 @@ document.getElementById('solution-form').onsubmit = async function(e) {
         window.location.href = '/problem/{{ problem.id }}';
     } catch (err) {
         document.getElementById('send-solution-summary').innerHTML =
-            '<span class="status status-danger">{{ _(error_connection_server") }}</span>';
+            '<span class="status status-danger">{{ _("error_connection_server") }}</span>';
         document.getElementById('send-solution-result').innerHTML = '';
     }
 };
