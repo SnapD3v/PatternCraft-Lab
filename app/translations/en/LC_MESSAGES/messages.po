@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-06-26 11:59+0500\n"
+"POT-Creation-Date: 2025-06-26 12:13+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -363,7 +363,7 @@ msgstr "Your solutions:"
 
 #: app/templates/problem.html:87
 msgid "problem_submit_solution"
-msgstr "Enter your solution here"
+msgstr "Send solution to Web-service"
 
 #: app/templates/problem.html:102
 msgid "problem_submit"
@@ -391,19 +391,19 @@ msgstr " passed!"
 
 #: app/templates/problem.html:198
 msgid "problem_pass_count"
-msgstr "Passed: "
+msgstr "Passed "
 
 #: app/templates/problem.html:198
 msgid "problem_mistakes_count"
-msgstr "Mistakes: "
+msgstr "Mistakes "
 
 #: app/templates/problem.html:198
 msgid "problem_exceptions_count"
-msgstr "Exceptions: "
+msgstr "Exceptions "
 
 #: app/templates/problem.html:198
 msgid "problem_skip_count"
-msgstr "Skipped: "
+msgstr "Skipped "
 
 #: app/templates/problem.html:224
 msgid "problem_saving"
@@ -497,6 +497,22 @@ msgstr "Deletion error"
 #: app/templates/problems.html:110
 msgid "problems_error_network"
 msgstr "Network error"
+
+#: app/templates/profile.html:4 app/templates/profile.html:8
+msgid "account_title"
+msgstr "Account "
+
+#: app/templates/profile.html:11
+msgid "base_url_for_web_service"
+msgstr "Base URL for Web service"
+
+#: app/templates/profile.html:17
+msgid "password"
+msgstr "Password"
+
+#: app/templates/profile.html:21
+msgid "save"
+msgstr "Save"
 
 #: app/templates/section_form.html:5 app/templates/section_form.html:14
 msgid "section_form_edit_title"
@@ -613,7 +629,4 @@ msgstr "Add card"
 #: app/templates/theory_list.html:34
 msgid "theory_list_add_section"
 msgstr "Add section"
-
-#~ msgid "password"
-#~ msgstr "Password"
 

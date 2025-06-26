@@ -340,8 +340,8 @@
     "ru": "Ваши решения:"
   },
   "problem_submit_solution": {
-    "en": "Enter your solution here",
-    "ru": "Введите ваше решение здесь"
+    "en": "Send solution to Web-service",
+    "ru": "Отправить решение на Web-сервис"
   },
   "problem_submit": {
     "en": "Check solution",
@@ -368,20 +368,20 @@
     "ru": " пройдены!"
   },
   "problem_pass_count": {
-    "en": "Passed: ",
-    "ru": "Пройдено: "
+    "en": "Passed ",
+    "ru": "Пройдено "
   },
   "problem_mistakes_count": {
-    "en": "Mistakes: ",
-    "ru": "Ошибки: "
+    "en": "Mistakes ",
+    "ru": "Ошибки "
   },
   "problem_exceptions_count": {
-    "en": "Exceptions: ",
-    "ru": "Исключения: "
+    "en": "Exceptions ",
+    "ru": "Исключения "
   },
   "problem_skip_count": {
-    "en": "Skipped: ",
-    "ru": "Пропущено: "
+    "en": "Skipped ",
+    "ru": "Пропущено "
   },
   "problem_saving": {
     "en": "Saving...",
@@ -474,6 +474,22 @@
   "problems_error_network": {
     "en": "Network error",
     "ru": "Сетевая ошибка"
+  },
+  "account_title": {
+    "en": "Account ",
+    "ru": "Профиль "
+  },
+  "base_url_for_web_service": {
+    "en": "Base URL for Web service",
+    "ru": "Base URL для Web-сервиса"
+  },
+  "password": {
+    "en": "Password",
+    "ru": "Пароль"
+  },
+  "save": {
+    "en": "Save",
+    "ru": "Сохранить"
   },
   "section_form_edit_title": {
     "en": "Edit section",
@@ -590,9 +606,5 @@
   "theory_list_add_section": {
     "en": "Add section",
     "ru": "Добавить раздел"
-  },
-  "password": {
-    "en": "Password",
-    "ru": "Пароль"
   }
 }

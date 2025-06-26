@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-06-26 11:59+0500\n"
+"POT-Creation-Date: 2025-06-26 12:13+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -494,6 +494,22 @@ msgstr ""
 
 #: app/templates/problems.html:110
 msgid "problems_error_network"
+msgstr ""
+
+#: app/templates/profile.html:4 app/templates/profile.html:8
+msgid "account_title"
+msgstr ""
+
+#: app/templates/profile.html:11
+msgid "base_url_for_web_service"
+msgstr ""
+
+#: app/templates/profile.html:17
+msgid "password"
+msgstr ""
+
+#: app/templates/profile.html:21
+msgid "save"
 msgstr ""
 
 #: app/templates/section_form.html:5 app/templates/section_form.html:14

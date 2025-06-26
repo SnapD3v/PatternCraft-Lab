@@ -117,14 +117,15 @@ class PatternCraftAuthClient:
         if not self.is_authenticated:
             self.login()
             if not self.is_authenticated:
-                raise RuntimeError(
-                    "Login failed. Please check your credentials in settings."
-                )
+                raise RuntimeError("Login failed. Check credentials.")
 
+        # Объединяем заголовки пользователя с нашим Referer
+        headers = kwargs.pop("headers", {})
+        headers["Referer"] = f"{self.base_url}/{path.lstrip('/')}"
         url = f"{self.base_url}{path}"
-        response = self.session.request(method, url, **kwargs)
 
-        return response
+        # ⬇️ Передаём **kwargs дальше, чтобы не терять json/data/files и др.
+        return self.session.request(method, url, headers=headers, **kwargs)
 
 
 """

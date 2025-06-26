@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Аккаунт
+    {{ _('account_title') }}
 {% endblock %}
 
 {% block content %}
-    <h2>Профиль</h2>
+    <h2>{{ _('account_title') }}</h2>
 
     <form method="post">
-        <p>Base URL для Web-сервиса</p>
+        <p>{{ _('base_url_for_web_service') }}</p>
         <input name="auth.base_url" class="block-light full-width" type="text" value="{{ config.auth.base_url }}">
         <br>
         <p>Email</p>
@@ -18,7 +18,7 @@
         <input name="auth.password" class="block-light full-width" type="password" value="{{ config.auth.password }}">
         <br><br><br>
 
-        <input type="submit" class="button card block-light" href="#" value="Сохранить">
+        <input type="submit" class="button card block-light" href="#" value="{{ _('save') }}">
 
     </form>
 
